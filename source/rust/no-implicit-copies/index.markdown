@@ -42,9 +42,6 @@ The following changes are made:
 - arrays can be embedded in record types as the final field, leading to a
   dynamically sized record;
 - large, deep copies will require an explicit `copy` keyword;
-- functions can designate a `new T` return type, meaning they return a
-  `T` which is freshly allocated but where the user decides whether it
-  is shared or unique.
 - move-mode parameters go away, replaced with a `move` keyword.
 
 ## Terminology: kinds of types
@@ -107,14 +104,14 @@ follows:
        | ~ AV
     AV = CE
        | [ ... ]                 (Array literal)
-       | x(...)                  (Function call with new return type)
+       | { ..., f: [...]}        (Record literals of dynamic size)
        
 The nonterminal `AV` indicates an allocatable value: something which
 may be copied into the heap.  This is *almost* the same as a
-constructor expression, but it also includes arrays and `new`
-functions, both of which can produce values of dynamic size which
-cannot be placed on the stack and must therefore go in the heap.  More
-details about arrays and `new` functions come later.
+constructor expression, but it also includes array literals and record
+literals of dynamic size, both of which can produce values of dynamic
+size which cannot be placed on the stack and must therefore go in the
+heap.  More details about dynamically sized types come later.
 
 Note: It is illegal to use `@ mutable` when the `AV` has a
 non-copyable type.
@@ -207,13 +204,13 @@ use of creation functions.  Literals result in an array of the given
 size which is stored on the stack.  There are two creation functions,
 each of which creates an array of dynamic length:
 
-    fn create_val<copy T>(size: uint, v: T) -> new [T];
-    fn create<T>(size: uint, b: block(uint) -> T) -> new [T];
+    fn create_val<copy T>(size: uint, v: T) -> [T];
+    fn create<T>(size: uint, b: block(uint) -> T) -> [T];
 
 The function `create_val()` creates an array of a given size where
 each value of the array is initially equal to `v`.  The second creates
 an array where the initial value of the array at index `i` is given by
-`b(i)`.  The `new [T]` return type is explained below.
+`b(i)`.  
 
 ### Mutability
 
@@ -222,8 +219,10 @@ mutable, or read-only (`const`).  An immutable array cannot be
 modified by anyone.  A read-only array is a reference to an array thay
 may be mutated by someone else.
 
-Functions returning `new` arrays may be used to create either mutable
-or immutable arrays at the callers' choice.  For example:
+Functions returning arrays may be used to create either mutable or
+immutable arrays at the callers' choice; the caller also decides
+whether the array will be allocated in the shared or exchange heap.
+For example:
 
     let f: @[int] = @arr::create_val(256, 0);
     let g: @[mutable int] = @arr::create_val(256, 0);
@@ -255,7 +254,7 @@ array types may be used is as the last field in a record.  In that
 case, the record type is itself considered dynamically sized and
 subject to the same restrictions as array types.  Dynamically sized
 types are also legal as the type of a by-ref parameter and as the
-return type of a `new` function (see below).
+return type of a function (see below).
 
 Lvalues of dynamically sized type cannot be assigned after they are
 initially created.  In other words, given a record `x` with a field
@@ -268,75 +267,44 @@ declared with the bound `var` (for "variably sized").  This is so that
 the type checker can guarantee that such types are never allocated on
 the stack.
 
-## New functions
+As a consequence of the previous rule, functions whose return type may
+have dynamic size can only be invoked from a limited set of contexts:
 
-The return type of a function can be tagged with the keyword `new`.
-This indicates that the function will be allocating a (potentially
-dynamically sized) value and returning it, but it does not specify the
-heap in which that value will be allocated.  That decision is left to
-the caller. `new` functions are not compatible non-`new` functions.
-That is, the types `fn(S) -> T` and `fn(S) -> new T` are distinct.
-Within a `new` function, the return keyword must be followed by an
-allocation value `AV`, as defined previously. It is a static error to
-invoke a `new` function outside of an allocator expression or the
-`ret` expression of another `new` function.
+- they may be called as part of an allocation value (`AV`, defined
+  previously).  An example would be `@f(...)`.
+- they may be called as part of a `ret` statement from another function
+  (which must itself have a dynamically sized return type, or else
+  the types would not match).
+- we might consider allowing them to be caller in an argument position
+  when the parameter has reference mode, but this might be complex to
+  check and is certainly not mandatory (e.g., `g(f(x))`).  Otherwise,
+  such a call would be written `g(*@f(x))`.
 
-Some examples:
+### Handy wrappers
 
-    fn make_arr(a: int, b: int, c: int) -> new [int] {
-        ret [a, b, c];
-    }
+Because dynamically sized types can only be used in a limited set of
+contexts, we might want to provide wrappers like the following:
 
-    type T = { a: int, b: int, c: int };
-    fn make_rec(a: int, b: int, c: int) -> new T {
-        ret { a: a, b: b, c: c };
-    }
-
-A `new` value can also be obtained by returning the value of another
-function that has a `new` return type, such as `arr::create()` and
-`arr::create_val()`:
-
-    fn map<S,T>(a: [S], f: block(S) -> T) -> new [T] {
-        ret arr::create(arr::len(a), { |i| block(a[i]) });
-    }
-
-### Impedance mismatch between new functions and normal functions
-
-The compiler could automatically convert non-new functions to new
-functions if we decide that is a good thing.  Otherwise, the user can
-trivially write code like:
-
-    fn foo() -> T { ... }
-    fn wrapped_foo() -> new T { ret foo(); }
-    
-The difference here is that the return value of `wrapped_foo()` must
-be placed into the heap by its caller.
-
-Converting a `new` function to a non-new function cannot be done
-automatically, because `new` functions offer the ability to select
-what heap the result is placed in.  Therefore, it might be useful to
-create a few helper functions for converting in the opposite
-direction:
-
-    fn shared<S,T:var>(f: fn(S) -> new T) -> (fn(S) -> @T) {
+    fn shared<S,T:var>(f: fn(S) -> T) -> (fn(S) -> @T) {
         ret lambda(s: S) { @f(s) }
     }
     
-    fn unique<S,T:var>(f: fn(S) -> new T) -> (fn(S) -> ~T) {
+    fn unique<S,T:var>(f: fn(S) -> T) -> (fn(S) -> ~T) {
         ret lambda(s: S) { ~f(s) }
     }
-    
-Now, to continue our previous example, `shared(wrapped_foo())` would
-yield a function that always returns `@T` and `unique(wrapped_foo())`
-would yield a function that always returns `~T`.
+
+Now a function `f()` returning an array `[T]` could be converted by
+`shared(f)` to a function returning a boxed array `@[T]`, which has
+static size.
 
 ### Implementation
 
 Today, all Rust functions are compiled with an implicit first
 parameter which is a pointer to the location to store their return
-value.  `new` functions would contain two additional implicit
-parameter: the heap in which to allocate space for their result and
-the amount of prefix space required for the allocation.
+value.  Functions that may return values of dynamic size would contain
+two additional implicit parameter: the heap in which to allocate space
+for their result and the amount of prefix space required for the
+allocation.
 
 For example, the `arr::create()` with signature
 
@@ -419,9 +387,9 @@ would compile to the following C functions:
     int foo_direct() { return 22; }
     int foo_by_val(int *r) { *r = 22; }
 
-Direct calls to `foo()` would use `foo_direct()`.  Loading `foo()` 
-as a value would use `foo_by_val()`. Note that all `new` functions
-always return a word-sized pointer.
+Direct calls to `foo()` would use `foo_direct()`.  Loading `foo()` as
+a value would use `foo_by_val()`. Note that functions whose result may
+have dynamic size always return a word-sized pointer.
 
 ## Interaction with generics
 
