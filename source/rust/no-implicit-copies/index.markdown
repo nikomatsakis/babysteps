@@ -17,6 +17,11 @@ language.  Secondary goals include:
   is obvious from language syntax;
 - support dynamically sized records.
 
+## Revision History
+
+- `2011-12-03`: initial version
+- `2011-12-08`: removed `new` functions
+
 ## Why are these goals important?
 
 Implicit copies are dangerous for many reasons:
