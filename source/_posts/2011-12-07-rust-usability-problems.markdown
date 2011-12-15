@@ -3,7 +3,7 @@ layout: post
 title: "Rust usability problems"
 date: 2011-12-07 17:38
 comments: true
-categories: 
+categories: [Rust]
 ---
 
 I recently implemented a new hashtable module for Rust.  This was
@@ -136,6 +136,11 @@ didn't even define the object yet! (Because objects in Rust have no
 self pointer, they can't invoke their own methods, so you basically
 always end up defining a module of functions and a type that holds the
 object's data, then glueing it all together with an object at the end)
+
+**Update:** Self calls are possible with objects in Rust, but that is
+the only thing one can do with the `self` pointer.  Nonetheless one
+still defines sets of functions that operate over shared data in order
+to achieve encapsulation.
 
 #### References
 

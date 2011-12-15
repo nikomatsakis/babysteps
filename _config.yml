@@ -88,7 +88,7 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name: nikomatsakis
+disqus_short_name: nikomatsakis-babysteps
 disqus_show_comment_count: false
 
 # Google Analytics

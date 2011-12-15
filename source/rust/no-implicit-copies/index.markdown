@@ -166,6 +166,7 @@ to produce a unique pointer for the callee to consume: whether that
 unique pointer is copied, moved, or newly constructed is up to the
 caller.
 
+<a name="dynamically-sized-types"></a>
 ## Fixed-length arrays, strings, and dynamically sized types
 
 Currently, vectors and strings are implicitly accessed via unique

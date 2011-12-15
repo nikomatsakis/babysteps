@@ -3,7 +3,7 @@ layout: post
 title: "Sendable functions"
 date: 2011-12-08 09:47
 comments: true
-categories: 
+categories: [Rust]
 ---
 
 One of the last remaining tasks for Rust 0.1 is to find a way to
