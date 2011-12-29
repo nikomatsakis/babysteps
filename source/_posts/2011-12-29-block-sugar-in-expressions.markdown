@@ -6,6 +6,8 @@ comments: true
 categories: [Rust]
 ---
 
+**UPDATE:** I found some more complications.  Updates inline.
+
 I have been working on and off on allowing block sugar to appear in
 Rust expressions and not only statements.  For those who do not know
 what I am talking about, let me give a bit of context.  At the moment,
@@ -150,6 +152,34 @@ This means that the above example would work, but a call to
 a tail expression like `10` (it produces an int value).  Those would
 require a trailing semicolon.
 
+**UPDATE:** This solution can lead to some complications.  Consider
+code like the following:
+
+    fn foo() {
+        if cond {
+            vec::iter(v) { ... }
+        } else {
+            vec::iter(v) { ... }
+        }
+        
+        bar();
+    }
+    
+The first `if/else` now looks like an expression, because both blocks
+produce a value (albeit a value of type unit).  In other words, the
+`if/else` is classified the same as an `if/else` like `if cond { 10 }
+else { 20 }` by the parser.  These "value-bearing" if/else expressions
+require semicolons.  Therefore, the example doesn't parse.  To solve
+this, we say that `if/else`, `alt`, `do/while`, and standalone blocks
+never require semicolons when used at top-level.  
+
+I find this more consistent anyhow.  Basically there is a category of
+"dual-purpose" (statement and expression) forms.  These include
+"keyword" expressions (`if`, `alt`, `while`, etc), standalone blocks,
+and syntactic sugar calls.  If these dual-purpose expressions appear
+at top-level, they are a statement.  Otherwise, they are an
+expression.
+  
 #### "No, it does not produce a value."
 
 We could also say that a top-level expression never produces a value.
