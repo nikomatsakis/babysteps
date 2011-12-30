@@ -253,6 +253,12 @@ tail expression (`int`) is ignored.  Most likely the result type of
 because the user will notice that the return type of `foo()` is missing
 when they try to call it elsewhere in the code.
 
+**UPDATE:** This also requires distinguishing "dual-purpose"
+statements as described in the first solution ("yes, it does produce a
+value").  In fact, both the first and fourth solution are kind of the
+same, but the fourth involves a bit more work in the type checker to
+allow users to omit semicolons somewhat more often.
+
 #### So what should I do?
 
 I don't know but I am leaning towards the first or final solutions, as
