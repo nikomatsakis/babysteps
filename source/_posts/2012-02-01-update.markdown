@@ -1,0 +1,91 @@
+---
+layout: post
+title: "Update"
+date: 2012-02-01 20:50
+comments: true
+categories: [Rust, PL, PJs]
+---
+
+It's been a while since I wrote anything on the blog! A lot has been
+going on in the meantime, both in Rust, parallel JavaScript, and
+personally...I hate to write a big update post but I gotta' catch up
+somehow!
+
+### Rust
+
+First, we made our 0.1 release, which is great.  We are now planning
+for 0.2.  The goal is to make frequent, relatively regular releases.
+We're still in such an early phase that it doesn't seem to make sense
+to literally release every few months, but at the same time we don't
+plan to wait long.
+
+Lately I've been working on several issues, some major, some minor.
+The most exciting to me has been [#1493][1493], which vastly improved
+our performance when working with thread-local boxes.  There is still
+[work to be done on box performance][1737], but before taking any next
+steps more investigation is needed.  The problems may be creating type
+descriptors, they may be garbage collection, etc.  This is also a
+first step to
+[simplifying some of the scarier parts of the Rust runtime][1739].
+
+On a smaller note, I've been working on a new iteration library that
+I'm reasonably excited about, based on the principles from
+[an earlier blog post][composingblocks].  Making it nice to use will require a
+[lighter bind syntax][1649], which I've almost got complete now.
+This also (as a side effect) improves our type inference somewhat.
+One final thing I'd like to do is integrate support for
+[break and cont][1619] into the library, though some details remain to
+be discussed there.
+
+Finally, I'm beginning work now on cross-crate inlining.  I plan to
+write a post later exploring some of the dynamics of this.  It's an
+interesting problem.  It's clearly important for performance, though:
+functions like `vec::iter()` are used ubiquitously and we need to be
+able to inline their definitions.  This is also where Rust's emphasis
+on static dispatch can really pay off (not that it is not helpful
+already at reducing dispatch costs).
+
+### Parallel JavaScript
+
+I have been progressing on the parallelism work that occupied the
+[last few posts][pjposts].  First, the parallel JavaScript work now
+has an official name: the [PJs project][pjs].  That github project is
+not that useful at the moment, though: I am in the process of moving
+the code from an [older GitHub project][pjs-old] into the new one
+which contains the rest of mozilla-central.
+
+What exists today is a (very) simple multi-threaded infrastructure
+that will run JavaScript functions in parallel, multiplexing them over
+a fixed number of workers.  Right now though there is no data sharing
+between threads.  I am working on the membrane approach.
+
+I have also had some discussions with the [Rivertrail][rivertrail]
+group.  The Rivertrail definition of an elemental function dovetails
+very well with my own ideas, so it seems like the two projects could
+be fruitfully combined: the PJs API can be used both for task-based
+parallel tasks and for those instances where vectorization either
+fails or is not effective.
+
+Finally, I drew up a [Java-based prototype][patpar] of the API as well
+as the [static type system that I described earlier][typesys].  Having
+this prototype gives me confidence that the approach will work, as I
+found it quite easy to parallelize a number of interesting examples.
+
+### Whew!
+
+Man, I didn't realize how much stuff has been going on.  No wonder I
+haven't had time for blog posts!  And this isn't even a complete list,
+really.  But it's everything that's interesting, I suppose. 
+
+[1493]: https://github.com/mozilla/rust/issues/1493
+[1737]: https://github.com/mozilla/rust/issues/1737
+[1739]: https://github.com/mozilla/rust/issues/1739
+[1619]: https://github.com/mozilla/rust/issues/1619
+[1649]: https://github.com/mozilla/rust/issues/1619
+[pjs]: https://github.com/nikomatsakis/pjs
+[pjs-old]: https://github.com/nikomatsakis/pjs-old
+[patpar]: https://github.com/nikomatsakis/patpar
+[typesys]: /blog/2011/12/09/pure-blocks/
+[rivertrail]: https://github.com/RiverTrail/RiverTrail
+[pjposts]: /blog/2012/01/09/parallel-javascript/
+[composingblocks]: /blog/2011/12/29/composing-blocks/
