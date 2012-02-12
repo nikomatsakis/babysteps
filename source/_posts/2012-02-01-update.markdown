@@ -81,7 +81,7 @@ really.  But it's everything that's interesting, I suppose.
 [1737]: https://github.com/mozilla/rust/issues/1737
 [1739]: https://github.com/mozilla/rust/issues/1739
 [1619]: https://github.com/mozilla/rust/issues/1619
-[1649]: https://github.com/mozilla/rust/issues/1619
+[1649]: https://github.com/mozilla/rust/issues/1649
 [pjs]: https://github.com/nikomatsakis/pjs
 [pjs-old]: https://github.com/nikomatsakis/pjs-old
 [patpar]: https://github.com/nikomatsakis/patpar
