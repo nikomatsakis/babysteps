@@ -100,7 +100,7 @@ would look something like:
 
 Now, to deserialize, we generate similar code for a deserialization interface:
 
-    fn deserialize1<C: serialization::ctxt>(cx: C) -> {x: uint, y: uint} {
+    fn deserialize1<C: deserialization::ctxt>(cx: C) -> {x: uint, y: uint} {
         cx.read_record {||
             let x = cx.read_field("x", 0) {||
                 cx.read_u64() as uint
@@ -151,7 +151,7 @@ It would be serialized as:
 
 The deserializer meanwhile would look like:
 
-    fn deserialize2<C: serialization::ctxt>(cx: C) -> option<uint> {
+    fn deserialize2<C: deserialization::ctxt>(cx: C) -> option<uint> {
         cx.read_enum {|v_id|
             alt v_id {
                 0u { // std::option::none
