@@ -116,10 +116,11 @@ used is that `t` is an immutable local variable (I am assuming
 This means that the memory will remain valid as long as `t` is in
 scope.
 
-This implies that if `t` were mutable, the example would not work.
-In that case, the validity of the memory to `t` could not be guaranteed
-for the entire block, as `t` could be overwritten.  In other words,
-a program might do something like this:
+**EDIT: There is no reason to impose the following restriction.  See
+discussion below.** This implies that if `t` were mutable, the example
+would not work In that case, the validity of the memory to `t` could
+not be guaranteed for the entire block, as `t` could be overwritten.
+In other words, a program might do something like this:
 
     fn caller_on_heap() {
         let mut t = @{mut f: 3};
@@ -132,7 +133,7 @@ However, such a program would not type check.  The reason is that,
 because `t` is mutable, when `t` was coerced to a region type, a
 narrow region `s` would be assigned.  The region `s` would correspond
 to precisely the call to `get_f()`.  The result of `get_f()` would
-therefore hvae type `s&mut uint`, but the region `s` would be out of
+therefore have type `s&mut uint`, but the region `s` would be out of
 scope after `get_f()` returned, and so a type error occurs (this is
 that rule I mentioned before: when returning a reference, the region
 must be in scope).
@@ -147,6 +148,23 @@ after the call, because we would not be able to guarantee the
 uniqueness invariant, as there might be escaped region-typed pointers
 into its interior. Anyway, I don't want to go into details about
 unique pointers in this post as it's already plenty long.
+
+**EDIT:** pcwalton pointed out to me that there is no reason to treat
+mutable variables specially.  Instead, we can basically just increment
+the ref count whenever we coerce an `@T` to a `r&T`. The region `r`
+would still be the region of an enclosing block `b` (probably the
+innermost one, or perhaps the one where the variable is declared) and
+we would release the reference upon exiting the block `b` can still
+optimize immutable variables to not increase the reference at all
+because it is unnecessary.  I rejected this approach initially because
+I was thinking that we would want to keep it very predictable when
+references would be dropped, but that's not actually an important
+property.  Garbage collection traditionally does not define precisely
+when dead memory will be reclaimed, after all (and, as graydon
+correctly points out, RC+CC is garbage collection).  Note though that
+borrowing unique pointers probably still ought to use a narrow region
+corresponding to the call or `alt` statement in which the borrow
+occurs.
 
 ### But does it scale?
 
