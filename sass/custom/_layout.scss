@@ -19,3 +19,27 @@
 //$sidebar-pad-medium: 15px;
 //$sidebar-pad-wide: 20px;
 //$sidebar-width-wide: 300px;
+
+table#regions {
+              border-collapse: collapse;
+              text-align: left;
+              width: 100%;
+} 
+table#regions td, table#regions th {
+              padding: 3px 10px;
+}
+table#regions thead th {
+              font-weight: bold; 
+              border: 1px solid #000000;
+}
+table#regions tbody th { 
+              color: #000000; 
+              border: 1px solid #000000;
+              font-weight: normal; 
+}
+table#regions tbody td { 
+              text-align: center;
+              color: #000000; 
+              border: 1px solid #000000;
+              font-weight: normal; 
+}
