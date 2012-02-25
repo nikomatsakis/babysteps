@@ -51,7 +51,7 @@ parameter, but I don't know that `span` is an import of
 `syntax::codemap::span` is defined as a record itself.
 
 So how do I generate code to serialize a type like `T` or `span`
-without knowing anything about that type is?  It turns out that we
+without knowing anything about what that type is?  It turns out that we
 have a nice language tool for doing that: ifaces and impls (a.k.a.,
 typeclasses).
 
