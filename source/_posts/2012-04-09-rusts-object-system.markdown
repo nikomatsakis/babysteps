@@ -24,6 +24,17 @@ in the right direction!  There are some links in his post that I
 haven't read, for example, but I will definitely put them on my
 reading list.
 
+**EDIT**: It's a bit unclear what I precisely think is novel.  In
+fact, when I wrote the previous paragraph, I was referring to our
+proposed technique for enforcing instance coherence.  However, I
+didn't even describe this problem in this post, because I realized
+there was a lot of background to cover.  So, to be clear, I don't
+think that the basics in this post are terribly novel---with the
+exception of our use of the same interfaces to unify Haskell-style
+type-classes (or C++ concepts, if you prefer) with OOP-style
+existential (sub)typing.  That particular part works out quite well, I
+think.
+
 [post]: http://www.bitc-lang.org/pipermail/bitc-dev/2012-April/003315.html
 
 ### The building block: ifaces
@@ -125,7 +136,7 @@ which would have a single pointer to the object and would embed the
 vtable in the object itself.  There are a variety of reasons that we
 take a different approach which I will cover later.
 
-The reason I am talking about `draw` instances are represented at
+The reason I am talking about how `draw` instances are represented at
 runtime is that it is not the same as the way that a `@circle`
 instance (for example) is represented.  The type `@circle` is just a
 pointer to the a block of memory containing the fields for the class
