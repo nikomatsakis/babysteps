@@ -38,8 +38,9 @@ reference.
 
 References are basically generic pointers.  They can point anywhere:
 into the stack, into the `@` heap, into the `~` heap, even into the
-inside of a record or vector.  They are as flexible as pointers in C;
-however, they are free from the many errors that C permits.  The type
+inside of a record or vector.  They can point at anything that a C
+pointer could point at and can be used in many of the same ways;
+however, they are free from the errors that C permits.  The type
 checker guarantees that references are always valid, so you can't have
 a reference into freed memory, or into a stack frame that has been
 popped, and so forth.
@@ -282,7 +283,7 @@ allocations which you plan to do but which will all get freed at one
 point, then you can allocate a big block of memory and just hand it
 out piece by piece.  Once the pass is done, you free the memory all at
 once.  The key is that you never track whether an individual
-allocation has completed or not, so you avoid a lot of overhead The
+allocation has completed or not, so you avoid a lot of overhead. The
 problem with arenas is that, as typically implemented, they are
 unsafe, because you might free the arena but still hold on to pointers
 that point into the arena.  This is where lifetimes come in.
@@ -358,9 +359,10 @@ is in fact shorthand for something like the following:
 
 In other words, the `&uint` type we saw before in fact expands to a
 lifetime with a unique name; we'll call this name `d` (in fact, all
-uses of `&` within a function are references to a special region
-called the anonymous region---it acts just like a named region, except
-that it doesn't have a name).  
+uses of `&` within the types of a function's parameters or its return
+type are references to a special region called the anonymous
+region---it acts just like a named region, except that it doesn't have
+a name).
 
 The lifetime `d` is a bit different from the other lifetimes we've
 seen, as it appears within the function declaration itself: it is in

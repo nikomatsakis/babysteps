@@ -16,7 +16,7 @@ specified by the caller.  That is, it is a kind of shorthand for a
 type that might be written like `fn<r>(&r.int)`, where the `<r>`
 indicates that the function type is *parameterized* by the region `r`.
 
-[trivial]: blog/2012/04/15/syntax-matters-dot-dot-dot/
+[trivial]: /blog/2012/04/15/syntax-matters-dot-dot-dot/
 
 ### But first, a digression on types and type schemes...
 
