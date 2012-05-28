@@ -1,0 +1,193 @@
+I wanted to bring together the various ideas around vectors and
+function types into one post.  The goals of these changes are
+
+1. to achieve orthogonality of the pointer types, so that leading `&`,
+   `@`, and `~` sigils are the only way to indicate the kind of
+   pointer that is in use;
+2. to help pare down on the proliferation of subtle variantions on
+   types, such as the 5 different function types currently available.
+
+## The proposal
+
+The Rust type system would be described by the following grammar.  In
+this grammar, I have included all optional portions except for region
+bounds.  I indicated those types which could have a lifetime bound
+associated with them by writing `(/&r)` in the description (a lifetime
+bound indicates the lifetime of any pointers embedded within the type
+itself; this is not related to the changes I am discussing here so I
+won't go into detail):
+
+    M = mut | const | ""                  // immutable by default
+    
+    K = send | copy | move | ""           // move by default
+    
+    T = () | int | uint | float | ...     // scalar types
+      | @MT | ~MT | &r.MT | *MT           // pointer types
+      | id<T*>                            // enum, resource, class (/&r)
+      | id                                // type variable
+      | [T]                               // slice type (/&r)
+      | substr                            // string slice type (/&r)
+      | (T*)                              // tuple type
+      | (T "*" N)                         // fixed-size array
+      | {(M id: T)*}                      // anonymous record types
+      | U                                 // dynamically sized types
+    
+    U = fn:K(T*) -> T                     // closure types (/&r)
+      | id:K<T*>                          // iface instances (/&r)
+      | vec<MT>                           // vector type
+      | str                               // string type
+      
+## Dynamically sized types      
+
+The types described by `U` are separated out because, unlike the other
+types listed, they have "dynamic size"---that is, the size of an
+instance of `U` will vary from instance to instance.  As a result, the
+`U` types are somewhat "second-class" when compared to the other
+types:
+
+- Type variables cannot be bound to dynamically sized types.
+- Expressions whose type is a dynamically sized type are generally prohibited.
+
+There is one exception to these rules.  Literal expressions of
+dynamically sized types are permitted, as the compiler can readily
+compute their size.  The literal forms of the various types `U` are:
+
+    Type            Literal form
+    ----            ------------
+    fn:K(T*) -> T   fn:K(x, y) -> T { ... }
+    fn:K(T*) -> T   id (where id is a fn item)
+    id:K<T*>        iface(v)
+    vec<MT>         [M ...]
+    str             "..."
+
+If it seems useful, we could lift the restriction that type variables
+cannot be bound to dynamically sized types and instead use some sort
+of kind to mark variables that may accept dynamically sized types (or
+to mark those that may not, depending on what we feel the defaults
+ought to be).
+
+## Vectors and slices
+
+These basically work in the same way as currently proposed, but the
+syntax has changed.  A vector is written `vec<T>`; note that unlike
+other types, vector type parameters have a mutability, so you might
+have `vec<mut u8>`, for example.
+
+Slices can be created by using the `[:]` operator, which works just as
+in Python.  So `[1, 2, 3][-1:]` returns a slice containing `[3]`,
+`[1, 2, 3][1:-1]` returns `[2]` and `[1, 2, 3][2:1]` returns an empty
+slice.  The slice operator can be applied to both vectors and slices.
+We could conceivably allow it to be overloaded.
+
+Vectors may be added to slices.  The type of the resulting vector is
+taken from the left-hand side.  So adding a `@vec<mut u8>` to a `[u8]`
+yields a (longer) `@vec<mut u8>`.
+
+## Fixed-length arrays
+
+The type `(T * N)` represents a fixed-length array.  Here `T` is
+another type and `N` is a constant expression.  This is primarily
+intended for C compatibility: a fixed-length array has no length field
+and is simply represented by `N` instances of the type `T` laid out
+one after the other.  In most ways it is precisely equivalent to a
+tuple.  There is no literal form for such arrays: they are in fact
+supertypes of tuples of equivalent size, and so share the tuple syntax
+`(v1, ..., vN)`.  We can introduce a macro for repeating the same
+element `N` times to avoid repetition.
+
+Fixed-length arrays are indexable and sliceable but their contents are
+not modifiable.  If modification is desired one can create a simple
+one-entry record.
+
+*Note:* I think this idea of having fixed-length arrays and tuples be
+closely related makes sense.  I'm mostly trying to keep things simple
+and not introduce too much machinery for an edge case.  But maybe
+there is a problem with it.
+
+## Closure and iface instance bounds
+
+Both the closure and iface instance types feature a bound `K` called a
+"kind bound".  These types are unlike the other types because they are
+"opaque" to the compiler: that is, the compiler does not know the
+types of the data that is contained within.  The bound `K` puts a
+restriction on those types so that additional operations can be
+permitted.
+
+For example, if you have a closure `x` of type `fn:send()`, then the
+compiler knows that whatever data is closed over by `x` is sendable.
+The compiler can therefore permit `x` to be sent between tasks.
+Similarly the iface type `to_str:send` describes an instance of some
+type which is sendable and implements the `to_str` interface.
+
+If no bound is specified, the default is `move` (which is the most
+general).  This simply states that the closure may close over
+arbitrary data.  
+
+As today, the "sugared closure" form `{|x| ...}` would be inferred to
+some form of "pointer to closure".  That is, it could result in `@fn`,
+`~fn` or `&fn`, depending on the expected type.  The sugared closure is
+also the only way to get a closure that refers to 
+
+There is no type that represents a "closure that accesses variables by
+reference and not by copy".  Sugared closures become the only way to
+construct such a closure: if the expected type is `&fn()` they will
+construct a "access-by-reference" closure and the if the expected type
+is `@fn()` or `~fn()` they will not.  This seems non-ideal but
+equivalent to the situation today.
+
+### Bare functions
+
+The type of "bare functions" (that is, function items which do not
+close over anything) is simply `fn:send(T*) -> T`.  To use a bare
+function as a closure, you must prefix the bare function with an
+appropriate sigil (`&`, `@`, or `~`).
+
+For example, the following snippet uses a function `inc()` as the
+argument to `vec::map`:
+
+    fn inc(x: int) -> int { x + 1 }
+    
+    fn inc_all(vs: [int]) -> [int] {
+         vec::map(vs, &inc)
+    }
+
+Here the expression `&inc` has the (fully elaborated) type
+`&static.fn:send(int) -> int`.  This is a subtype of the expected type
+that `vec::map` requires: `&fn:move(int) -> int`.
+
+To send a bare function between tasks you might write:
+
+    fn task_body() { ... }
+    
+    fn spawn_task() {
+        task::spawn(~task_body)
+    }
+
+### Representing closures
+
+The representation of closures will change somewhat.  Before a closure was
+the pair of a function pointer with an environment pointer.   Now a closure
+will be a pointer to a structure like:
+
+    struct closure {
+        void *fptr,
+        type_desc *td,
+        ... // (closed over data)
+    };
+
+Also, for bare functions we will pre-generate a structure like this so
+that an expression like `&inc` requires no allocation. 
+
+## Pros and cons
+
+I think the pros of the proposal are that the type system feels
+simpler and more orthogonal.  Naturally these qualities are
+subjective, so you may disagree.
+
+There are three downsides that I see:
+
+- the existence of second-class, dynamic size types is unfortunate and
+  mars the very orthogonality I am trying to achieve;
+- expressions like `@id` or `~id` where `id` is a `fn` item would now
+  require allocation where they did not before.
+  
