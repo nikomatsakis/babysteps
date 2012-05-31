@@ -137,7 +137,7 @@ vectors, which are currently unique, in that we have `vec::from_mut()`
 and `vec::to_mut()`.  But we could make this a more general
 transformation.
 
-For example, the following program out to be legal:
+For example, the following program ought to be legal:
 
     type rec = {mut f: int, mut g: int};
     type rec_frozen = {f: int, g: int};
