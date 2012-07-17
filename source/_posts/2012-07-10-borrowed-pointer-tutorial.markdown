@@ -35,8 +35,8 @@ current function.
 Borrowed pointers can be created in two ways.  The first is to explicitly
 take the address of something, such as a local variable or a field:
 
-    let r: {x: int, y; int} = {x: 10, y: 10};
-    let p: &{x: int, y; int} = &r;
+    let r: {x: int, y: int} = {x: 10, y: 10};
+    let p: &{x: int, y: int} = &r;
     let q: &int = &r.x;
     
 In the previous example, the memory is a record `r` stored on the
@@ -46,7 +46,7 @@ variable `q` is a borrow of the field `x` specifically.
 One convenience: in C, the `&` operator can only be applied to lvalues
 (assignable locations).  In Rust, the `&` operator can also be applied
 to rvalues, in which case it means "allocate some temporary space on
-the stack and copy the value in there".  So, foe example, the
+the stack and copy the value in there".  So, for example, the
 following code create a new record, store it on the stack, and take
 its address all in one step:
 
@@ -59,7 +59,7 @@ places where such conversions can occur).  This is useful for writing
 routines that operate over data no matter where it is stored.  For
 example:
 
-    fn distance_from_origin(r: &{x: int, y; int}) {
+    fn distance_from_origin(r: &{x: int, y: int}) {
         sqrt(r.x * r.x + r.y * r.y)
     }
     ...
