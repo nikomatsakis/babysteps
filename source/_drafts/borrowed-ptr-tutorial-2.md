@@ -464,8 +464,8 @@ This is bad.
 The goal of the compiler is to guarantee that each time a borrowed
 pointer with lifetime L is created, the compiler will ensure that the
 memory which is being borrowed is valid for the entirety of the
-lifetime L.  The technique that we use to do this is based on the
-concept of *ownership*.
+lifetime L.  We can currently make this guarantee in one of three
+ways, depending on the *owner* of the data being borrowed.
 
 #### Data ownership
 
@@ -557,21 +557,33 @@ is not freed because it was co-owned by `x`.  Meanwhile, the variable
 
 #### The rules for preventing overleverage
 
-Let us assume that there is an expression `&expr` which produces a
-borrowed pointer with the lifetime L.  The aim of the overleverage
-checks is then to guarantee that the memory found at the lvalue `expr`
-will remain valid for the entirety of the lifetime L.  The first step
-then is to determine the owner of `expr`, if possible, because knowing
-the owner of `expr` also tells us how and when `expr` may be freed.
+The rules for preventing overleverage depend on the owner of the data
+being borrowed.  Basically the compiler tries to accept as many
+programs as it can, so it takes advantage of whatever knowledge is
+available.
 
-The compiler begins by categorizing `expr` into one of three groups:
+The best case is when the data to be borrowed is exclusively owned by
+the stack frame.  This does not *necessarily* mean that the data is
+stored on the stack frame.  For example, the data might be found in a
+unique box stored in a local variable: in that case, the stack frame
+owns the local, which then owns the box, which owns its contents, and
+so the data is ultimately owned by the stack frame.  As described
+below, data owned by the stack frame can be closely tracked by the
+compiler and hence it can be very flexible with what it accepts.
 
-- Exclusively owned by the current stack frame;
-- Exclusively owned by a shared box;
-- Unknown ownership.
+For data which is not owned by the stack frame---or for which the
+compiler cannot determine a concrete owner---a stricter set of rules
+is applied.  If the data being borrowed is unstable---meaning that
+mutating the container would invalidate the borrowed pointer---then
+the data must reside in an immutable field, so as to guarantee that no
+mutations occur.  
 
-Each case is treated somewhat differently.  Let's look at each case in
-turn.
+Finally, if the program is borrowing unstable data in a mutable
+location, the final fallback is to accept the borrow but only for pure
+actions.  *Pure* actions are actions which do not modify any data
+unless it is owned by the current stack frame.
+
+The next three subsections examine the three cases in more detail.
 
 ##### Loaning out data owned by the current stack frame
 
@@ -631,23 +643,101 @@ general, borrowing a value also borrows its owner.
 
 The previous section focused on data which was owned by the current
 stack frame, but said nothing about other cases.  Very often, of
-course, we would like to borrow data owned by a shared box.
+course, we would like to borrow data owned by a shared box.  Unless
+the data being borrowed is part of a unique box or the interior of an
+enum, this is not generally an issue.
 
-If there is an attempt to borrow potentially unstable memory which is
-owned by a shared box or with an unknown owner, then the compiler
-requires that the memory being borrowed is immutable.
+For example, the following program does not cause any sort of error:
 
-Consider the most common case, something like (note that this case is
-not, in fact, in error):
+    type T = @{mut f: {g: int}};
+    
+    fn foo(v: T) -> int {
+        let x = &mut v.f.g;
+        *x
+    }
+    
+The reason is that even though the field `g` is part of a record
+stored in a mutable location, it is not harmful if the field `f` is
+reassigned, as it will not change the type of the field `g`.  Field
+`g` will remain an integer.  Note however that when we took the
+address of `v.f.g` we used the operator `&mut`, which means that the
+type of `x` will be `&mut int`: basically, we had to explicitly
+acknowledge that the value we borrowed is stored in mutable memory.
 
-    fn 
-    fn example() {
-        let u = ~{mut x: 10, mut y: 10};
-        let b = &u.x;                    // (0)
-        u.x += 11;                       // (1)
-        send_to_other_task(u);           // (2)
-        #debug["%d", *b];
+However, if there is an attempt to borrow *unstable* memory then the
+compiler must be more careful:
+
+    type T = @{mut f: {g: ~int}};
+    
+    fn foo(v: T) -> int {
+        let x = &*v.f.g;
+        ...
+        *x
     }
 
+Here we attempted to borrow the integer found inside the unique box
+`v.f.g`.  This is dangerous because if `v.f.g` were reassigned, then
+the pointer `x` would be invalidated.  Furthermore, it is not enough
+for the compiler to prevent you from modifying `v.f.g`: because `v` is
+a shared box, there may some alias to `v` that you could modify
+instead and still cause the same effect.  Therefore, this program
+is illegal.
+
+Basically borrowing unstable memory that is owned by a shared box is
+only safe if it is stored in an immutable field.  For example, if we
+modify the type `T` to remove the `mut` qualified:
+
+    type T = @{f: {g: ~int}};
+
+Now, so long as the shared box remains live, there is no way for the
+fields `f` or `g` to be modified, and hence the unique box will remain
+live.  
+
+It is still true that the compiler must guarantee that the shared box
+remains live.  Because of the nature of shared boxes, however, this is
+not a problem: all we must do is guarantee that some reference to the
+shared box exists for the duration of the borrow.  In some cases, the
+compiler can see that this is already the case in your program: for
+example, in the function `foo`, the parameter `v` is immutable and
+refers to the shared box, so so long as `v` is in scope the shared box
+will not be freed.  
+
+However, even if `v` were a mutable local, there is no problem: the
+compiler would just create a temporary with the current value so as to
+ensure that the shared box is not collected while the borrowed pointer
+exists.  Here is an example `bar()` that makes use of this feature:
+
+    fn bar() -> int {
+        let mut x = @{f: 3};
+        let y = &x.f;
+        assert *y == 3;
+        x = @{f: 4};    // overwrite x with new value
+        assert *y == 3; // but y still points at the old memory
+    }
+    
+What happens here is that the field `f` of the shared box is borrowed,
+but then the reference `x` to the shared box is mutated.  If `x` were
+the last reference to the box, and the compiler did nothing, then the box
+might be freed at this point.  But in fact the compiler sees that `x` is
+declared as a mutable local variable and so it inserts a temporary that
+refers to `x`.  This is called *rooting* `x`, because it ensures that
+there is a root for the garbage collector to find.  In other words,
+the function `bar()` is compiled to something like:
+
+    fn bar() -> int {
+        let mut x = @{f: 3};
+        let _x = x;     // compiler-inserted root
+        let y = &x.f;
+        assert *y == 3;
+        x = @{f: 4};    // overwrite x with new value
+        assert *y == 3; // but y still points at the old memory
+    }
 
 ##### Purity
+
+Sometimes neither of the two techniques described above apply.  In
+that case, the compiler will accept any borrow, so long as all code
+for the lifetime of the borrow is *pure*. Pure code is code which does
+not modify any data that is not owned by the current stack
+frame. Basically you can borrow anything so long as you promise not to
+make any mutation (except for local variables).
