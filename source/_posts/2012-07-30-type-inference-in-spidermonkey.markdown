@@ -14,8 +14,8 @@ on the topic. You may, like me, have read that publication.  You may,
 also like me, have walked away thinking, "um, I don't really
 understand how that works."  In that case, dear reader, this blog post
 is for you.  Well, actually, it's for me, to try and document what I
-gleaned from a conversation or two.  It may or may not be accurate
-(almost certainly not) and it may or may not be helpful.
+gleaned from a conversation or two.  It it is almost certainly not
+*entirely* accurate and it may or may not be helpful.
 
 <!-- more -->
 
@@ -90,13 +90,33 @@ example, suppose that there is a sequence of code like this:
 
     a = b.c
     d.e = a
-    
+
 Now, support that before this code runs, the type set `D.e` associated
 with `d.e` only contains integers.  Further suppose that the value `a`
-is a string. You might think that after this code executed the type
-set `D.e` would contain both integers and strings.  You'd be wrong.
+is a string. The state of the system might then look something like
+this:
 
-In fact, the type set is unaffected.  Instead, when the store
+     +-----+                 +-----+
+     | "B" |                 | "D" |
+     +-----+     /-------\   +-----+     /-------\
+     | "c" |---->| "str" |   | "e" |---->| "int" |
+     +-----+     \-------/   +-----+     \-------/
+     
+Here you see that the type set `B.c` has strings in it, and the
+type set for `D.e` has integers in it.  
+
+If this were a standard type inference algorithm, the above state
+would not be possible.  This is because a value is being copied from
+`b.c` into `d.e`, and hence the type set `D.e` ought to be a superset
+of the typeset `B.c`.  But this is not so.  "Ok", you might think,
+"perhaps the algorithm waits until the assignment *occurs* to do the
+propagation".  In that case, after the code executed, the type set
+`D.e` would contain both `int` and `str`.  But that too is not what
+happens.
+
+In fact, even once this code has executed, the type set `D.e` is
+unaffected.  This is true *even though* one of the objects associated
+with that type set has a string in the property `e`!  When the store
 executes, the engine observes that a string has been added to this
 property, but it prefers to take an optimistic approach and assume
 that the string will never actually be *read out*.  But of course we
@@ -109,7 +129,7 @@ To understand the practical impact of a type barrier, consider a snippet
 of code like the following:
 
     next = d.e + 1
-    
+
 Here the value `d.e` is being read, where `d` is the same object that
 was stored into before (or actually any object associated with the
 type object `D`).  Before the type barrier was added to the type set,
@@ -126,16 +146,25 @@ or performing on-stack replacement).
 Now so long as that string is never actually read, the type set `D.e`
 continues to store only an integer, but every access to the property
 will check for a string.  Once a string is actually *observed*, the
-type set updates itself.  This triggers a certain amount of
-propagation based on a constraint graph generated from the code.  I
-don't *fully* understand the constraint graph in detail yet, but my
-high-level understanding is that the TI analysis code constructs a
-constraint graph based on the JS source.  When new values appear in a
-type set, these will sometimes be propagated into other type sets, or
-they may trigger new barriers.  Basically there are various heuristics
-that determine whether a value is eagerly propagated from one type set
-to another or whether the propagation merely triggers a new type
-barrier.
+type set updates itself.  At that point, the type set `D.e` will
+contain both `str` and `int`.  This will cause code that relied on
+`D.e` being only an integer (such as the addition above) to be
+invalidated.  
+
+Updates to type sets also triggers a certain amount of propagation
+based on a traditional static constraint graph generated from the
+code.  I don't *fully* understand the constraint graph in detail yet.
+One thing I do know is that, unlike a static constraint graph, it
+contains two sorts of edges (in reality, probably more).  One edge is
+a traditional subset edge that ensures that one type set is a subset
+of the other.  The second edge is a barrier edge which says "if this
+type set A is bigger than B, it is possible that values from A have
+been stored into B, so add a type barrier to watch for them".  This is
+the same mechanism that we just discussed.  Basically it's more
+efficient and accurate to use traditional constraint edges, but they
+can lead to a loss of overall precision, so there are some heuristics
+that guide the decision about which kind of edge to use in order to
+get the best overall results.
 
 ### Conclusion
 
