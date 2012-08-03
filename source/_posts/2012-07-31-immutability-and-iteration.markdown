@@ -7,6 +7,27 @@ categories: [Rust]
 published: false
 ---
 
+I am trying to figure out how our APIs should look in light of the
+move to a region system.  One of the goals with borrowed pointers was
+to make it more evident when you have a pointer and when you
+don't---something which reference modes made quite hard to reason
+about.  Of course, the fact that modes obscured the use of pointers
+also made them nicer to use sometimes.
+
+<!-- more -->
+
+## The problem
+
+## One solution
+
+## Another option
+
+
+
+As so often happens, one of the great
+weaknesses of modes---that they hid where pointers were being
+used---is also one of their greatest strengths.
+
 So I started taking a tiny stab at modifying the map API to remove
 modes.  Right now, maps define a method each with a (region-ified)
 signature like:
@@ -15,26 +36,80 @@ signature like:
 
 In other words, the callback takes pointers to the keys/values in each
 entry.  This is (theoretically) great from an efficiency
-point-of-view, and it works with non-copyable keys and values.  In
-practice, however, we wind up making copies of the values, at least.
-This is because of the danger of someone modifying the hashmap during
-the iteration.  The current situation is fairly suboptimal.  We pay
-the full price of a copy but the callee only gets a reference and
+point-of-view, and it works with non-copyable keys and values.  
+
+In practice, however, we wind up making copies of the values, at
+least.  This is because of the danger of someone modifying the hashmap
+during the iteration.  The current situation is fairly suboptimal.  We
+pay the full price of a copy but the callee only gets a reference and
 hence can't take advantage of that.  However, if we want to allow
 internal pointers into the data structure, we have to follow some
 rules to make it safe (see below).
 
-So my question is, what do we want to do?  I see two main options.
+So my question is, what do we want to do?  How do want to design the
+iteration APIs and what are the implications?  I see two main options.
+
+<!-- more -->
+
+There are actually two orthogonal (but interlinked) concerns.  The
+first is, what kind of iteration methods do we want to support?
+Currently we have `each()` which is given borrowed pointers; perhaps
+we want `each()` and `each_ref()`, where the former iterates "by
+value" and the second iterates "by reference".  
+
+To help keep things concrete, I will focus on vector iteration at the
+moment, but the same principles apply
+
+
+
+
+
+
 
 ## 1. Include "by-value" and "by-pointer" iteration functions
 
-This has certain advantages.  The API is probably mildly more
-convenient (fewer pointers) for common use cases.  Also, it is
-possible to write "by-value" iterators that do not require that the
-structure be fully immutable, though they are generally less efficient
-than iterators that can assume immutability.  The reason for that
-inefficiency is that iterators which assume immutability can iterate
-through vectors without bound checks and so forth.
+This has certain advantages but doesn't fully solve the problem.  The
+API is probably mildly more convenient (fewer pointers) for common use
+cases.  Also, it is possible to write "by-value" iterators that do not
+require that the structure be fully immutable, though they are
+generally less efficient than iterators that can assume immutability.
+The reason for that inefficiency is that iterators which assume
+immutability can iterate through vectors without bound checks and so
+forth.
+
+To see what I mean, let us consider the simple case of iterating over
+a vector.  The current vector code basically reads the length once and
+uses unsafe pointers to access the actual array elements.  The reason
+is can safely do that is because it is actually iterating over a
+*slice* `&[T]`.  The type system, right now, guarantees that a slice
+`&[T]` will remain valid, which means that the length cannot change.
+This in turn requires that the slice must either live in immutable
+memory or live on the current stack frame.  Which means that you
+cannot iterate over a vector stored in a mutable field of some managed
+or borrowed data.  The following function, for example, would fail
+because the vector lives in a mutable field of a managed box, and thus
+we cannot guarantee that it will remain immutable during the iteration:
+
+    struct record {
+        mut f: ~[int]
+    }
+    fn foo(x: @record) {
+        for x.f.each |v| { ... }        // reports an error
+    }
+    
+If, however, we had defined iteration so that it did not rely on
+immutability, we could accommodate the above case, but at a
+performance cost.  We must re-check the bounds each iteration and we
+must copy the values out rather than passing them by pointer.  In
+fact, for this to work, the iteration must be defined over vectors and
+not just slices: the whole formation of a slice requires a guarantee
+that the source vector will not be freed.
+
+So, in summary, we can have "by-value" functions that will operate
+over collections in mutable locations, but they will be inherently
+less efficient than the "by-pointer" variety.  This also implies that
+there will probably be two separate iteration implementations, one
+written to take advantage of interior pointers and one not.
 
 ## 2. Include only "by-pointer" iteration functions (as today)
 
@@ -146,10 +221,10 @@ iterating) it would fail.
 The `managed<T>` type would be defined something like this:
 
     enum managed_state<T> {
-        priv transient,
         priv owned(~T),
         priv mutable(*mut T),
         priv immutable(*T)
+        priv transient,
     }
     struct managed<T> {
         mut state: managed_state<T>
@@ -193,7 +268,7 @@ The implementation of `as_mutable()` would look something like this
             alt self.state {
                 transient => { fail; } // cannot happen
                 immutable(ptr) => { fail "Mixing immutable and mutable"; }
-                mutable(ptr) => { ret op(*ptr); }
+                mutable(ptr) => { ret op(unsafe{*ptr}); }
                 owned(val) => { /*fallthrough*/ }
             }
             let mut state = transient;
