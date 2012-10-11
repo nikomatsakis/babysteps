@@ -69,16 +69,27 @@ mandelbrot set is pure:
     }
 
 `mandelbrot()` is simple as it only modifies local
-variables.  A mildly more interesting example might be `sums()`:
+variables.  A mildly more interesting example might be `sums()`.
+This function computes the partial sums of the input array
+`x` and stores them into an output array `sums`:
 
     function sums(x) {
         var sums = [], sum = 0;
-        for (var i = 0; i < x; i++) {
-            sum += i;
+        for (var i = 0; i < x.length; i++) {
+            sum += x[i];
             sums[i] = sum;
         }
         return sums;
     }
+
+The main thing I want to highlight here is that the function is
+assigning its results into to the array `sums`, and thus modifying a
+heap object, rather than simply modifying local variables.  But
+because this object was allocated by the function itself, and hence no
+one else can observe it, this is still pure. (Actually, this
+particular example would not be executable in parallel given some of
+the limitations of the *current* RiverTrail implementation, but I hope
+to lift those particular limitations soon).
 
 This function is *not* pure, because it modifies `x` which
 is not locally allocated:
@@ -224,3 +235,5 @@ They are extremely easy to use *and* guarantee that executions are
 serializable (PJs also guarantees deterministic execution, but
 Rivertrail does not due to functions like `reduce()`).  Not many
 languages can say that.
+
+**UPDATE:** Some paragraphs edited and expanded slightly for clarity.
