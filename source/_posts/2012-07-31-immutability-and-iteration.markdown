@@ -3,7 +3,7 @@ layout: post
 title: "Immutability and iteration"
 date: 2012-07-31 08:37
 comments: true
-categories: [Rust]
+categories: [Rust, Mutability]
 published: false
 ---
 

@@ -3,7 +3,7 @@ layout: post
 title: "Rust's object system"
 date: 2012-04-09 10:05
 comments: true
-categories: [Rust]
+categories: [Rust, Traits]
 ---
 
 On the `rust-dev` mailing list, someone pointed out another

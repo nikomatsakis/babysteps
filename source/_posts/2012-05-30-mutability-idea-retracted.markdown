@@ -3,7 +3,7 @@ layout: post
 title: "Mutability idea retracted"
 date: 2012-05-30 18:47
 comments: true
-categories: [Rust]
+categories: [Rust, Mutability]
 ---
 
 I have been thinking a bit more about the

@@ -1,224 +1,126 @@
-I am trying to put the final nails in the regions coffin now.  One of
-the big remaining areas is dealing with function and iface types.
-This proposal is certainly influenced by my previous proposals.
-However, we have backed away from the idea of dynamically-sized types
-for vectors and so I will do the same here.
+Guess what: we're looking at fn types again.  Ben Blum and I sat down
+and thought this over and we think we have a design that is at once
+reasonable to use but also offers a lot of power.
 
-### The design
+### Goals
 
-My current design includes the following kinds of function types
-(written as I expect them to commonly be written; some details are
-omitted):
-- `&fn(S) -> T`
-- `@fn(S) -> T`
-- `~fn(S) -> T`
+We use closures a lot in Rust to build up new control-flow
+abstractions.  However, they have many shortcomings:
 
-Similar types apply to iface types (using the iface `to_str` as an example):
-- `&to_str`
-- `@to_str`
-- `~to_str`
+- They are not integrated with lifetimes and hence not as flexible as
+  they can be.
+- You cannot move out of a closure.
+- You need to be able to limit the kind of data that a closure closes
+  over in a more fine-grained way; today's `fn~()`, for example, can
+  only close over "sendable" data.  This means we can safely send them
+  to other tasks without fear of data-races; but it doesn't indicate
+  whether the data is *immutable* or not, so they can't be shared
+  between threads.  Also, sendability no longer implies copyability,
+  so the current system can violate linearity, as all `fn~()` are
+  considered copyable.
 
-These types work like their corresponding pointer types, so a value of
-type `@fn(S) -> T` or `~fn(S) -> T` can be "borrowed" into a `&fn(S)
--> T`. (Today, there is a subtyping relationship)
+### What is the problem with the current system
 
-Similarly, the explicit syntax for creating closures will become
-`@fn(s: S) -> T { ... }` and `~fn(s: S) -> T { ... }`.  I will make it
-legal to omit the argument and return types and infer them from
-context.  The closures produced from such expressions are always
-copying closures, in that they copy or move values from their
-environment when created.
+The single biggest problem with the current system is the inability to
+move out of a closure.  Here is one example of where such a thing
+might come up.  Imagine I had a piece of code like this:
 
-The sugared notation `|s| expr` as well as the `do` and `for` loop
-notation will use inference to decide which of the three kinds of
-closures is produced.  If a sugared closure resolves to a `&fn`, then
-a "by-reference" closure will be produced.  That is, one which can
-modify the values in its enclosing environment.  Otherwise, a copying
-closure is created.  (As today)
+    fn validate_and_send(chan: Channel<Message>,
+                         msg: ~Message) {
+        validate_msg(msg);
+        chan.send(move msg);
+    }
 
-#### Borrowed closures
+This function takes a message of type `~Message`, validates it, and
+finally sends it along the channel.  Presume that this message is big
+and copying it is expensive.
 
-Borrowed closures in their most explicit form are written `&r/fn(S) ->
-T`.  They are like `fn()` today but they are associated with a region
-`r`.  The region type system will ensure they do not escape, so we can
-lift the various restrictions about using borrowed closures only
-within parameters and so forth.
+Now, imagine we are profiling and we want to insert a little closure
+to measure and print out how long this validation takes.  So we write
+something like:
 
-This will require some tweaks to various analyses (notably borrowck)
-that take advantage of the limited possibilities of the current
-by-reference closures.  I don't think this will be terribly difficult.
-
-Including an explicit region also *enables* a lot of very useful
-things.  Closures which reference their environment can be stored in
-other data structures.  Further, we should be able to make use of the
-region bound to allow borrowed closures to deinitialize variables in
-their environment---see below for more details.
-
-#### Shared closures
-
-Shared closures, written like `@fn(S) -> T`, are exactly like the
-`fn@(S) -> T` that we use today.  They consist of a shared, boxed
-environment which may close over arbitrary data.  They cannot close
-over borrowed pointers.
-
-#### Unique closures
-
-Unique closures in their most explicit form are written like `~fn:K(S)
--> T`, where `K` is a set of bounds like those found on type
-parameters.  If `K` is omitted it defaults to `send`.  They cannot
-close over borrowed pointers and, furthermore, all data that they do
-close over must conform to the given bound.  I expect it will rarely
-be necessary to write an explicit bound, but it may be useful
-sometimes to write `~fn:send copy(S) -> T`, to indicate that the data
-that is closed over is not only sendable but also copyable.  Unlike
-all other closure types, unique closures are themselves sendable
-provided that `send` is listed among the bounds `K`.
-
-#### Representation, bare functions
-
-The representation of function pointers will remain a pair `(code,
-env)` of pointers.  This is not as pure as my prior proposals but has
-some advantages, not the least of which being that it will require
-less code churn to achieve.  It should also make bare functions more
-efficiently represented.
-
-The bare function type goes away entirely, to be replaced with an
-inference technique similar to what Lindsey did with integer literal
-inference.
-
-#### Preventing capture
-
-There is one annoying complication.  As they have no region bounds, we
-need to prevent the `@fn()` and `~fn()` types from closing over
-borrowed pointers.  I plan to do this by introducing a new kind
-`owned` which means "copyable and does not contain borrowed pointers".
-Functions can only close over owned data.  The reason that a kind is
-necessary is due to the possibility of functions like the following:
-
-    iface foo { fn foo(); }
-    fn generator<A: copy foo>(a: A) -> @fn() {
-        @fn() { a.foo() }
+    fn validate_and_send(chan: Channel<Message>,
+                         msg: ~Message) {
+        do time_and_print {
+            validate_msg(msg);
+            chan.send(move msg);
+        }
     }
     
-This function closes over `a`.  So now if we invoked `generator()`
-with `A` bound to a type like `&int`, it would close over region data.
-Any time the returned closure is used, it would make use of that
-region data.  Because the region does not appear in the type of the
-closure (`@fn()`), the type system would be powerless to prevent this
-borrowed pointer from leaking out beyond its lifetime.  Bad.
+where `time_and_print()` is a function which executes its closure
+argument and then prints out the elapsed time.  This looks good.
 
-In my current design, the function above would be illegal.  One would
-have to write:
+But wait, there is a problem!  If we try to compile this, the compiler
+will object because the `move msg` command tries to move out of the
+closure environment.  The reason that the compiler is concerned is
+that it is possible that the closure may be invoked twice; in that
+case, the message would already have been sent.  That's bad!
 
-    iface foo { fn foo(); }
-    fn generator<A: owned foo>(a: A) -> @fn() {
-        @fn() { a.foo() }
+Similar problems arise when you try to hand off data to tasks using
+the task spawn function:
+
+    do task::spawn {
+        ...
     }
     
-Note that the bound `owned` replaced `copy`.  Without this bound it
-would not be legal to copy `a` into the closure.  This bound also
-prevents `generator()` from being called with a borrowed pointer.
+This function may well want to take data that it owns and move it
+along.
 
-This is actually a simplified approach.  Another option might be to
-add region bounds on all `fn` types.  We could then allow `fn` types
-to close over borrowed pointers.  I hestitate to do this though
-because I think that the region bounds on `@fn` and `~fn` would want
-different defaults than all other region references.  For example, all
-region references appearing in a function signature default to a
-region parameter, including those that appear within shared boxes and
-so forth (this will not be a common occurrence, I think, but of course
-it can happen).  So if I write:
+### Proposed solution: high level
 
-    fn some_func(x: &int, y: @&int) { ... }
-    
-then both `x` and `*y` have the same lifetime (the default lifetime
-parameter).  If we were consistent, then, it would mean that a function
-like this:
+The proposed fn types are rather general and can cover a large number
+of scenarios.  However, in practice, I think people will use one of
+the following:
 
-    fn some_func(x: &int, f: @fn(int)) { ... }
+- `once fn(T) -> U`: "A function I will call once"
+- `&fn(T) -> U`: "A function I will call some number of times"
+- `once fn:send(T) -> U`: "A sendable function that will be called at
+  most once"
+- `~fn:send const(T) -> U`: "A sendable function that only closes over
+  immutable state (and hence can be executed many times in parallel)"
 
-would imply that the lifetime of `x` and the region bound of `f` would
-both be the same as well (the default lifetime parameter).  But this
-is likely not what you wanted; probably you planned to store `f` into
-a data structure or something and actually wanted a region bound of
-`&static` (that is, does not close over region data).  
+You can see here that function types will begin with either one of the
+standard ownership sigils (`&`, `~`, or `@`) or the keyword `once`.
+A `once fn` is statically guaranteed to be called at most once.
 
-Basically, the difference between an `@fn` type and other shared types
-with regard to regions is that we never know what an `@fn` closes over.
-With a normal shared type, we only add region bounds when regions are
-actually used: but for `@fn` we'd have to choose a different default.
 
-Maybe this is not so bad, but even if we added region bounds to `@fn`,
-we'd *still* need the `owned` kind, or else we'd need to be able to
-add region bounds to type variables.  This all seems like layers and
-layers of complexity that won't be necessary, as a `@fn` type that
-closes over borrowed pointers isn't all that useful (there are places
-I can imagine it being useful, though).  
 
-Anyway this part is actually easily tweaked if it seems more
-expressiveness is warranted.
+In general, function types will be equipped with constraints on the
+things that they close over.  So you can write `fn:send const` to
+indicate a function that only closes over sendable, immutable data.
 
-### Goals that are achieved by this proposal
+Function types cannot be referenced directly (so `fn(int)` is not a
+type) but must include an appropriate sigil prefix, or else the keyword
+`once`.  So `&fn(T) -> U` is a borrowed function that you can call any
+number of types, and `once fn(T) -> U` is a function you can only call once.
 
-**Stack-allocated and sendable iface instances.** I've wanted this for
-a long time.
-  
-**Prefix-sigils.** Postfix sigils like `fn@` are so Rust 0.2.
+Any type of function can be coerced to a `once fn(T) -> U`, presuming
+that the bounds and argument types are compatible.  `@fn` and `~fn`
+can also be borrowed as a `&fn`.
 
-**Support for sendable, copyable unique closures.** Now that `send` no
-longer implies `copy`, we need to distinguish these things.
+The most common uses of functions will look like:
 
-**Fewer closure types.** We currently have way too many (5, I think).
-Now there are still three, but they look and feel like one.
 
-### Goals that *might* be achieved by this proposal
+### Proposed solution: nitty-gritty details
 
-**Moving within closures.** Actually I only *think* this can be done
-  safely.  This is a fairly complex topic.  The basic goal is to be
-  able to write something like this `fold()` operation (here I am using
-  some non-implemented things, like unary move):
-  
-      fn fold<A,B>(iter: &iterable<A>, b0: B, op: &fn(B, &A) -> B) {
-          let b = move b0;
-          for iter.each |a| {
-              b = op(move b, a);
-          }
-      }
-      
-  The interesting part is that we move the intermediate value `b`
-  out of the stack frame in the call to `op()` and then replace it
-  with a new value before the next iteration of the loop.  Note that the
-  loop body here is actually a closure.
-  
-  This may seem trivially safe, but given the possibility of recursion
-  it is not so.  We need to prove that the closure never recurses
-  while some upvars are uninitialized.  I *think* regions give us the
-  tools to do that: we can see that the region of `op` is bigger than
-  the method body itself (it's a region parameter, in fact).  This
-  implies that `op()` cannot reach the closure which is executing,
-  which is defined with a tighter region.  However, there are some
-  complications I haven't thought through---for example, what if we
-  provided the closure as an argument to `op()`?  This will turn out
-  being quite complex in the end I fear.  Maybe there is a better way.
+The basic of all function types will be a pseudo-type "F".  Here is
+the grammar, omitting all defaults
 
-### Goals that are *not* achieved by this proposal
+    T := ...
+       | @F
+       | ~F
+       | &r/F
+       | once F
+    F := fn:B(T) -> U;
+    B := &r' K1 ... Kn
+    K := copy
+       | send
+       | const
+       | ...
 
-**One-shot closures.** We still have no support for one-shot closures.
-It is becoming increasingly clear that these would be helpful: it is
-common to want to move some value into the closure and then move it
-out again, and the current unique closure design does not permit this.
-You can work around it with a series of painful swaps and calls to
-`option::unwrap()`, but it's inefficient and inelegant.
+The bound `B` of a function includes a lifetime bound `&r'` and any
+number of kind bounds. Kinds are built-in selectors like `copy`,
+`send`, and so forth.
 
-pcwalton ran an idea by me which basically converted today's `fn~`
-into a one-shot closure: if you wanted to call the closure mutiple
-times, you had to copy it.  This has a certain appeal but it doesn't
-work with the system as it is today nor the system I proposed just
-now, because `fn~` (at least today) can be upcast to `fn`.  We'd have
-to make `fn~` not borrowable.
-
-I was initially enthusiastic about this idea but am now less so.  It
-seems to be a strike against orthogonality: `~fn()` types would behave
-differently from all other closure types.  I'd rather give them a
-different name, like procedures or even `~fn1()`, to make the
-distinction more clear.
+The precise details of how a function type can be used and allocated
+will depend on how it is 

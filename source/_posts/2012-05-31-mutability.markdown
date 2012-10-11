@@ -3,7 +3,7 @@ layout: post
 title: "Mutability"
 date: 2012-05-31 10:32
 comments: true
-categories: [Rust]
+categories: [Rust, Mutability]
 ---
 
 OK, I've been thinking more about the mutability issue and I think

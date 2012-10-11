@@ -3,7 +3,7 @@ layout: post
 title: "Moving mutability into the type"
 date: 2012-05-28 15:17
 comments: true
-categories: [Rust, PL]
+categories: [Rust, PL, Mutability]
 ---
 
 I am dissatisfied with how mutability is treated in the Rust type

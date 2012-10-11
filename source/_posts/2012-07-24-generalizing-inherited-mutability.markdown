@@ -3,7 +3,7 @@ layout: post
 title: "Generalizing inherited mutability"
 date: 2012-07-24 11:33
 comments: true
-categories: [Rust]
+categories: [Rust, Mutability]
 ---
 
 I have been working on a change to the definition of mutability in
