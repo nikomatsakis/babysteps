@@ -3,7 +3,7 @@ layout: post
 title: "Rivertrail"
 date: 2012-10-10 17:36
 comments: true
-categories: [PJS]
+categories: [PJs]
 ---
 I have started work on implementing [Rivertrail][rt], Intel's proposal
 for data parallelism in JS.  I am excited about this project, it seems
@@ -49,7 +49,7 @@ key differences:
   
 A pure function is just an ordinary JavaScript function which does not
 mutate shared state.  This does not mean that the function cannot
-mutate *anything*: it can mutate local variables or variables that it
+mutate *anything*: it can mutate local variables or objects that it
 itself allocated.  So, for example, this function which computes the
 mandelbrot set is pure:
 
@@ -168,14 +168,14 @@ code, though only two work at the moment:
   which the vectorized code runs on the GPU instead of the CPU.  There
   are numerous technical differences, though.  For one thing, the GPU
   hardware handles the vectorization, rather than the compiler having
-  to use difference instructions.  For another, on some platforms at
+  to use special instructions.  For another, on some platforms at
   least, we have to think about the movement of memory betwen the CPU
   and GPU.
   
 Of these modes, the sequential mode is the most general: it can be
 applied to any pure function.  The multicore mode is also fairly
 general, and can be used with any pure function that restricts itself
-to safe operations.
+to the support set of threadsafe operations.
 
 The vectorized and GPU modes will be more limited.  Vectorized mode is
 only profitable for functions where we are able to convert the code
@@ -185,7 +185,7 @@ GPU mode similarly imposes limitations on data movement and so forth.
 ## What about performance?
 
 I won't post extensive numbers here because (1) I have not done any
-proper profiling; (2) we don't have a good benchmarks; and (3) we have
+proper profiling; (2) we don't have good benchmarks; and (3) we have
 not spent *any* time optimizing the implementation.  That said, here
 are some results from running a mandelbrot computation locally on my
 laptop, which has four cores with two hyperthreads each.  The Seq column
@@ -197,11 +197,11 @@ so higher is better.
 
 <p><table class="hor-minimalist-a">
 <tr><th>Threads</th><th>Seq (ms)</th><th>Par (ms)</th><th>Ratio (Seq/Par)</th></tr>
-<tr><td>1</td>  <td>2976</td> <td>2515</td> <td>1.18</td></tr>
-<tr><td>2</td>  <td>2952</td> <td>1782</td> <td>1.65</td></tr>
-<tr><td>4</td>  <td>2964</td> <td>1417</td> <td>2.09</td></tr>
-<tr><td>8</td>  <td>2880</td> <td>1149</td> <td>2.50</td></tr>
-<tr><td>16</td> <td>2891</td> <td>1109</td> <td>2.60</td></tr>
+<tr><td>2</td>  <td>2976</td> <td>2515</td> <td>1.18</td></tr>
+<tr><td>3</td>  <td>2952</td> <td>1782</td> <td>1.65</td></tr>
+<tr><td>5</td>  <td>2964</td> <td>1417</td> <td>2.09</td></tr>
+<tr><td>9</td>  <td>2880</td> <td>1149</td> <td>2.50</td></tr>
+<tr><td>17</td> <td>2891</td> <td>1109</td> <td>2.60</td></tr>
 </table></p>
 
 Obviously, these numbers have room for improvement.  I'd like to see
@@ -214,6 +214,12 @@ JavaScript implementation based on arrays, not the sequential
 ParallelArray mode, and I ran the code for a while first to ensure
 that the JIT was in use.  At least I think the JIT was in use (this is
 what I mean by "I have not done any proper profiling").
+
+**UPDATE:** I realized that I was counting the number of worker
+threads, but there is always an extra thread (the "main thread") that
+is helping out too.  Hence instead of measuring 1, 2, 4, etc threads,
+I have been measuring 2, 3, 5, etc threads.  I have updated the chart
+accordingly.
 
 ## What about PJs?
 

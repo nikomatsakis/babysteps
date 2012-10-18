@@ -1,2 +1,32 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+
+// From http://coding.smashingmagazine.com/2008/08/13/top-10-css-table-designs/
+
+.hor-minimalist-a
+{
+	// font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+	font-size: 12px;
+        //	background: #fff;
+	margin: 45px;
+	width: 480px;
+	border-collapse: collapse;
+	text-align: left;
+}
+.hor-minimalist-a th
+{
+	font-size: 14px;
+	font-weight: normal;
+	color: #039;
+	padding: 10px 8px;
+	border-bottom: 2px solid #6678b1;
+}
+.hor-minimalist-a td
+{
+	color: #669;
+	padding: 9px 8px 0px 8px;
+}
+.hor-minimalist-a tbody tr:hover td
+{
+	color: #009;
+}

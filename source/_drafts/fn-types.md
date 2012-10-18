@@ -1,3 +1,7 @@
+My big goal for 0.5 is to straighten out our function types.
+
+
+
 Guess what: we're looking at fn types again.  Ben Blum and I sat down
 and thought this over and we think we have a design that is at once
 reasonable to use but also offers a lot of power.
