@@ -1,3 +1,11 @@
+---
+layout: post
+title: "Lifetime notation"
+date: 2012-12-30 16:33
+comments: true
+categories: [Rust]
+---
+
 I've been thinking for a while that our lifetime notation has too many
 defaults which can be more confusing than helpful.  A recent spate of
 e-mails on rust-dev brought this back to my mind.  I've been wanting
@@ -271,5 +279,5 @@ matching delimeters as it allows for multiple parameters very easily
 (e.g., `Context{a, b}`).  Re-using `<>` for both the lifetime
 parameters and the type parameters is also appealing to me, but I
 can't quite find a way to do it that is unambiguously parsable.
-Option 5 is perhaps tolerable. 
+Option 5 is perhaps tolerable.
 

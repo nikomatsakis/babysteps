@@ -1,3 +1,11 @@
+---
+layout: post
+title: "Restrict pointers"
+date: 2012-10-24 21:15
+comments: true
+categories: [Rust]
+---
+
 I am considering whether we should add a way to borrow something but
 retain uniqueness.  This would address a shortcoming of the borrowing
 system that has been bothering me for some time, and it would enable a
@@ -55,9 +63,7 @@ has finished:
     }
     
 This is a bit annoying, but it works.  It's similar to other affine
-systems like [Alms].
-
-[alms]: http://www.eecs.harvard.edu/~tov/pubs/alms/
+systems like [Alms][alms].
 
 ### A solution
 
@@ -84,7 +90,6 @@ So, we could rewrite our troublesome function `foo()` as follows:
         for bar.each |k, v| {
             ...
         }
-        return map;
     }
 
 Now it is perfectly legal to insert into the map and iterate over it.
@@ -92,6 +97,12 @@ The borrow checker knows that there are no aliases of `bar`, so it
 will permit it to be treated as both mutable and immutable, as long as
 those regions do not overlap.  You would call `foo` like this
 `foo(&restrict map)`.
+
+The reason that `restrict` implies mutability is that, if the memory
+is *immutable*, you might as well just do an `&T` pointer.  There is
+no need to have a unique pointer to immutable memory, since aliases
+cannot interfere with one another.  We could force you to say
+`&restrict mut` but that seems rather verbose!
 
 ### How can you enforce this?
 
@@ -179,14 +190,16 @@ returned at the end of that.  This is less flexible in theory---you
 can't stash a permission into a heap structure, for example---but it's
 often more flexible in practice, since most of the actual fractional
 permissions since I've seen paper over fractional permissions with a
-borrowing-like system.
+borrowing-like system, and they usually don't have the full power of
+regions.
 
-Also, we permit a value to borrowed with an `&mut` pointers.  This
-prevents the value from being *moved* but does not prevent it from
-being mutated.  In a traditional fractional permission system,
-mutability and moves are both tied to having the full 1.0 permission,
-but having less than 1.0 means you are limited to reads and cannot
-move.  But for us there is a third possibility, that one can write but
-not move.
+Another difference is that our permissions can't actually be
+summarized as number between 0 and 1.  In a traditional fractional
+permission system, mutability and moves are both tied to having the
+full 1.0 permission, but having less than 1.0 means you are limited to
+reads and cannot move.  But for us there is the possibility that you
+borrow with `&mut`, which permits writes but not move.
 
+[pr]: /blog/2012/09/26/type-system-for-borrowing-permissions/
+[alms]: http://www.eecs.harvard.edu/~tov/pubs/alms/
 [c99]: http://en.wikipedia.org/wiki/Restrict

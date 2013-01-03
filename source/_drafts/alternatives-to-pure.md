@@ -14,67 +14,70 @@ quite sure that Rust would quickly develop a corresponding term like
 [mildly humorous medical condition][mc] and thus is inherently less
 appealing.
 
-[pcwalton]: http://pcwalton.github.com/
-[mc]: http://www.webmd.com/digestive-disorders/digestive-diseases-constipation
+Some of you loyal readers may be thinking: "I thought there was no
+need for purity if we implemented
+[the ideas you wrote about in your previous post][imagine]?"  Of
+course you are correct, but those ideas have not been implemented yet
+and may never be.  In particular, Patrick and I were discussing that
+perhaps it would be best to make `@mut` dynamically checked but leave
+`&mut` as it is today, meaning that the possibility of aliasable,
+mutable data still exists.  That means that purity---or something like
+it!---will remain relevant.
+
+<!-- more -->
 
 ### Where purity is important
 
-The current type system includes three mutability qualifiers:
+Purity is currently needed whenever the user attempts to *freeze* data
+is that both mutable *and* aliasable.  To see why it is necessary
+imagine a borrowed pointer `b` of type `&mut T`.  Now if the compiler
+wants to guarantee that the value `*b` pointed at by `b` is not
+mutated, it can easily prevent you from writing to `*b`, but it also
+has to prevent you from writing to some alias `b1` of `b`.  To make
+this worse, the compiler tries not to look at the contents of
+functions you call (that is, the check is modular) and hence if the
+compiler sees a call to some function `f()` it must assume that `f`
+may mutate `b` or some alias of `b`.
 
-- immutable (the default): no one can change this data
-- `mut`: the data can be changed via this pointer
-- `const`: the data cannot be changed via this pointer but may be
-  mutable through other pointers
+Today, we allow functions to be declared as pure, which basically
+means "I promise not to mutate any data that you the caller can see".
+In fact the rule is more like, "I won't mutate any data that you the
+caller can see, except by calling closures that you gave to me".  But
+the principle is the same: the caller never needs to examine the body
+of the function `f()` to know what `f()` might mutate.  It only needs
+to examine the closures that the caller passes to `f()` as argument,
+if any, to make sure that those closures do not modify `b` or any
+alias of `b`.
 
-`const` is the supertype of the other two qualifiers.  At first, you
-might think that if you want to write code that operates over data
-which may or may not be mutable, `const` would be just the thing you
-want.  Unfortunately, this turns out not to be true a lot of the time.
+Let's get more concrete with an example.  Here's one of my favorites.
+If you have a freezable hashmap, you wind up with some functions to
+insert and retrieve keys from it:
 
-To see why `const` is not sufficient, think of the implementation of a
-sendable map.  The types involved look something like this:
+    struct Map<K,V> { buckets: ~[Option<Bucket<K,V>>], ... }
+    struct Bucket<K,V> { key: K, value: V}
+    fn insert<K,V>(m: &mut Map<K,V>, k: K, v: V) {...}
+    fn get<K,V>(m: &r/Map<K,V>, k: &K) -> &r/V {...}
 
-```rust
-struct Map<K: Const Eq Hash, V> {
-    buckets: ~[Option<Bucket<K,V>>]
-}
-struct Bucket<K: Const Eq Hash, V> {
-    hash: uint,
-    key: K,
-    value: V
-}
-```
+Note that these functions both take a borrowed pointer `m` to a
+`Map<K,V>`, but for `insert()` the pointer is mutable and for `get()`
+the pointer is immutable.  By the rules of inherited mutability, this
+means that `insert()` is able to mutate the data any data owned by the
+map, which includes its `buckets` array and the contents of the
+buckets themselves.
 
-Now in the `insert()` routine, we want to see whether an entry already
-exists.  In the current send_map code, there is a pure routine that is
-shared by both the `insert()` and `find()` routines:
+    
+    
+### So what is the alternative?
 
-```rust
-pure fn find_bucket_index(&self, hash: uint, key: &K) -> Option<uint> {
-    loop {
-        ...
-        match self.buckets[index] {
-            Some(ref bkt) => {
-                if hash == bkt.hash && bkt.key.eq(key) {
-                    return Some(index);
-                }
-            }
-            None => {
-                ...
-            }
-        }
-    }
-}
-```
+Note that emphasis on *mutation* in that previous paragraph.  That's
+what purity, at least in Rust, is really about: ensuring that the
+function you are calling doesn't mutate the data that you have frozen.
 
-Of course this isn't exactly how it works but you get the idea.  Now,
-here is the tricky part.  If there were no purity, but only `const`,
-then "self" would have type `&const Map<K,V>` which would make the
-`ref bkt` illegal---particularly as within the body of the match we
-invoke `bkt.key.eq()` which might mutate self, for all that we know,
-and cause the bucket to be overwritten with `None`.
+The basic idea is to replace the idea of a pure function with the idea
+of a function that doesn't have access to mutable state.
 
-### So what can we do?
+
+
 
 Part of the current plan for closure types is to introduce a bound on
 the environment of the closure.  So, for example, one could write
@@ -132,10 +135,13 @@ large
 
 ###
 
-Anyway, I may do some experiments in this direction.  If we could remove
-purity I think it'd be a win.
+Anyway, I may do some experiments in this direction.  If we could
+remove purity I think it'd be a win.
 
 Interestingly, this definition of purity is still *mostly* compatible
 with porting a [PJs or Rivertrail][pjs]-like approach to Rust.
 
-[pjs]: 
+[pjs]: /blog/categories/pjs/
+[pcwalton]: http://pcwalton.github.com/
+[imagine]: /blog/2012/11/18/imagine-never-hearing-the-phrase-aliasable/
+[mc]: http://www.webmd.com/digestive-disorders/digestive-diseases-constipation

@@ -3,7 +3,7 @@ layout: post
 title: "Fn types"
 date: 2012-07-12 09:21
 comments: true
-categories: [Rust]
+categories: [Rust, FnTypes]
 ---
 
 I am trying to mop up some of the remaining work for regions now.  One
