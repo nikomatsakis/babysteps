@@ -114,9 +114,9 @@ I think that we should change the standard `each` signature to:
 
     fn each<E>(c: &Coll<E>, f: &fn(&E) -> bool) -> bool
    
-Here the return value of `each` is always a bool, and it will be false
+Here the return value of `each` is always a boolean, and it will be false
 if the last call to `f()` returned false, and true otherwise.  This
-makes it easier to write compose `each()` methods.  We would also
+makes it easier to write composed `each()` methods.  We would also
 adjust `for` statements so that they always return unit and do not
 return the result of `each()`.
 
