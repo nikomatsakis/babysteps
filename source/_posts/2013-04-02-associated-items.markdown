@@ -7,7 +7,7 @@ categories: [Rust]
 ---
 I've been doing a lot of thinking about Rust's trait system lately.
 The current system is a bit uneven: it offers a lot of power, but the
-implementation is inconsinstent and incomplete, and in some cases we
+implementation is inconsistent and incomplete, and in some cases we
 haven't thought hard enough about precisely what should be allowed and
 what should not.  I'm going to write a series of posts looking at
 various aspects of the trait system and trying to suss out what we
