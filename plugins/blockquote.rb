@@ -21,6 +21,7 @@ module Jekyll
   class Blockquote < Liquid::Block
     FullCiteWithTitle = /(\S.*)\s+(https?:\/\/)(\S+)\s+(.+)/i
     FullCite = /(\S.*)\s+(https?:\/\/)(\S+)/i
+    AuthorTitle = /([^,]+),([^,]+)/
     Author =  /(.+)/
 
     def initialize(tag_name, markup, tokens)
@@ -30,23 +31,21 @@ module Jekyll
       if markup =~ FullCiteWithTitle
         @by = $1
         @source = $2 + $3
-        @title = $4.titlecase
+        @title = $4.titlecase.strip
       elsif markup =~ FullCite
         @by = $1
         @source = $2 + $3
+      elsif markup =~ AuthorTitle
+        @by = $1
+        @title = $2.titlecase.strip
       elsif markup =~ Author
-        if $1 =~ /([^,]+),([^,]+)/
-          @by = $1
-          @title = $2.titlecase
-        else
-          @by = $1
-        end
+        @by = $1
       end
       super
     end
 
     def render(context)
-      quote = paragraphize(super.map(&:strip).join)
+      quote = paragraphize(super)
       author = "<strong>#{@by.strip}</strong>" if @by
       if @source
         url = @source.match(/https?:\/\/(.+)/)[1].split('/')
@@ -60,9 +59,9 @@ module Jekyll
         source << '/&hellip;' unless source == @source
       end
       if !@source.nil?
-        cite = "<cite><a href='#{@source}'>#{(@title || source)}</a></cite>"
+        cite = " <cite><a href='#{@source}'>#{(@title || source)}</a></cite>"
       elsif !@title.nil?
-        cite = "<cite>#{@title}</cite>"
+        cite = " <cite>#{@title}</cite>"
       end
       blockquote = if @by.nil?
         quote
@@ -75,7 +74,7 @@ module Jekyll
     end
 
     def paragraphize(input)
-      "<p>#{input.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>"
+      "<p>#{input.lstrip.rstrip.gsub(/\n\n/, '</p><p>').gsub(/\n/, '<br/>')}</p>"
     end
   end
 end
