@@ -1,8 +1,16 @@
+---
+layout: post
+title: "Mutable fn alternatives"
+date: 2013-05-13 17:31
+comments: true
+categories: [Rust]
+---
 I've been thinking about what I wrote in my last post regarding
 closures and I am beginning to change my opinion about the correct
-solution. So, besides writing `fn~`, what are the other options?  I
-just thought I'd write down the other ideas I've come up with.  Not
-saying any of the ideas in this post are good yet.
+solution. `fn~` just seems so unfortunate. So, besides writing `fn~`,
+what are the other options?  I just thought I'd write down a few of
+the other ideas I've come up with for later reference.  Not saying any
+of the ideas in this post are good yet.
 
 ### Just write `&mut fn()`
 
