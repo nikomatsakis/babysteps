@@ -286,9 +286,9 @@ type errors. The solution there would be to use unsafe code:
                 
                 // But we know that we never hand out same ref twice,
                 // and there is no alternate means of accessing `self.data`,
-                // so we can cheat and transmute the pointer:
+                // so we can cheat and extend the lifetime by fiat:
                 
-                unsafe { Some(unsafe::transmute(ptr)) }
+                unsafe { Some(unsafe::copy_mut_lifetime(self.data, ptr)) }
             } else {
                 None
             }
