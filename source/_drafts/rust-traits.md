@@ -1,3 +1,95 @@
+High-level
+
+1. Coherence rules are too restrictive
+2. Method matching doesn't recurse as well as perhaps it ought to
+3. We should add additional restrictions to traits with *methods*:
+   - Implied functional dependency so that method resolution is tractable
+   - No use of `Self` except in receiver position
+     - Perhaps `Self` should be declared explicitly?
+4. Operator overloading traits:
+   - Do not use methods
+   - Just call the function directly
+5. Better support for associated items 
+6. Refinement in subtraits https://etherpad.mozilla.org/pnRFgwAoBv
+
+## Goals
+
+At present, Rust's trait system is both (indisputably) ill-defined as
+well as (I believe) being simultaneously overly accepting and
+unnecessarily restrictive. This document aims to define what sorts of
+traits and impls should and should not be accepted. It also describes
+some future extensions adding useful features.
+
+Some potentially controversial aspects of this proposal include:
+
+- Special treatment for traits that contain *methods* versus simply
+  associated functions.
+- No attempt to guarantee decidability of impl selection.
+- The details of associated items.
+- The introduction of `where` clauses.
+
+## Comparison with Haskell
+
+The aim of those section is to define the proposed trait system
+relative to Haskell's, for the convenience of those familiar with
+Haskell's system.
+
+The Rust system roughly supports Haskell's multiparameter type classes.
+We do not support:
+
+- [orphan instances](http://www.haskell.org/haskellwiki/Orphan_instance)
+- [overlapping or incoherent instances](http://www.haskell.org/ghc/docs/6.12.1/html/users_guide/type-class-extensions.html#instance-overlap)
+- type families, except as expressed through associated items
+
+In some cases, we can be more permissive than Haskell:
+
+- because we do not permit orphans, we can make the "closed world"
+  assumption, which means that we can determine definitely whether a
+  given trait is implemented for some set of types.
+- we do not restrict the types that can appear in impls,
+  similar to Haskell's `-XUndecidableInstances` flag.
+  
+Unlike Haskell, we also support *inherent methods*, sometimes called
+*anonymous traits*. These are methods that are attached to a type
+itself and not associated with a type class, as is typical in OOP
+languages. These methods do not directly interact with type-classes
+but naturally must be considered as part of the method lookup
+algorithm.
+  
+## Trait declaration syntax
+
+I won't bother to define a formal grammar, but here is an example
+covering the relevant aspects of trait syntax:
+
+    trait Trait<A,B,C>       // Zero or more type parameters
+      : Supertrait1<...>,  // Zero or more supertraits
+        Supertrait2<...>
+      where A : Int
+    {
+    }
+
+## 
+
+We do not permit orhpa
+
+1. Multiparameter type classes
+2. 
+
+
+
+This document describes an intended Rust's trait system.
+In this document, I aim to specify a precise semantics for Rust's
+trait systems.
+
+1. Specify a precise semantics of Rust's trait system
+
+
+
+
+
+
+
+
 I want to take some time to write out a description of how I think
 traits in Rust ought to eventually work (but don't today). I'll also
 describe how I think these changes ought to be phased in and
