@@ -3,7 +3,7 @@ layout: post
 title: "Parallel JS lands"
 date: 2013-03-20 09:56
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 The [first version of our work on ParallelJS][bug829602] has just been

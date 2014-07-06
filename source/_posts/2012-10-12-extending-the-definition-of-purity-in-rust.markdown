@@ -3,7 +3,7 @@ layout: post
 title: "Extending the definition of purity in Rust"
 date: 2012-10-12 13:40
 comments: true
-categories: [Rust, PJs]
+categories: [Rust, PJs, JS]
 ---
 
 In this post I propose an extension of Rust's purity rules.  The short

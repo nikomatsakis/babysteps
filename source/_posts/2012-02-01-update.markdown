@@ -3,7 +3,7 @@ layout: post
 title: "Update"
 date: 2012-02-01 20:50
 comments: true
-categories: [Rust, PL, PJs]
+categories: [Rust, PL, PJs, JS]
 ---
 
 It's been a while since I wrote anything on the blog! A lot has been

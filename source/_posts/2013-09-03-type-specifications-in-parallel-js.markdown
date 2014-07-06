@@ -3,7 +3,7 @@ layout: post
 title: "Type specifications in Parallel JS"
 date: 2013-09-03 13:35
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 Since I last wrote, we've made great progress with the work on the

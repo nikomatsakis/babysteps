@@ -3,7 +3,7 @@ layout: post
 title: "Splitting the PJs API"
 date: 2013-02-26 15:08
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 Lately, I've been thinking about the ParallelJS API that we want to

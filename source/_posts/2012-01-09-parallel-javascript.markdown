@@ -3,7 +3,7 @@ layout: post
 title: "Parallel Javascript"
 date: 2012-01-09 16:55
 comments: true
-categories: [PL, PJs]
+categories: [PL, PJs, JS]
 ---
 
 Lately the ideas for a parallel, shared memory JavaScript have begun

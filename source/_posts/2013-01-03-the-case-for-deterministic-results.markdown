@@ -3,7 +3,7 @@ layout: post
 title: "The case FOR deterministic results"
 date: 2013-01-03 19:05
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 In my last post, I made the case against having a deterministic

@@ -3,7 +3,7 @@ layout: post
 title: "Optimizing SIMD"
 date: 2013-11-21 21:56
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 There is currently some [ongoing effort][904913] to implement the

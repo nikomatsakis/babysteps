@@ -1,4 +1,4 @@
-High-level
+## High-level
 
 1. Coherence rules are too restrictive
 2. Method matching doesn't recurse as well as perhaps it ought to
@@ -11,6 +11,67 @@ High-level
    - Just call the function directly
 5. Better support for associated items 
 6. Refinement in subtraits https://etherpad.mozilla.org/pnRFgwAoBv
+
+### 
+
+
+
+### Method matching
+
+- When processing an expression `expr.m(...)`, how should we proceed?
+- Complications:
+  - Trait vs inherent
+    - At present, we give inherent precedence. This was required
+      pre-DST to permit `impl Trait for &Trait`. Unclear if it is
+      required post-DST.
+  - Overloadable deref, and in particular `DerefImm` vs `DerefMut`
+  - "Redirecting impls" like `impl<T:Hash> Foo for T { ... }`
+  - Can we improve performance (a secondary concern). Memoization?
+- Original plan:
+  - Deref until we find the inherent type at the heart (if any).
+    - Check for an inherent method.
+    - If the self declaration is:
+      - `fn(self)`, just consume
+      - `fn(&self)` or `fn(&mut self)`, add autoref
+      - `fn(GC<self>)`, walk back
+  - Same process for but for trait methods, searching at each step
+    along the way
+- For now, ignore the deref problem, assume an oracle tells us `*` vs `*mut`.
+  What about "redirecting" traits?
+  - If we find a matching trait method, check if the receiver matches.
+  - If the receiver is just a type parameter, introduce additional
+    constraints from the receiver's bounds. All constraints must be satisfied
+    for method to be considered a match.
+    - Note that constraints on possibly linked variables are *not* checked:
+      ```
+      impl<K:Foo,V:Bar<K>> Zed for V { ... }
+      impl Bar<A> for B { ... }
+      ```
+      If a method from `Zed` is invoked for the type `B`, we require that
+      `Bar<K>` is implemented for some `K`, but not *for some `K:Foo`*.
+    - Is this reasonable? Or should we just enqueue the full set of constriants?
+  - I guess there is no inherent challenge here. We have to decide how
+    deeply to recurse during method matching.
+- Now, about adapting to deref:
+  - We can either *branch* or *patch*, I don't see any other choices.
+  - *Branching* means that we try first `imm` and then `mut`.
+  - *Patch* means that we try `imm` and then go back and fixup to `mut`
+    if `mut` turns out to be necessary.
+  - *Branching* is the obvious choice from a complexity point of view.
+  - There is a hybrid option that optimizes *branching*:
+    - Try imm first, but keep a note if we saw a candidate that didn't
+      fit (possibly because of `&mut` vs `&` mismatch). Only branch in 
+      that case.
+
+
+
+
+
+
+
+
+
+
 
 ## Goals
 

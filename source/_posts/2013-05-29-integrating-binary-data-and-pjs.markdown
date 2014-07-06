@@ -3,7 +3,7 @@ layout: post
 title: "Integrating binary data and PJs"
 date: 2013-05-29 06:48
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 We've been making a lot of *conceptual* progress with the PJS API that

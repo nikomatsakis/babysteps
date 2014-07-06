@@ -3,7 +3,7 @@ layout: post
 title: "Deterministic or not?"
 date: 2013-01-02 12:30
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 One of the interesting questions with respect to Parallel JS is what

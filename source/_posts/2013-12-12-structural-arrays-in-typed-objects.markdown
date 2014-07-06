@@ -3,7 +3,7 @@ layout: post
 title: "Structural arrays in Typed Objects"
 date: 2013-12-12 13:07
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 [Dave Herman][dherman] and I were tossing around ideas the other day for a

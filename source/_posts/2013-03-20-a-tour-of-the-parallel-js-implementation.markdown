@@ -3,7 +3,7 @@ layout: post
 title: "A tour of the Parallel JS implementation (Part 1)"
 date: 2013-03-20 16:30
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 I am going to write a series of blog posts giving a tour of the
 current Parallel JS implementation in SpiderMonkey.  These posts are

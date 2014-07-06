@@ -3,7 +3,7 @@ layout: post
 title: "PJS Roadmap"
 date: 2013-10-29 17:51
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 I think someone reading this blog would be forgiven for thinking that
 I must spend most of my energy thinking about Rust. In fact I spend a

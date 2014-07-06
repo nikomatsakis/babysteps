@@ -3,7 +3,7 @@ layout: post
 title: "Optimizing complex typed object assignments"
 date: 2013-11-04 18:34
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 I want to optimize assignments to struct-typed fields in typed

@@ -3,7 +3,7 @@ layout: post
 title: "A tour of the Parallel JS implementation (Part 2)"
 date: 2013-04-04 10:17
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 In my [last post about ParallelJS][pp], I discussed the `ForkJoin()`

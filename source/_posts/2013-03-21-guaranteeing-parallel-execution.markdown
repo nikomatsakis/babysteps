@@ -3,7 +3,7 @@ layout: post
 title: "Guaranteeing parallel execution"
 date: 2013-03-21 10:38
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 One common criticism of the work on ParallelJS is that the API itself

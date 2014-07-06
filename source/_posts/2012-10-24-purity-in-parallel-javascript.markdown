@@ -3,7 +3,7 @@ layout: post
 title: "Purity in Parallel JavaScript"
 date: 2012-10-24 13:54
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 I can't believe I'm saying this, but I've started to think that

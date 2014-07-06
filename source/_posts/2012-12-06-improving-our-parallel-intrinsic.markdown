@@ -3,7 +3,7 @@ layout: post
 title: "Improving our parallel intrinsic"
 date: 2012-12-06 09:27
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 I mentioned in my previous post that we are using a single primitive

@@ -161,7 +161,7 @@ and not under user control. If a type is changed from `Pod` to
 non-pod, or `Send` to non-send, no error message will result until
 client code attempts to use an instance of that type. In general we
 have tried to avoid this sort of situation, and instead have each
-declaration contain enough information to check it indepenently of its
+declaration contain enough information to check it independently of its
 uses. Issue #12202 describes this same concern, specifically with
 respect to stability attributes.
 
@@ -180,7 +180,7 @@ and non-pod without any sort of declaration. It is not necessarily
 obvious why a `T` and `~T` value, which are *semantically equivalent*,
 behave so differently by default. Makes the pod category something you
 opt into means that types will all be linear by default, which can
-make teaching and leaning easier.
+make teaching and learning easier.
 
 #### Safety and correctness: unsafe code
 
@@ -193,7 +193,7 @@ In general, the *opt out* approach seems to be hard to reason about:
 many people (including myself) find it easier to think about what
 properties a type *has* than what properties it *does not* have,
 though clearly the two are logically equivalent in this binary world
-we programmer's inhabit.
+we programmers inhabit.
 
 More concretely, opt out is dangerous because it means that types with
 unsafe methods are generally *wrong by default*. As an example,

@@ -3,7 +3,7 @@ layout: post
 title: "Integrating binary data and type inference in SpiderMonkey"
 date: 2013-07-19 06:42
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 Since the new version of PJS is going to be based on binary data, we
 are going to need to have a well-optimized binary data implementation.

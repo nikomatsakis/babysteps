@@ -3,7 +3,7 @@ layout: post
 title: "Self-hosted Parallel JS"
 date: 2012-12-05 09:53
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 
 The blog has been silent for a while.  The reason is that I've been

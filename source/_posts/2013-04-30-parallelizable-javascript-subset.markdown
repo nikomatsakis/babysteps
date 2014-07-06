@@ -3,7 +3,7 @@ layout: post
 title: "Parallelizable JavaScript Subset"
 date: 2013-04-30 11:30
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 I want to look at an interesting topic: what subset of JavaScript do
 we intend to support for parallel execution, and how long will it take

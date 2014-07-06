@@ -3,7 +3,7 @@ layout: post
 title: "Rivertrail"
 date: 2012-10-10 17:36
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 I have started work on implementing [Rivertrail][rt], Intel's proposal
 for data parallelism in JS.  I am excited about this project, it seems

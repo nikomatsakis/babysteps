@@ -3,7 +3,7 @@ layout: post
 title: "Optimizing SIMD, part 2"
 date: 2013-11-22 15:50
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 A quick follow-up to my previous post. The approach I suggested
 ("generate boxing instructions but bypass them when possible") is in

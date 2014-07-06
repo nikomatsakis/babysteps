@@ -3,7 +3,7 @@ layout: post
 title: "Typed object handles"
 date: 2013-10-18 15:39
 comments: true
-categories: [PJs]
+categories: [PJs, JS]
 ---
 Yesterday [Dmitry Lomov][dl] and I had a discussion about the typed objects
 API. Much of the discussion revolved around the specific issue of

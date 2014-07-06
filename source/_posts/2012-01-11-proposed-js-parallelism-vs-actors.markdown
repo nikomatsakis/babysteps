@@ -3,7 +3,7 @@ layout: post
 title: "Proposed JS parallelism vs actors"
 date: 2012-01-11 10:38
 comments: true
-categories: [PL, PJs]
+categories: [PL, PJs, JS]
 ---
 
 In one of the comments on yesterday's post,
