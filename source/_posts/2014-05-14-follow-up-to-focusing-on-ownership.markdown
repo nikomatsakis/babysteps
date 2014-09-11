@@ -6,6 +6,9 @@ comments: true
 categories: [Rust]
 ---
 
+This post withdrawn: it was posted by accident and was incomplete.
+
+<!-- 
 I read through the comments from [Reddit][r] and I wanted to add a few
 follow-on thoughts to my
 [previous post ("Focusing on Ownership")][fo].
@@ -153,3 +156,4 @@ normal.
 [r]: http://www.reddit.com/r/rust/comments/25i544/babysteps_focusing_on_ownership_or_removing_let/
 [fo]: http://smallcultfollowing.com/babysteps/blog/2014/05/13/focusing-on-ownership/
  
+-->
