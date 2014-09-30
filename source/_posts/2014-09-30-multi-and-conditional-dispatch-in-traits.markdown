@@ -80,10 +80,10 @@ trait MyGet {
 }
 
 impl<T> Convert<MyInt> for T
-    where T:Hash
+    where T:MyGet
 {
     fn convert(&self) -> MyInt {
-        self.hash()
+        self.get()
     }
 }
 ```
