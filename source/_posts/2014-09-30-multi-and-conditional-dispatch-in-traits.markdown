@@ -158,10 +158,7 @@ only one type you could legally choose. Also, multidispatch is fairly
 rare; most traits has a single type that decides on the `impl` and
 then all other types are uniquely determined. Moreover, with the
 [associated types RFC][assoctypes], there is even a syntactic way to
-express this. Still, aturon and I have encountered cases where
-multidispatch was technically needed but rarely utilized, and hence
-where usability would be improved by having inference also for input
-type parameters.
+express this.
 
 However, when you start trying to implement *conditional dispatch*
 that is, dispatch predicated on where clauses, crate concatenability
