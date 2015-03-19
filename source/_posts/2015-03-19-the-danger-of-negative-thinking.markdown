@@ -182,8 +182,8 @@ adding an impl in one crate causes there to be *too few* impls in
 downstream crates, at least not without enabling some feature-gates.
 However, you can achieve this easily with [OIBIT][oibit] and
 [RFC 586][586]. **This suggests to me that we want to tweak the design
-of OIBIT -- which has been accepted -- and we do not want to accept
-RFC 586.**
+of OIBIT -- which has been accepted, but is still feature-gated -- and
+we do not want to accept RFC 586.**
 
 I'll start by showing what I mean using [RFC 586][586], because it's
 more obvious. Consider this example of a trait `Release` that is
