@@ -20,9 +20,7 @@ This blog post covers why negative reasoning can be problematic, with
 a focus on the pitfalls in the current coherence system. This post
 only covers the problem. The next post will cover one possible
 solution I have been working on based on specialization. This solution
-*seems* to be very appealing, but does require one backwards
-incompatible change. I am experimenting now to see how restrictive
-this will be in practice.
+*seems* to be very promising.
 
 <!-- more -->
 
