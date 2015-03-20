@@ -6,42 +6,51 @@ comments: true
 categories: [Rust]
 ---
 
-There has been a lot of talk about integrating *negative reasoning*
-into the trait system. The most obvious example is this (very well
-reasoned) RFC covering [negative trait bounds][586]. However, what's
-perhaps less widely recognized is that the trait system as currently
-implemented already has some amount of negative reasoning, in the form
-of the coherence system. Recently, [I realized][23086] that *any* form
-of negative reasoning carries real risks for forwards compatibility --
-including coherence as it exists today. Fortunately, there seem to be
-some potential solutions on the horizon.
+One of the aspects of language design that I find the most interesting
+is trying to take *time* into account. That is, when designing a type
+system in particular, we tend to think of the program as a fixed,
+immutable artifact. But of course real programs evolve over time, and
+when designing a language it's important to consider what impact the
+type rules will have on the ability of people to change their
+programs. Naturally as we approach the 1.0 release of Rust this is
+very much on my mind, since we'll be making firmer commitments to
+compatibility than we ever have before.
+
+Anyway, with that introduction, I recently realized that our current
+trait system contains a [forward compatibility hazard][23086]
+concerned with *negative reasoning*. Negative reasoning is basically
+the ability to decide if a trait is *not* implemented for a given
+type. The most obvious example of negative reasoning are
+[negative trait bounds][586], which have been proposed in a rather
+nicely written RFC. However, what's perhaps less widely recognized is
+that the trait system as currently implemented already has some amount
+of negative reasoning, in the form of the coherence system.
 
 This blog post covers why negative reasoning can be problematic, with
 a focus on the pitfalls in the current coherence system. This post
-only covers the problem. The next post will cover one possible
-solution I have been working on based on specialization. This solution
-*seems* to be very promising.
+only covers the problem. I've been working on prototyping possibld
+solutions and I'll be coverting those in the next few blog posts.
 
 <!-- more -->
 
 ### A goal
 
 Let me start out with an implicit premise of this post. I think it's
-important that implementing an existing trait for an existing type
-does not cause code to stop compiling (and hence does not require a
-"major version bump"). Let me give you a concrete example. libstd
-defines the `Range<T>` type. Right now, this type is not `Copy` for
-various [good reasons][18045]. However, we might like to make it
-`Copy` in the future when we have a suitable lint. It feels like that
-should be legal. However, as I'll show you below, this could in fact
-cause existing code not to compile. I think this is a problem.
+important that we be able to add impls of existing traits to existing
+types without breaking downstream code (that is, causing it to stop
+compiling, or causing it to radically different things). Let me give
+you a concrete example. libstd defines the `Range<T>` type. Right now,
+this type is not `Copy` for various [good reasons][18045]. However, we
+might like to make it `Copy` in the future. It feels like that should
+be legal. However, as I'll show you below, this could in fact cause
+existing code not to compile. I think this is a problem. I will cover
+more potential "real-life" problems I've found later on in the post.
 
-Put another way, I think we'd like adding impls to be `monotonic`,
-meaning that it cannot cause compilation failures. Ideally, we'd also
-have the guarantee that if a new impl is added to an ancestor crate,
-then downstream crates continue to use the same impls that they did
-before, regardless of the new impl that was added (presuming the
-downstream crate doesn't change as well).
+(In the next few posts when I start covering solutions, we'll see that
+it may be that one cannot *always* add impls of any kind for *all
+traits* to *all types*.  If so, I can live with it, but I think we
+should try to make it possible to add as many kinds of impls as
+possible.)
 
 ### Negative reasoning in coherence today, the simple case
 
@@ -108,9 +117,10 @@ impl Debug for Carton<AppType> { ... }
 
 You might expect this to be illegal per the orphan rules, but in fact
 it is not, and this is no accident. We *want* people to be able to
-define impls on *references* to their types. That is, since `Carton`
-is a smart pointer, we want impls like the one above to work, just
-like you should be able to do an impl on `&AppType` or `Box<AppType>`.
+define impls on *references* and *boxes* to their types. That is,
+since `Carton` is a smart pointer, we want impls like the one above to
+work, just like you should be able to do an impl on `&AppType` or
+`Box<AppType>`.
 
 OK, so, what's the problem? The problem is that now maybe `lib1` notices
 that `Carton` should define `Debug`, and it adds a blanket impl for all
@@ -138,35 +148,40 @@ impls that violate this negative assertion.
 ### Negative reasoning in coherence today, the more complex case
 
 The previous example was relatively simple in that it only involved a
-single trarit (`Debug`). But the current coherence rules also allow us
+single trait (`Debug`). But the current coherence rules also allow us
 to concoct examples that employ multiple traits. For example, suppose
 that `app` decided to workaround the absence of `Debug` by defining
 it's own debug protocol. This uses `Debug` when available, but allows
 `app` to add new impls if needed.
 
 ```rust
+// In lib1 (note: no `Debug` impl yet)
+struct Carton<T> { }
+
 // In app, before `lib1` added an impl of `Debug` for `Carton`
-trait AppDebug { ... }
-impl<T:Debug> AppDebug for T { }
-impl<T:AppDebug> AppDebug for Carton<T> { }
+trait AppDebug { }
+impl<T:Debug> AppDebug for T { } // Impl A
+
+struct AppType { }
+impl Debug for AppType { }
+impl AppDebug for Carton<AppType> { } // Impl B
 ```
 
-This is perfectly legal (actually, I realized later that this is only
-legal due to [a bug][23516]; but I'm leaving the example as is because
-I think the larger point still holds and besides if I don't stop
-revising this blog post I'll never get anything else done today!). But
-now if `lib1` should add the impl of `Debug` for `Carton<T>` that it
-added before, we get a conflict again:
+This is all perfectly legal. In particular, implementing `AppDebug`
+for `Carton<AppType>` is legal because there is no impl of `Debug` for
+`Carton`, and hence impls A and B are not in conflict. But now if
+`lib1` should add the impl of `Debug` for `Carton<T>` that it added
+before, we get a conflict again:
 
 ```rust
-// In lib1
+// Added to lib1
 impl<T:Debug> Debug for Carton<T> { }
 ```
 
 In this case though the conflict isn't that there are two impls of
 `Debug`. Instead, adding an impl of `Debug` caused there to be two
-impls of `AppDebug` that are applicable to (say) `Carton<AppType>`,
-whereas before there was only one.
+impls of `AppDebug` that are applicable to `Carton<AppType>`, whereas
+before there was only one.
 
 ### Negative reasoning from OIBIT and RFC 586
 
@@ -224,35 +239,33 @@ following impls:
 ```rust
 trait AppDebug { ... }
 impl<T:Debug> AppDebug for T { }
-impl<U:AppDebug> AppDebug for Carton<U> { }
+impl AppDebug for Carton<AppType> { }
 ```
 
 (Assume that there is no impl of `Debug` for `Carton`.) The overlap
 checker would check these impls as follows. First, it would create
-fresh type variables for `T` and `U` and unify, so that `T=Carton<$U>`
-for some fresh variable `$U`. It would then add in all the constraints
-that must hold for both impls to simultaneously apply:
+fresh type variables for `T` and unify, so that `T=Carton<AppType>`.
+Because `T:Debug` must hold for the first impl to be applicable, and
+`T=Carton<AppType>`, that implies that if both impls are to be
+applicable, then `Carton<AppType>: Debug` must hold. But by searching
+the impls in scope, we can see that it does not hold -- and thanks to
+the coherence orphan rules, we know that nobody else can make it hold
+either. So we conclude that the impls do not overlap.
 
-    $U: AppDebug
-    Carton<$U>: Debug
-    
-It iterates over this list and tries to find out whether any of them
-are known *not* to be true. In this case, the second condition might
-or might not be true, it's impossible to say without knowing what type
-`$U` is. But the overlap checker believes it say for sure `Carton<$U>:
-Debug` doesn't hold, because we don't see any impls that apply to
-`Carton`. (NB: In writing this post, I actually realized that this
-itself is a separate bug (now filed as [#23516][23516]), but for now
-let's ignore that. I don't think it really affects most of this post.)
+It's true that `Carton<AppType>: Debug` doesn't hold *now* -- but this
+reasoning doesn't take into account *time*. Because `Carton` is
+defined in the `lib1` crate, and not the `app` crate, it's not under
+"local control". It's plausible that `lib1` can add an impl of `Debug`
+for `Carton<T>` for all `T` or something like that. This is the central
+hazard I've been talking about.
 
-In any case, this is an example of a negative bound -- the coherence
-checker is relying on `Carton<$U>: Debug` not being true. So I
-modified the checker so that it could only rely on negative bounds if
-either the trait is local or else the type is a struct/enum defined
-locally. The idea being that the current crate is in full control of
-the set of impls for either of those two cases. This turns out to work
-somewhat OK, but it breaks a few patterns we use in the standard
-library. The most notable is `IntoIterator`:
+To avoid this hazard, I modified the checker so that it could only
+rely on negative bounds if either the trait is local or else the type
+is a struct/enum defined locally. The idea being that the current
+crate is in full control of the set of impls for either of those two
+cases. This turns out to work somewhat OK, but it breaks a few
+patterns we use in the standard library. The most notable is
+`IntoIterator`:
 
 ```rust
 // libcore
@@ -272,18 +285,15 @@ principle we could add an impl like `impl<T:Something> Iterator for
 want to support, so we'd have to find some way to allow this. (See
 below for some further thoughts.)
 
-### What should we do?
-
-Here I'll sketch out some things we can do to help ourselves here.
-
 #### Limiting OIBIT
 
-First, and independently from everything else, we should add the
-constraint that negative OIBIT impls cannot add additional
-where-clauses beyond those implied by the types involved. (There isn't
-much urgency on this because negative impls are feature-gated.)
-Therefore, one cannot write an impl like this one, because it would be
-adding a constraint `T:Debug`:
+As an aside, I mentioned that OIBIT as specified today is equivalent
+to negative bounds. To fix this, we should add the constraint that
+negative OIBIT impls cannot add additional where-clauses beyond those
+implied by the types involved. (There isn't much urgency on this
+because negative impls are feature-gated.)  Therefore, one cannot
+write an impl like this one, because it would be adding a constraint
+`T:Debug`:
 
 ```rust
 trait Release for .. { }
