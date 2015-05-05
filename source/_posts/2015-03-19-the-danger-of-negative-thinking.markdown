@@ -4,6 +4,7 @@ title: "The danger of negative thinking"
 date: 2015-03-19 17:59:39 -0400
 comments: true
 categories: [Rust]
+published: false
 ---
 
 One of the aspects of language design that I find the most interesting
@@ -28,8 +29,8 @@ of negative reasoning, in the form of the coherence system.
 
 This blog post covers why negative reasoning can be problematic, with
 a focus on the pitfalls in the current coherence system. This post
-only covers the problem. I've been working on prototyping possibld
-solutions and I'll be coverting those in the next few blog posts.
+only covers the problem. I've been working on prototyping possible
+solutions and I'll be covering those in the next few blog posts.
 
 <!-- more -->
 
@@ -43,8 +44,7 @@ you a concrete example. libstd defines the `Range<T>` type. Right now,
 this type is not `Copy` for various [good reasons][18045]. However, we
 might like to make it `Copy` in the future. It feels like that should
 be legal. However, as I'll show you below, this could in fact cause
-existing code not to compile. I think this is a problem. I will cover
-more potential "real-life" problems I've found later on in the post.
+existing code not to compile. I think this is a problem.
 
 (In the next few posts when I start covering solutions, we'll see that
 it may be that one cannot *always* add impls of any kind for *all
@@ -83,7 +83,7 @@ implement any traits for it. This is a kind of smart pointer, like
 
 ```rust
 // In lib1
-struct Carton<T> { }
+struct Carton<T> { ... }
 ```
 
 Now imagine that the `app` crate defines a type `AppType` that uses
@@ -91,8 +91,8 @@ the `Debug` trait.
 
 ```rust
 // In app
-struct AppType { }
-impl Debug for AppType { }
+struct AppType { ... }
+impl Debug for AppType { ... }
 ```
 
 At some point, `app` has a `Carton<AppType>` that it is passing around,
@@ -128,7 +128,7 @@ types:
 
 ```rust
 // In lib1
-impl<T:Debug> Debug for Carton<T> { }
+impl<T:Debug> Debug for Carton<T> { ... }
 ```
 
 This seems like a harmless change, but now if `app` tries to
@@ -137,7 +137,7 @@ recompile, it will encounter a **coherence violation**.
 What went wrong? Well, if you think about it, even a simple impl like
 
 ```rust
-impl Debug for Carton<AppType> { }
+impl Debug for Carton<AppType> { ... }
 ```
 
 contains an implicit negative assertion that no ancestor crate defines
@@ -156,15 +156,15 @@ it's own debug protocol. This uses `Debug` when available, but allows
 
 ```rust
 // In lib1 (note: no `Debug` impl yet)
-struct Carton<T> { }
+struct Carton<T> { ... }
 
 // In app, before `lib1` added an impl of `Debug` for `Carton`
-trait AppDebug { }
-impl<T:Debug> AppDebug for T { } // Impl A
+trait AppDebug { ... }
+impl<T:Debug> AppDebug for T { ... } // Impl A
 
-struct AppType { }
-impl Debug for AppType { }
-impl AppDebug for Carton<AppType> { } // Impl B
+struct AppType { ... }
+impl Debug for AppType { ... }
+impl AppDebug for Carton<AppType> { ... } // Impl B
 ```
 
 This is all perfectly legal. In particular, implementing `AppDebug`
@@ -175,7 +175,7 @@ before, we get a conflict again:
 
 ```rust
 // Added to lib1
-impl<T:Debug> Debug for Carton<T> { }
+impl<T:Debug> Debug for Carton<T> { ... }
 ```
 
 In this case though the conflict isn't that there are two impls of
@@ -196,9 +196,10 @@ I don't believe it is possible *today* to have the problem where
 adding an impl in one crate causes there to be *too few* impls in
 downstream crates, at least not without enabling some feature-gates.
 However, you can achieve this easily with [OIBIT][oibit] and
-[RFC 586][586]. **This suggests to me that we want to tweak the design
+[RFC 586][586]. This suggests to me that we want to tweak the design
 of OIBIT -- which has been accepted, but is still feature-gated -- and
-we do not want to accept RFC 586.**
+we do not want to accept RFC 586 (at least not without further
+thought).
 
 I'll start by showing what I mean using [RFC 586][586], because it's
 more obvious. Consider this example of a trait `Release` that is
@@ -206,8 +207,8 @@ implemented for all types that do not implement `Debug`:
 
 ```rust
 // In app
-trait Release { }
-impl<T:!Debug> Release for T { }
+trait Release { ... }
+impl<T:!Debug> Release for T { ... }
 ```
 
 Clearly, if `lib1` adds an impl of `Debug` for `Carton`, we have a
@@ -217,8 +218,8 @@ problem in `app`, because whereas before `Carton<i32>` implemented
 Unfortunately, we can create this same scenario using OIBIT:
 
 ```rust
-trait Release for .. { }
-impl<T:Debug> !Release for T { }`
+trait Release for .. { ... }
+impl<T:Debug> !Release for T { ... }`
 ```
 
 In practice, these sorts of impls are both feature-gated and buggy
@@ -238,8 +239,8 @@ following impls:
 
 ```rust
 trait AppDebug { ... }
-impl<T:Debug> AppDebug for T { }
-impl AppDebug for Carton<AppType> { }
+impl<T:Debug> AppDebug for T { ... }
+impl AppDebug for Carton<AppType> { ... }
 ```
 
 (Assume that there is no impl of `Debug` for `Carton`.) The overlap
@@ -269,11 +270,11 @@ patterns we use in the standard library. The most notable is
 
 ```rust
 // libcore
-trait IntoIterator { }
-impl<T:Iterator> for IntoIterator { }
+trait IntoIterator { ... }
+impl<T:Iterator> for IntoIterator { ... }
 
 // libcollections
-impl<'a,T> IntoIterator for &'a Vec<T> { }
+impl<'a,T> IntoIterator for &'a Vec<T> { ... }
 ```
 
 In particular, the final impl there is illegal, because it relies on
@@ -282,8 +283,7 @@ defined in the local crate (it's a *reference* to a struct). In
 particular, the coherence checker here is pointing out that in
 principle we could add an impl like `impl<T:Something> Iterator for
 &T`, which would (maybe) conflict. This pattern is one we definitely
-want to support, so we'd have to find some way to allow this. (See
-below for some further thoughts.)
+want to support, so we'd have to find some way to allow this.
 
 #### Limiting OIBIT
 
@@ -296,16 +296,16 @@ write an impl like this one, because it would be adding a constraint
 `T:Debug`:
 
 ```rust
-trait Release for .. { }
-impl<T:Debug> !Release for T { }`
+trait Release for .. { ... }
+impl<T:Debug> !Release for T { ... }`
 ```
 
 However, this would be legal:
 
 ```rust
-struct Foo<T:Debug> { }
-trait Release for .. { }
-impl<T:Debug> !Release for Foo<T> { }`
+struct Foo<T:Debug> { ... }
+trait Release for .. { ... }
+impl<T:Debug> !Release for Foo<T> { ... }`
 ```
 
 The reason that this is ok is because the type `Foo<T>` isn't even
