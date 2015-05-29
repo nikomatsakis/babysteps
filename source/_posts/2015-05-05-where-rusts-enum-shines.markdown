@@ -194,13 +194,13 @@ suclassing is sometimes fantastic and enums kind of annoying.
 
 ### Caveat
 
-Oh, and I'm well aware I'm picking on C++ a bit unfairly. For example,
-perhaps instead of writing up my own little class hierarchy, I should
-be using `boost::any` or something like that. Because C++ is such an
-extensible language, you can definitely construct a class hierarchy
-that gives you similar advantages to what Rust enums offer. Heck, you
-could just write a carefully constructed wrapper around a C `union` to
-get what you want. But I'm really focused here on contrasting the
-kind of "core abstractions" that the language offers for handling
-variants with data, which in Rust's case is (currently) enums, and in
-C++'s case is subtyping and classes.
+I'm well aware I'm picking on C++ a bit unfairly. For example, perhaps
+instead of writing up my own little class hierarchy, I should be using
+`boost::any` or something like that. Because C++ is such an extensible
+language, you can definitely construct a class hierarchy that gives
+you similar advantages to what Rust enums offer. Heck, you could just
+write a carefully constructed wrapper around a C `union` to get what
+you want. But I'm really focused here on contrasting the kind of "core
+abstractions" that the language offers for handling variants with
+data, which in Rust's case is (currently) enums, and in C++'s case is
+subtyping and classes.
