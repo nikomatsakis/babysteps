@@ -337,7 +337,7 @@ many other crates at large that could similarly benefit.
 
 Interestingly, Rust can gain a lot of the benefits of the subclass
 approach---namely, common fields and refinement types---just by making
-enum variants into types. There have [been proposals][324] along these
+enum variants into types. There have [been proposals][349] along these
 lines before, and I think that's an important ingredient for the final
 plan.
 
