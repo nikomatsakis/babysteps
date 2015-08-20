@@ -33,7 +33,17 @@ destination: public/babysteps
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories
-markdown: rdiscount
+markdown: redcarpet
+redcarpet:
+  extensions:
+    - tables
+    - no_intra_emphasis
+    - autolink
+    - strikethrough
+    - footnotes
+    - quote
+    - superscript
+    - with_toc_data
 rdiscount:
   extensions:
     - autolink
