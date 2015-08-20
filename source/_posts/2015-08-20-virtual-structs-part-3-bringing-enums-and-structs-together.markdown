@@ -772,13 +772,15 @@ twists that close important gaps:
 - The "associated struct" for enums, allowing for constructors.
 
 One of the big goals of this design is to find something that fits
-well within Rust's orthogonal design, while alleviating some of its
-pain points:
+well within Rust's orthogonal design. Today, data types like enums and
+structs are focused on describing data layout and letting you declare
+natural relationships that mesh well with the semantics of your
+program. Traits, in contrast, are used to write generic code that
+works across a heterogeneous range of types. This proposal retains
+that character, while alleviating some of the pain points in Rust
+today:
 
-- No refinement types;
-- Unable to express common fields;
-- Unequal enum sizes can be very inefficient, but tuning is tricky and
-  can require more indirection than necessary.
+- Support for refinement types and nested enum hierarchies;
+- Support for common fields shared across variants;
+- Unsized enums that allow for more efficient memory layout.
 
-Under this proposal, we can have the memory layout of a traditional
-class, while retaining the "feel" of a Rust enum.
