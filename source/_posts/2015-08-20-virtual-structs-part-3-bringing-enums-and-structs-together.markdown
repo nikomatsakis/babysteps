@@ -6,34 +6,34 @@ comments: true
 categories: [Rust]
 ---
 
-So, in [previous] posts, I discussed the pros and cons of two different
+So, in [previous][pp1] [posts][pp2], I discussed the pros and cons of two different
 approaches to modeling variants: Rust-style enums and C++-style
 classes. In those posts, I explained why I see Rust enums and OO-style
 class hierarchies as more alike than different (I personally credit
 Scala for opening my eyes to this, though I'm sure it's been
 understood by others for much longer). The key points were as follows:
 
-[previous]: http://smallcultfollowing.com/babysteps/blog/2015/05/05/where-rusts-enum-shines/
-[posts]: http://smallcultfollowing.com/babysteps/blog/2015/05/29/classes-strike-back/
+[pp1]: http://smallcultfollowing.com/babysteps/blog/2015/05/05/where-rusts-enum-shines/
+[pp2]: http://smallcultfollowing.com/babysteps/blog/2015/05/29/classes-strike-back/
 
 - Both Rust-style enums and C++-style classes can be used to model the
   idea of a value that be one of many variants, but there are
   differences in how they work at runtime. These differences mean that
   Rust-style enums are more convenient for some tasks, and C++-style
-  classes for others.
-- A Rust-style enum is sized as large as the largest variant. This is
-  great because you can lay them out flat in another data structure
-  without requiring any allocation. You can also easily change from
-  one variant to another. One downside of Rust enums is that you cannot
-  "refine" them to narrow the set of variants that a particular value
-  can have.
-- A C++-style class is sized to be exactly as big as one variant. This
-  is great because it can be much more memory efficient. However, if
-  you don't know what variant you have, you must manipulate the value
-  by pointer, so it tends to require more allocation. It is also
-  impossible to change from one variant to another. Class hierarchies
-  also give you a simple, easily understood kind of refinement, and
-  the ability to have common fields that are shared between variants.
+  classes for others. In particular:
+  - A Rust-style enum is sized as large as the largest variant. This is
+    great because you can lay them out flat in another data structure
+    without requiring any allocation. You can also easily change from
+    one variant to another. One downside of Rust enums is that you cannot
+    "refine" them to narrow the set of variants that a particular value
+    can have.
+  - A C++-style class is sized to be exactly as big as one variant. This
+    is great because it can be much more memory efficient. However, if
+    you don't know what variant you have, you must manipulate the value
+    by pointer, so it tends to require more allocation. It is also
+    impossible to change from one variant to another. Class hierarchies
+    also give you a simple, easily understood kind of refinement, and
+    the ability to have common fields that are shared between variants.
 - C++-style classes offer constructors, which allows for more
   abstraction and code reuse when initially creating an instance, but
   raise thorny questions about the type of a value under construction;
@@ -42,9 +42,9 @@ understood by others for much longer). The key points were as follows:
 
 What I want to talk about in this post is a proposal (or
 proto-proposal) for bridging those two worlds in Rust. I'm going to
-focus on data layout in this post. In a future post, I will tackle the
-question of virtual methods (spoiler alert: they can be viewed as a
-special case of [specialization]).
+focus on data layout in this post. I'll defer virtual methods for
+another post (or perhaps an RFC). *Spoiler alert:* they can be viewed
+as a special case of [specialization].
 
 [specialization]: https://github.com/rust-lang/rfcs/pull/1210
 
@@ -71,7 +71,7 @@ The key idea is to generalize enums and structs into a single concept.
 This is often called an *algebraic data type*, but "algebra" brings
 back memories of balancing equations in middle school (not altogether
 unpleasant ones, admittedly), so I'm going to use the term *type
-hierarchy* instead. *Anywho*, to see what I mean, let's look at my
+hierarchy* instead. Anyway, to see what I mean, let's look at my
 favorite enum ever, `Option`:
 
 ```rust
@@ -87,7 +87,7 @@ a type representing the `None` variant:
 
 ```
 enum Option<T>
-|           
+|
 +- struct None<T>
 +- struct Some<T>
 ```
@@ -115,9 +115,11 @@ This creates a nested hierarchy:
 
 ```
 enum Mode
+|
 +- enum ByRef
-   +- struct Mutable
-   +- struct Immutable
+|  |
+|  +- struct Mutable
+|  +- struct Immutable
 +- ByValue
 ```
 
@@ -135,7 +137,7 @@ enum Option<T> {
 }
 struct Some<T>: Option<T> {
     value: T
-}  
+}
 struct None<T>: Option<T> {
 }
 ```
@@ -151,7 +153,7 @@ as variants. These fields are inherited by all variants of that enum.
 In the syntax, fields must appear before the variants, and it is also
 not possible to combine "tuple-like" structs with inherited fields.
 
-Let's revisit an example from [the previous post][pp1]. In the compiler,
+Let's revisit an example from [the previous post][pp2]. In the compiler,
 we currently represent types with an enum. However, there are certain
 fields that every type carries. These are handled via a separate struct,
 so that we wind up with something like this:
@@ -172,7 +174,7 @@ enum TypeStructure<'tcx> {
     Ref(Ty<'tcx>),
     ...
 }
-```                
+```
 
 Under this newer design, we could simply include the common fields in the
 enum definition:
@@ -185,13 +187,27 @@ enum TypeData<'tcx> {
     id: u32,
     flags: u32,
     ...,
-    
+
     // Variants:
     Int { },
     Uint { },
     Ref { referent_ty: Ty<'tcx> },
     ...
 }
+```
+
+Naturally, when I create a `TypeData` I should supply all the fields,
+including the inherited ones (though in a later section I'll present
+ways to extract the initialization of common fields into a reusable
+fn):
+
+```rust
+let ref =
+    TypeData::Ref {
+        id: id,
+        flags: flags,
+        referent_ty: some_ty
+    };
 ```
 
 And, of course, given a reference `&TypeData<'tcx>`, we can access these common
@@ -203,8 +219,7 @@ fn print_id<'tcx>(t: &TypeData<'tcx>) {
 }
 ```
 
-(In a later section, I will explore how initialization works with
-these common fields.)
+Convenient!
 
 [pp]: http://smallcultfollowing.com/babysteps/blog/2015/05/29/classes-strike-back/
 
@@ -216,24 +231,24 @@ posts, it is often useful to have each value be sized to a particular
 variant. In the previous posts I identified some criteria for when
 this is the case:
 
-> One interesting question is whether we can concisely state
-> conditions in which one would prefer to have “precise variant sizes”
-> (class-like) vs “largest variant” (enum). I think the “precise
-> sizes” approach is better when the following apply:
->
-> - A recursive type (like a tree), which tends to force boxing
->   anyhow. Examples: the AST or types in the compiler, DOM in servo, a
->   GUI.
-> - Instances never change what variant they are.
-> - Potentially wide variance in the sizes of the variants.
+*One interesting question is whether we can concisely state
+conditions in which one would prefer to have “precise variant sizes”
+(class-like) vs “largest variant” (enum). I think the “precise
+sizes” approach is better when the following apply:*
+
+- *A recursive type (like a tree), which tends to force boxing
+  anyhow. Examples: the AST or types in the compiler, DOM in servo, a
+  GUI.*
+- *Instances never change what variant they are.*
+- *Potentially wide variance in the sizes of the variants.*
 
 Therefore, it is possible to declare the root enum in a type hierarchy
 as either sized (the default) or *unsized*; this choice is inherited
 by all enums in the hierarchy. If the hierarchy is declared as
-unsized, it means that each value will be sized just as big as it
-needs to be.  This means in turn that the enum types in the hierarchy
-as unsized types, since the space required will vary depending on what
-variant an instance happens to be at runtime.
+unsized, it means that **each struct type will be sized just as big as
+it needs to be**.  This means in turn that the **enum types in the
+hierarchy are unsized types**, since the space required will vary
+depending on what variant an instance happens to be at runtime.
 
 To continue with our example of types in rustc, we currently go
 through some contortions so as to introduce indirection for uncommon
@@ -261,10 +276,10 @@ struct FnPointerData<'tcx> {
 }
 ```
 
-As discussed in the comment above, the current scheme also serves
-as a poor man's refinement types: if at some point in the code we know
-we have a fn pointer, we can write a function that takes a `FnPointerData`
-argument to express that:
+As discussed in a comment in the code, the current scheme also serves
+as a poor man's refinement type: if at some point in the code we know
+we have a fn pointer, we can write a function that takes a
+`FnPointerData` argument to express that:
 
 ```
 fn process_ty<'tcx>(ty: Ty<'tcx>) {
@@ -341,7 +356,7 @@ used if you just want to handle a single case.
 An important part of the design is that the entire type hierarchy must
 be declared **within a single crate**. This is of course trivially
 true today: all variants of an enums are declared in one item, and
-structs correspond to singelton hierarchies.
+structs correspond to singleton hierarchies.
 
 Limiting the hierarchy to a single crate has a lot of advantages.
 Without it, you simply can't support today's "sized" enums, for one
@@ -355,8 +370,8 @@ and to generate more efficient code. It is interesting to compare to
   full range of variants; this makes it fragile in the face of edits
   to the code. In contrast, the exhaustive nature of a Rust `match`
   ensures that you handle every case (of course, one must still be
-  judicious in your use of `_` patterns, which while convenient can be
-  a refactoring hazard).
+  judicious in your use of `_` patterns, which, while convenient, can
+  be a refactoring hazard).
 - `dynamic_cast` is somewhat inefficient, since it must handle the
   fully general case of classes that spread across compilation units;
   in fact, it is very uncommon to have a class hierarchy that is truly
@@ -378,13 +393,13 @@ declared in other crates).
 I also find that confining the hierarchy to a single crate helps to
 clarify the role of type hierarchies versus traits and, in turn, avoid
 some of the pitfalls so beloved by OO haters. Basically, it means that
-if you want to define an open-ended extension point, you ought to use
-a trait, which offers the most flexibility; a type hierarchy, like an
-enum today, can only be used to offer a choice between a fixed number
-of crate-local types. An analogous situation in Java would be deciding
-between an abstract base class and an interface; under this design,
-you would have to use an interface (note that the problem of code
-reuse can be tackled separately, [via specialization]).
+if you want to define an open-ended extension point, you must use a
+trait, which also offers the most flexibility; a type hierarchy, like
+an enum today, can only be used to offer a choice between a fixed
+number of crate-local types. An analogous situation in Java would be
+deciding between an abstract base class and an interface; under this
+design, you would have to use an interface (note that the problem of
+code reuse can be tackled separately, [via specialization]).
 
 *Finally,* confining extension to a trait is relevant to the
 construction of vtables and handling of specialization, but we'll dive
@@ -460,7 +475,7 @@ Using generics and bounds, I can rewrite the function:
 ```rust
 fn intersects<T:Node>(box: Rectangle, elements: &[Rc<T>]) -> Vec<Rc<T>> {
     // identical to before
-}    
+}
 ```
 
 Nothing in the body had to change, only the signature.
@@ -487,18 +502,64 @@ the same place for both cases. But if you want to access other things,
 such as `maxLength`, that implies virtual dispatch, since the address
 is dynamically computed and will vary.
 
-(As an aside, there is room here for a notion of "virtual fields", as
-proposed by [eddyb and kimundi in RFC #250][250]. The idea would be to
-add fields to traits which can then be "remapped" in an implementation
-to varying offsets. Accessing such a field implies dynamically loading
-the offset, which is slower than a regular field but faster than a
-virtual call. If we additionally added the restriction that those
-fields must access content that is orthogonal from one another, we
-might be able to make the borrow checker more permissive in the field
-case as well. But that is kind of an orthogonal extension to what I'm
-talking about here -- and one that fits well with my framing of
-"traits are for open-ended extension across heterogeneous types, enums
-are for a single cohesive type hierarchy".)
+#### Enums vs traits
+
+The notion of enums as bounds raises questions about potential overlap
+in purpose between enums and traits. I would argue that this overlap
+already exists: both enums and traits today are ways to let you write
+a single function that operates over values of more than one type.
+However, in practice, it's rarely hard to know which one you want to
+use. This I think is because they come at the problem from two
+different angles:
+
+- Traits start with the assumption that you want to work with any
+  type, and let you narrow that. Basically, you get code that is *as
+  general as possible*.
+- In contrast, enums assume you want to work with a fixed set of
+  types. This means you can write code that is *as specific as
+  possible*. Enums also work best when the types you are choosing
+  between are related into a kind of family, like "all the different
+  variants of types in the Rust language" or "some and none".
+  
+If we extend enums in the way described here, then they will become
+more capable and convenient, and so you might find that they overlap a
+bit more with plausible use cases for traits. However, I think that in
+practice there are still fairly clear guidelines for which to choose
+when:
+
+- If you have a fixed set of related types, use an enum. Having an
+  enumerated set of cases is advantageous in a lot of ways: we can
+  generate faster code, you can write matches, etc.
+- If you want open-ended extension, use a trait (and/or trait object).
+  This will ensure that your code makes as few assumptions as possible,
+  which in turn means that you can handle as many clients as possible.
+  
+Because enums are tied to a fixed set of cases, they allow us to
+generate tighter code, particularly when you are not monomorphizing.
+That is, if you have a value of type `&TypeData`, where `TypeData` is
+the enum we mentioned before, you can access common fields at no
+overhead, even though we don't know what variant it is. Moreover, the
+pointer is thin and thus takes only a single word.
+
+In contrast, if you had made `TypeData` a trait and hence `&TypeData`
+was a trait object, accessing common fields would require some
+overhead.  (This is true even if we were to add "virtual fields" to
+traits, as [eddyb and kimundi proposed in RFC #250][250].) Also,
+because traits are "added on" to other values, your pointer would be a
+fat pointer, and hence take two words.
+
+(As an aside, I still like the idea of adding virtual fields to
+traits.  The idea is that these fields could be "remapped" in an
+implementation to varying offsets. Accessing such a field implies
+dynamically loading the offset, which is slower than a regular field
+but faster than a virtual call. If we additionally added the
+restriction that those fields must access content that is orthogonal
+from one another, we might be able to make the borrow checker more
+permissive in the field case as well. But that is kind of an
+orthogonal extension to what I'm talking about here -- and one that
+fits well with my framing of "traits are for open-ended extension
+across heterogeneous types, enums are for a single cohesive type
+hierarchy".)
 
 [250]: https://github.com/rust-lang/rfcs/pull/250
 
@@ -529,7 +590,7 @@ enum TypeData<'tcx> {
     id: u32,
     flags: u32,
     counter: usize, // ok, I'm making this field up :P
-    
+
     ...,
     FnPointer {
         unsafety: Unsafety,
@@ -568,7 +629,7 @@ in an initializer as part of a `..` expression, like so:
 
 ```rust
 fn make_fn_type(cx: &mut Context, unsafety: Unsafety, abi: Abi, signature: Signature) {
-    TypeData::FnPointer { 
+    TypeData::FnPointer {
         unsafety: unsafety,
         abi: abi,
         signature: signature,
@@ -720,18 +781,4 @@ pain points:
   can require more indirection than necessary.
 
 Under this proposal, we can have the memory layout of a traditional
-class, while retaining the "feel" of a Rust enum. One interesting
-question raised by this design is the potential overlap between enums
-and traits. Both allow you to write a function that operates over
-values of many different types. This overlap exists today, but making
-enum variants into types of their own and adding the ability to use
-enums as bounds makes them more practical to use. Nonetheless, I think
-the role of each can be clearly defined:
-
-- Enums are used for a closed set of types within a single
-  family. They are not useful for open-ended extension; writing code
-  that operates over enum values lets you write code that can access
-  fields at precise offsets, even without knowing the exact variant.
-- Traits are used for extension *across* families of types. This makes
-  them good between crates, but also for for code that crosses modules
-  within a crate, and that sort of thing.
+class, while retaining the "feel" of a Rust enum.
