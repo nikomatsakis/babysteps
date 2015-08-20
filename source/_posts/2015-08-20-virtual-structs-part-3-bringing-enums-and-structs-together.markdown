@@ -524,8 +524,7 @@ different angles:
 If we extend enums in the way described here, then they will become
 more capable and convenient, and so you might find that they overlap a
 bit more with plausible use cases for traits. However, I think that in
-practice there are still fairly clear guidelines for which to choose
-when:
+practice there are still clear guidelines for which to choose when:
 
 - If you have a fixed set of related types, use an enum. Having an
   enumerated set of cases is advantageous in a lot of ways: we can
@@ -625,7 +624,7 @@ struct XXX {
 }
 ```
 
-And of coures I also want to be able to use an instance of this struct
+And of course I also want to be able to use an instance of this struct
 in an initializer as part of a `..` expression, like so:
 
 ```rust
@@ -634,7 +633,7 @@ fn make_fn_type(cx: &mut Context, unsafety: Unsafety, abi: Abi, signature: Signa
         unsafety: unsafety,
         abi: abi,
         signature: signature,
-        ..init_type_data(cx)
+        ..init_type_data(cx)   // <-- initializes the common fields 
     }
 }
 ```
@@ -673,16 +672,20 @@ the `&Node` fat pointer is just `()`. But in fact we don't necessarily
 HAVE to view upcasting like this as a coercion -- after all, there is
 no runtime change happening here.
 
+[rfc982]: https://github.com/rust-lang/rfcs/blob/master/text/0982-dst-coercion.md
+
 This gets at an interesting point. Subtyping between OO classes is
 normally actually subtyping between *references*. That is, in Java we
 say that `String <: Object`, but that is because everything in Java is
 in fact a reference. In C++, not everything is a reference, so if you
 aren't careful this in fact gives rise to creepy hazards like
-[object slicing][os]. The problem here is that in C++ the superclass
+[object slicing][]. The problem here is that in C++ the superclass
 type is really just the superclass fields; so if you do `superclass =
 subclass`, then you are just going to drop the extra fields from the
 subclass on the floor (usually). This probably isn't what you meant to
 do.
+
+[object slicing]: http://stackoverflow.com/questions/274626/what-is-object-slicing
 
 Because of unsized types, though, Rust can safely say that a struct
 type is a subtype of its containing enum(s). So, in the DOM example,
@@ -736,22 +739,7 @@ the same reason that `&mut [i32; 3]` -> `&mut [i32]` is safe). The
 fact that `&mut None<i32>` -> `&mut Option<i32>` is *not* safe is an
 example of why sized enums can in fact be more challenging here.
 
-[os]: http://stackoverflow.com/questions/274626/what-is-object-slicing
-
-### Type parameters, GADTs, etc
-
-One detail I want to note. At least to start, I anticipate a
-requirement that every type in the hierarchy has the same set of type
-parameters (just like an `enum` today). If you use the "inline"
-syntax, this is implicit, but you'll have to write it explicitly with
-the out of line syntax (we could permit reordering, but there should
-be a 1-to-1 correspondence). This simplifies the type-checker and
-ensures that this is more of an incremental step in complexity when
-compared to today's enums, versus the giant leap we could have
-otherwise -- loosening this rule also interacts with monomorphization
-and specialization, but I'll dig into that more in a future post.
-
-### An alternative variation
+#### An alternative variation
 
 If, in fact, we can't solve the subtyping inference problems, there is
 another option. Rather than unifying enums and structs, we could add
@@ -762,6 +750,19 @@ are. This can be justified on the basis that enums are used in
 different stylistic ways (like `Option` etc) where e.g. refinement
 types and common fields are less important; however, I do find the
 setup described in this blog post appealing.
+
+#### Type parameters, GADTs, etc
+
+One other detail I want to note. At least to start, I anticipate a
+requirement that every type in the hierarchy has the same set of type
+parameters (just like an `enum` today). If you use the "inline"
+syntax, this is implicit, but you'll have to write it explicitly with
+the out of line syntax (we could permit reordering, but there should
+be a 1-to-1 correspondence). This simplifies the type-checker and
+ensures that this is more of an incremental step in complexity when
+compared to today's enums, versus the giant leap we could have
+otherwise -- loosening this rule also interacts with monomorphization
+and specialization, but I'll dig into that more another time.
 
 ### Conclusion
 
