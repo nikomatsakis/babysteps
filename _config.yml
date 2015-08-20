@@ -44,6 +44,7 @@ redcarpet:
     - quote
     - superscript
     - with_toc_data
+    - smart
 rdiscount:
   extensions:
     - autolink
