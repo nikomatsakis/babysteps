@@ -691,9 +691,8 @@ Because of unsized types, though, Rust can safely say that a struct
 type is a subtype of its containing enum(s). So, in the DOM example,
 we could say that `TextElement <: Node`. We don't have to fear slicing
 because the type `TextElement` is unsized, and hence the user could
-only ever make use of it by value. In other words, object slicing
-arises C++ precisely because it doesn't have a notion of unsized
-types.
+only ever make use of it by ref. In other words, object slicing arises
+C++ precisely because it doesn't have a notion of unsized types.
 
 **Sized enums.** To be honest, unsized enums are not the scary case,
 because they are basically a new feature to the language. The harder
@@ -737,7 +736,11 @@ we do need to be able to coercion from the former to the latter. This
 is safe because the type `Node` is unsized (basically, it is safe for
 the same reason that `&mut [i32; 3]` -> `&mut [i32]` is safe). The
 fact that `&mut None<i32>` -> `&mut Option<i32>` is *not* safe is an
-example of why sized enums can in fact be more challenging here.
+example of why sized enums can in fact be more challenging here. (If it's
+not clear why that should be unsafe, the [Nomicon's section on variance][v]
+may help clear things up.)
+
+[v]: https://doc.rust-lang.org/nightly/nomicon/subtyping.html#variance
 
 #### An alternative variation
 
