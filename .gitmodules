@@ -1,0 +1,3 @@
+[submodule ".themes/classic-light"]
+	path = .themes/classic-light
+	url = git@github.com:nikomatsakis/classic-light.git
