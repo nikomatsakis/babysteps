@@ -533,13 +533,14 @@ when:
 - If you want open-ended extension, use a trait (and/or trait object).
   This will ensure that your code makes as few assumptions as possible,
   which in turn means that you can handle as many clients as possible.
-  
+
 Because enums are tied to a fixed set of cases, they allow us to
-generate tighter code, particularly when you are not monomorphizing.
-That is, if you have a value of type `&TypeData`, where `TypeData` is
-the enum we mentioned before, you can access common fields at no
-overhead, even though we don't know what variant it is. Moreover, the
-pointer is thin and thus takes only a single word.
+generate tighter code, particularly when you are not monomorphizing to
+a particular variant.  That is, if you have a value of type
+`&TypeData`, where `TypeData` is the enum we mentioned before, you can
+access common fields at no overhead, even though we don't know what
+variant it is. Moreover, the pointer is thin and thus takes only a
+single word.
 
 In contrast, if you had made `TypeData` a trait and hence `&TypeData`
 was a trait object, accessing common fields would require some
