@@ -21,13 +21,13 @@ on [this Rust internals thread][internals].)
 
 ### Conclusion
 
-Let me lead with my conclusion: **while I still want the "extended
-enums" proposal, I *lean* towards implementing the Thin Traits
+Let me lead with my conclusion: **while I still want the Extended
+Enums proposal, I *lean* towards implementing the Thin Traits
 proposal now, and returning to something like Extended Enums
-afterwards (or at some later time)**. My reasoning is that the "thin
-traits" proposal can be seen as a design pattern lying latent in the
+afterwards (or at some later time)**. My reasoning is that the Thin
+Traits proposal can be seen as a design pattern lying latent in the
 Extended Enums proposal. Basically, once we implement
-"specialization", which I want for a wide variety of reasons, we
+[specialization][], which I want for a wide variety of reasons, we
 *almost* get Thin Traits for free. And the Thin Traits pattern is
 useful enough that it's working taking that extra step.
 
@@ -516,3 +516,4 @@ Oh, wait, I already gave it. Well, the most salient points are:
 [PIC]: https://en.wikipedia.org/wiki/Inline_caching#Polymorphic_inline_caching
 [Expression Problem]: https://en.wikipedia.org/wiki/Expression_problem
 [internals]: https://internals.rust-lang.org/t/blog-post-extended-enums-and-thin-traits/2755
+[specialization][]: https://github.com/rust-lang/rfcs/pull/1210
