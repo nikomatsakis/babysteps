@@ -204,6 +204,7 @@ Note that while it's relatively easy in Rust to handle the case where
 case like `Struct` or `Enum`, where only *some* of the variants have
 common fields.
 
+<a id="initialization"></a>
 ### Problem #3: Initialization of common fields
 
 Rust differs from purely OO languages in that it does not have special

@@ -563,6 +563,7 @@ hierarchy".)
 
 [250]: https://github.com/rust-lang/rfcs/pull/250
 
+<a id="constructors"></a>
 ### Associated structs (constructors)
 
 One of the distinctive features of OO-style classes is that they
