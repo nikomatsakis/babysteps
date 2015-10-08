@@ -49,7 +49,7 @@ to do match statements, or to use inheritance when implementing any
 trait at all (more details on this last point below).
 
 To put it another way: with Thin Traits, you write virtual methods
-whereas with "extensible enums", you write match statements -- and I
+whereas with Extensible Enums, you write match statements -- and I
 think match statements are far more common in Rust today.
 
 Still, Thin Traits will be a very good fit for various use cases.
@@ -516,4 +516,4 @@ Oh, wait, I already gave it. Well, the most salient points are:
 [PIC]: https://en.wikipedia.org/wiki/Inline_caching#Polymorphic_inline_caching
 [Expression Problem]: https://en.wikipedia.org/wiki/Expression_problem
 [internals]: https://internals.rust-lang.org/t/blog-post-extended-enums-and-thin-traits/2755
-[specialization][]: https://github.com/rust-lang/rfcs/pull/1210
+[specialization]: https://github.com/rust-lang/rfcs/pull/1210
