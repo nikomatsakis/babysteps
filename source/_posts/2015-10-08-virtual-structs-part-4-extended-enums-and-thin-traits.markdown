@@ -17,7 +17,7 @@ previous proposal as [the Extended Enums proposal][ee]. Very good.
 (OK, I lied, one more note: starting with this post, I've decided to
 disable comments on this blog. There are just too many forums to keep
 up with! So if you want to discuss this post, I'd recommend doing so
-on the Rust [internals][] page; I'll start a thread there.)
+on [this Rust internals thread][internals].)
 
 ### Conclusion
 
@@ -515,4 +515,4 @@ Oh, wait, I already gave it. Well, the most salient points are:
 [summary]: http://aturon.github.io/blog/2015/09/18/reuse/#ending-2:-the-enum-based-approach
 [PIC]: https://en.wikipedia.org/wiki/Inline_caching#Polymorphic_inline_caching
 [Expression Problem]: https://en.wikipedia.org/wiki/Expression_problem
-[internals]: https://internals.rust-lang.org/
+[internals]: https://internals.rust-lang.org/t/blog-post-extended-enums-and-thin-traits/2755
