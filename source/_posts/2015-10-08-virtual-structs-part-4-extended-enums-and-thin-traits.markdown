@@ -29,7 +29,7 @@ Traits proposal can be seen as a design pattern lying latent in the
 Extended Enums proposal. Basically, once we implement
 [specialization][], which I want for a wide variety of reasons, we
 *almost* get Thin Traits for free. And the Thin Traits pattern is
-useful enough that it's working taking that extra step.
+useful enough that it's worth taking that extra step.
 
 Now, since the Thin Traits and Extended Enums proposal appear to be
 alternatives, you may wonder why I would think there is value in
@@ -53,7 +53,7 @@ whereas with Extensible Enums, you write match statements -- and I
 think match statements are far more common in Rust today.
 
 Still, Thin Traits will be a very good fit for various use cases.
-Theyare a good fit for Servo, for example, where they can be put to
+They are a good fit for Servo, for example, where they can be put to
 use modeling the DOM. The extensibility here is probably a plus, if
 not a hard requirement, because it means Servo can spread the DOM
 across multiple crates. Another place that they might (maybe?) be
@@ -72,8 +72,8 @@ while useful, was not perfect. It had some rough spots we were not
 happy with (which I'll discuss later on). Deferring the proposal gives
 us time to find new solutions to those aspects. Often I find that when
 I revisit a troublesome feature after letting it sit for some time, I
-find that either (a) the problem I thought there was no longer bothes
-me or (b) the feature isn't that important anyway or (c) there is now
+find that either (1) the problem I thought there was no longer bothers
+me or (2) the feature isn't that important anyway or (3) there is now
 a solution that was either previously not possible or which just never
 occurred to me.
 
@@ -363,6 +363,9 @@ implements the virtual dispatch, by matching and dispatching to the
 appropriate variant:
 
 ```rust
+// As originally envisioned, `impl<T> MyTrait for Option<T>`
+// would be sugar for the following two impls:
+
 partial impl<T> MyTrait for Option<T> {
     default fn method1() { ... }
     default fn method2() { ... }
