@@ -1,2 +1,31 @@
 // This File is imported last, and will override other styles in the cascade
 // Add styles here to make changes without digging in too much
+
+.ndm table {
+border-collapse:
+collapse; border-spacing: 50px 0;
+}
+
+.ndm td, .ndm th {
+     text-align: left;
+    padding: 0 10px;
+border: 1px solid; /* No more visible border */
+height: 30px;
+transition: all 0.3s;  /* Simple transition for hover effect */
+}
+
+.ndm th {
+background: #DFDFDF;  /* Darken header a bit */
+font-weight: bold;
+}
+
+.ndm td {
+background: #FAFAFA;
+text-align: center;
+}
+
+/* Cells in even rows (2,4,6...) are one color */
+.ndm tr:nth-child(even) td { background: #F1F1F1; }
+
+/* Cells in odd rows (1,3,5...) are another (excludes header cells)  */
+.ndm tr:nth-child(odd) td { background: #FEFEFE; }
