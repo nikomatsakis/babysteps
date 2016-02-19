@@ -386,7 +386,7 @@ working on Rust's type system. Previously I thought that "dangling
 pointers" in sequential programs and "data races" were sort of
 distinct bugs: but now I see them as two heads of the same Hydra.
 Basically both are caused by having rampant aliasing and mutation, and
-both can be solved by the ownership and borrowing. Nifty.)
+both can be solved by the ownership and borrowing. Nifty, no?)
 
 [epiphany]: http://smallcultfollowing.com/babysteps/blog/2013/06/11/on-the-connection-between-memory-management-and-data-race-freedom/
 
@@ -545,8 +545,7 @@ safety here.  I think this is largely due to two key developments:
   in my early designs to try to find alternate traits to express the
   idea of data that was threadsafe but also contained stack
   references. Thankfully Joshua had the insight that simply removing
-  the `'static` bound would make this all much smoother! (Score one
-  for the RFC process and open source.)
+  the `'static` bound would make this all much smoother!
 
 ### Appendix: Implementing sequential fallback without code duplication
 
