@@ -314,11 +314,9 @@ LR(1). Therefore, it's actually automated in LALRPOP. All you have to
 do is annotate a nonterminal with `#[inline]` and the preprocessor
 will handle it for you (moreover, the preprocessor automatically
 converts `Foo*` into two options, one without `Foo` at all, and one
-with `Foo+`).
-
-In fact, if we go back to the original error report,
-we can see that LALRPOP recognized what was happening and even advised
-us that we may want to add a `#[inline]` attribute:
+with `Foo+`). In fact, if we go back to the original error report, we
+can see that LALRPOP recognized what was happening and even advised us
+that we may want to add a `#[inline]` attribute:
 
 ```text
   Hint: It appears you could resolve this problem by adding the annotation
