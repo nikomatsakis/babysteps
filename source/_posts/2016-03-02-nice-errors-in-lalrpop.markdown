@@ -303,10 +303,10 @@ Ident = r#"[a-zA-Z][a-zA-Z0-9]*"#;
 Now, this version is equivalent to what we had before, in that it
 parses the same inputs. But to the parser, it looks very different. In
 particular, we no longer have to first recognize that an identifier is
-a `Path` to product an `ImportDecl`. As you can see in the second
-production (indicating with a `(*)` comment) we can now directly
+a `Path` to produce an `ImportDecl`. As you can see in the second
+production (indicated with a `(*)` comment) we can now directly
 recognize `"import" Ident "." "*" ";"` as an `ImportDecl`.  In other
-words, our parse that we saw before works just fine.
+words, the parse which got stuck before now works just fine.
 
 This technique of inlining one nonterminal into another is very common
 and very effective for making grammars compatible with
