@@ -379,8 +379,8 @@ This may also lead to some ideas for how to automate inlining further,
 or other scenarios where I can make tailored suggestions.  We'll just
 have to see!
 
-I've got a few parsing related blog posts I hope to read over the
-next few weeks:
+I've got a few parsing-related blog posts I hope to write over the
+next few weeks (or months, more likely):
 
 - the "ascii art" library that I wrote to format the error messages
   is itself kind of interesting;

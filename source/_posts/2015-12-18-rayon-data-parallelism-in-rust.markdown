@@ -304,12 +304,12 @@ This means that you can add parallelism to previously sequential code
 without worrying about introducing weird, hard-to-reproduce bugs.
 
 There are two kinds of mistakes we have to be concerned about.  First,
-the two closures might shared some mutable state, so that changes made
+the two closures might share some mutable state, so that changes made
 by one would affect the other. For example, if I modify the above
 example so that it (incorrectly) calls `quick_sort` on `lo` in both
 closures, then I would hope that this will not compile:
 
-``` rust
+```rust
 fn quick_sort<T:PartialOrd+Send>(v: &mut [T]) {
     if v.len() > 1 {
         let mid = partition(v);
@@ -322,7 +322,7 @@ fn quick_sort<T:PartialOrd+Send>(v: &mut [T]) {
 
 And indeed I will see the following error:
 
-```
+```text
 test.rs:14:10: 14:27 error: closure requires unique access to `lo` but it is already borrowed [E0500]
 test.rs:14          || quick_sort(lo));
                     ^~~~~~~~~~~~~~~~~
@@ -392,7 +392,7 @@ both can be solved by the ownership and borrowing. Nifty, no?)
 
 So what about the second error, the one I got for sending an `Rc`
 across threads? This occurs because the `join` function declares that
-it's two closures must be `Send`. `Send` is the Rust name for a trait
+its two closures must be `Send`. `Send` is the Rust name for a trait
 that indicates whether data can be safely transferred across
 threads. So when `join` declares that its two closures must be `Send`,
 it is saying "it must be safe for the data those closures can reach to
@@ -531,7 +531,7 @@ users, but also simple for *implementors* -- that is, it doesn't
 require any crazy Rust type system tricks or funky traits to achieve
 safety here.  I think this is largely due to two key developments:
 
-- ["IMHTWAMA"][IM], which was the decision to make `&mut` references
+- ["INHTWAMA"][IM], which was the decision to make `&mut` references
   be non-aliasable and to remove `const` (read-only, but not
   immutable) references. This basically meant that Rust authors were
   now writing data-race-free code *by default*.
