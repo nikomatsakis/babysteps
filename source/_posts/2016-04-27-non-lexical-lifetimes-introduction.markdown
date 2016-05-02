@@ -218,7 +218,7 @@ fn get_default<'m,K,V:Default>(map: &'m mut HashMap<K,V>,
 At first glance, this code appears quite similar the code we saw
 before. And indeed, just as before, it will not compile. But in fact
 the lifetimes at play are quite different. The reason is that, in the
-`Some` branch, the value is not being **returned out** to the caller.
+`Some` branch, the value is being **returned out** to the caller.
 Since `value` is a reference into the map, this implies that the `map`
 will remain borrowed **until some point in the caller** (the point
 `'m`, to be exact). To get a better intuition for what this lifetime
