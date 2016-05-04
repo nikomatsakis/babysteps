@@ -2,7 +2,7 @@
 layout: post
 title: "Non-lexical lifetimes based on liveness"
 date: 2016-05-04 05:19:04 -0400
-comments: true
+comments: false
 categories: [Rust]
 ---
 In my [previous post][nllintro] I outlined several cases that we would like
@@ -16,7 +16,7 @@ possible scheme for solving those. The heart of the post is two key ideas:
 2. Use **liveness** as the basis for deciding where a variable's type
    must be valid.
 
-The rest of this post expounds on these two ideas, and shows how they
+The rest of this post expounds on these two ideas and shows how they
 affect the various examples from the previous post.
 
 <!-- more -->
@@ -41,11 +41,12 @@ fn bar() {
 
 As shown, the lifetime of this reference today winds up being the
 subset of the block that starts at the `let` and stretches until the
-ending `}`. Since when we have a borrow like `&mut data[..]`, we
-effectively "lock" the underlying data structure (here, `data[..]`)
-for the lifetime of the borrow, that means that `data` becomes off
-limits all the way until the closing `}`. Hence the calls to
-`data.push` result in compilation errors.
+ending `}`. This results in compilation errors when we attempt to push
+to `data`.  The reason is that a borrow like `&mut data[..]`
+effectively "locks" the `data[..]` for the lifetime of the borrow,
+meaning that `data` becomes off limits and can't be used (this
+"locking" is just a metaphor for the type system rules; there is of
+course nothing happening at runtime).
 
 What we would like is to observe that `slice` is *dead* -- which is
 [compiler-speak][lv] for "it won't ever be used again" -- after the call to
@@ -131,8 +132,8 @@ found that it caused problems with more advanced cases, such as a
 variation on problem case 3 we will examine in a later post.
 
 Instead, I have opted to weaken -- but not entirely remove -- the
-original rule.  The original rule was something like this (in
-inference form):
+original rule.  The original rule was something like this (expressed
+as an [inference rule][]):
 
     scope(x) = 's
     T: 's
@@ -148,7 +149,7 @@ this:
     ------------------
     let x: T OK
 
-Here I have substituted *scope* for *live-range*. By [live-range][lv]
+Here I have substituted *live-range* for *scope*. By [live-range][lv]
 I mean "the set of points in the CFG where `x` may be later used",
 effectively. If we apply this to our two variations, we will see that,
 in the first example, the variable `slice` is *dead* after the call to
@@ -179,6 +180,8 @@ fn baz() {
         data.push('d'); // ERROR!                        //   |
     }                                                    //   |
     // <------------------------------------------------------+
+    
+    // But note that `slice` is dead here, so the lifetime ends:
     data.push('e'); // OK
     data.push('f'); // OK
 }
@@ -195,12 +198,12 @@ example, while this bit of code *will* type-check:
 let mut data1 = vec![];
 let mut data2 = vec![];
 let x = &mut data1[..]; // <--+ data1 is "locked" here
-let y = &mut data2[..]; // <---+ data2 is "locked" here
-use(x);                 //    ||
-// <--------------------------+|
-data1.push(1);          //     |
-use(y);                 //     |
-// <---------------------------+
+let y = &mut data2[..]; // <----+ data2 is "locked" here
+use(x);                 //    | |
+// <--------------------------+ |
+data1.push(1);          //      |
+use(y);                 //      |
+// <----------------------------+
 data2.push(1);
 ```
 
@@ -227,27 +230,29 @@ to determine that we ought to compute the liveness of `tuple.0` and
 (If we did so, then any use of `tuple` would be considered a "gen" of
 both `tuple.0` and `tuple.1`, and any write to `tuple` would be
 considered a "kill" of both.) This would probably subsume and be
-compatible with the fragment logic used for [dynamic drop][], so it
+compatible with the fragment logic used for [dynamic drop][RFC 320], so it
 could be a net simplification.
 
 ### Destructors
 
 One further wrinkle that I did not discuss is that any struct with a
 destructor encounters special rules. This is because the destructor
-may access the references in the struct. These rules are colloquially
-called "dropck", and they basically state that when we create some
-variable `x` whose type `T` has a destructor, then `T` must *strictly*
-outlive the scope of `x`. That is, the references in `x` don't have to
-just be valid for the scope of `x`, they have to be valid for *longer*
-than the scope of `x`. In some sense, this rule remains unchanged by
-all I've discussed here. But in another sense dropck may stop being a
-special case. The reason is that, in [MIR][], all drops are made
-explicit in the [control-flow graph][CFG], and hence if a variable `x`
-has a destructor, that should show us as "just another use" of `x`,
-and thus cause the lifetime of any references within to be naturally
-extended to cover that destructor. I admit I haven't had time to dig
-into a lot of examples here: destructors are historically a very
-subtle case.
+may access the references in the struct. These rules were specified in
+[RFC 1238][dropck] but are colloquially called
+["dropck"][dropck]. They basically state that when we create some
+variable `x` whose type `T` has a destructor, then `T` must outlive
+the *parent* scope of `x`. That is, the references in `x` don't have
+to just be valid for the scope of `x`, they have to be valid for
+*longer* than the scope of `x`.
+
+In some sense, the dropck rules remains unchanged by all I've
+discussed here. But in another sense dropck may stop being a special
+case. The reason is that, in [MIR][], all drops are made explicit in
+the [control-flow graph][CFG], and hence if a variable `x` has a
+destructor, that should show us as "just another use" of `x`, and thus
+cause the lifetime of any references within to be naturally extended
+to cover that destructor. I admit I haven't had time to dig into a lot
+of examples here: destructors are historically a very subtle case.
 
 ### Implementation ramifications
 
@@ -298,12 +303,12 @@ today.
 
 Here I presented the key ideas of my current thoughts around
 non-lexical lifetimes: using flexible lifetimes coupled with
-liveness. I motivated this by examining problem case #1 from
+liveness. I motivated this by examining problem case \#1 from
 [my introduction][nllintro]. I also covered some of the implementation
-complications. In future posts, I plan to examine problem cases #2 and
-#3 -- and in particular to describe how to extend the system to cover
-named lifetime parameters, which I've completely ignored
-here. (Spoiler alert: problem cases #2 and #3 are also no longer
+complications. In future posts, I plan to examine problem cases \#2
+and \#3 -- and in particular to describe how to extend the system to
+cover named lifetime parameters, which I've completely ignored
+here. (Spoiler alert: problem cases \#2 and \#3 are also no longer
 problems under this system.)
 
 I also do want to emphasize that this plan is a
@@ -312,9 +317,16 @@ point out flaws or opportunities for improvement. So I wouldn't be
 surprised if the final system we wind up with winds up looking quite
 different.
 
+(As is my wont lately, I am disabling comments on this post. If you'd
+like to discuss the ideas in here, please do so in
+[this internals thread][thread] instead.)
+
 [lv]: https://en.wikipedia.org/wiki/Live_variable_analysis
 [nllintro]: http://smallcultfollowing.com/babysteps/blog/2016/04/27/non-lexical-lifetimes-introduction/
 [mir]: http://blog.rust-lang.org/2016/04/19/MIR.html
 [cfg]: https://en.wikipedia.org/wiki/Control_flow_graph
 [RFC 396]: https://github.com/rust-lang/rfcs/pull/396
 [RFC 320]: https://github.com/rust-lang/rfcs/blob/master/text/0320-nonzeroing-dynamic-drop.md
+[inference rule]: https://en.wikipedia.org/wiki/Rule_of_inference
+[dropck]: https://github.com/rust-lang/rfcs/blob/master/text/1238-nonparametric-dropck.md
+[thread]: http://internals.rust-lang.org/t/non-lexical-lifetimes-based-on-liveness/3428
