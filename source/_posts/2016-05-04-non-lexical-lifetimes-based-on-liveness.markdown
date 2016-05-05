@@ -126,10 +126,14 @@ backedge) but without reinitializing `slice`.**
 One way to address this problem would be to modify the definition of a
 lifetime. The definition I gave earlier was very flexible and allowed
 any set of points in the control-flow to be included. Perhaps we want
-some special rules around backedges? This is the approach that
-[RFC 396][] took, for example. I initially explored this approach but
-found that it caused problems with more advanced cases, such as a
-variation on problem case 3 we will examine in a later post.
+some special rules to ensure that control flow is continuous? This is
+the approach that [RFC 396][] took, for example. I initially explored
+this approach but found that it caused problems with more advanced
+cases, such as a variation on problem case 3 we will examine in a
+later post.
+
+(**EDITED:** The paragraph above incorrectly suggested that
+[RFC 396][] had special rules around backedges. Edited to clarify.)
 
 Instead, I have opted to weaken -- but not entirely remove -- the
 original rule.  The original rule was something like this (expressed
