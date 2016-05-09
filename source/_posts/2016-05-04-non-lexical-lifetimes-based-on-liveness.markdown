@@ -3,7 +3,7 @@ layout: post
 title: "Non-lexical lifetimes based on liveness"
 date: 2016-05-04 05:19:04 -0400
 comments: false
-categories: [Rust]
+categories: [Rust, NLL]
 ---
 In my [previous post][nllintro] I outlined several cases that we would like
 to improve with Rust's current borrow checker. This post discusses one

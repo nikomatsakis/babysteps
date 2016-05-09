@@ -3,7 +3,7 @@ layout: post
 title: "Non-lexical lifetimes: introduction"
 date: 2016-04-27 07:52:05 -0700
 comments: true
-categories: [Rust]
+categories: [Rust, NLL]
 ---
 
 Over the last few weeks, I've been devoting my free time to fleshing
