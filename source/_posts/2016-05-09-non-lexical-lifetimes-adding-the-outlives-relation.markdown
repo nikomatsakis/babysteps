@@ -2,7 +2,7 @@
 layout: post
 title: "Non-lexical lifetimes: adding the outlives relation"
 date: 2016-05-09 16:15:58 -0700
-comments: true
+comments: false
 categories: [Rust, NLL]
 ---
 
@@ -255,20 +255,20 @@ reference) will be as follows:
 
 - `'v0: E/0` -- `value` is live here
 - `'v0: C/2` -- `value` is live here
-- `'v0: D/5` -- `value` is live here
+- `'v0: D/4` -- `value` is live here
 
 For now, let's just treat the outlives relation as a "superset"
-relation.  So `'m1: 'v1``, for example, requires that `'m1` be a
+relation.  So `'m1: 'v1`, for example, requires that `'m1` be a
 superset of `'v1`. In turn, `'v0: E/0` can be written `'v0: {E/0}`.
 In that case, if we turn the crank and compute some minimal lifetimes
 that satisfy the various constraints, we wind up with the following
 values for each lifetime:
 
-- `'v0 = {C/2, D/5, E/0}`
-- `'v1 = {C/*, D/5, E/0}`
-- `'m1 = {B/*, C/*, E/0, D/5}`
-- `'v2 = {C/2, D/{3,4,5}, E/0}`
-- `'m2 = {C/2, D/{2,3,4,5}, E/0}`
+- `'v0 = {C/2, D/4, E/0}`
+- `'v1 = {C/*, D/4, E/0}`
+- `'m1 = {B/*, C/*, E/0, D/4}`
+- `'v2 = {C/2, D/{3,4}, E/0}`
+- `'m2 = {C/2, D/{2,3,4}, E/0}`
 
 This turns out not to yield any errors, but you can see some kind of
 surprising results. For example, the lifetime assigned to `v1` (the
@@ -409,16 +409,21 @@ subtyping relationship with a location. I don't see this causing a
 problem, but it's not something I've seen before. We'll have to see as
 we go. It might e.g. affect caching.
 
+### Comments
+
+Please comment on
+[this internals thread](http://internals.rust-lang.org/t/non-lexical-lifetimes-based-on-liveness/3428/).
+
 ### Appendix A: An alternative: variables have multiple types
 
 There is another alternative to lifetimes with gaps that we might
 consider. We might also consider allow variables to have multiple
 types.  I explored this a bit by using an SSA-like renaming, where
 each verson assignment to a variable yielded a fresh type. However, I
-thought that in the end it help more complicated than just allowing
+thought that in the end it felt more complicated than just allowing
 lifetimes to have gaps; for one thing, it complicates determining
 whether two paths overlap in the borrow checker (different versions of
-the same variable are still stored in teh same lvalue), and it doesn't
+the same variable are still stored in the same lvalue), and it doesn't
 interact as well with the notion of *fragments* that I talked about in
 [the previous post][post2] (though one can use variants of SSA that
 operate on fragments, I suppose). Still, it may be worth exploring --
@@ -447,7 +452,7 @@ the named lifetime parameter `'v`. The most intuitive explanation is
 this parameter indicates that the return value is "borrowed from" the
 `self` argument (because they share the same lifetime `'v`). Hence we
 could conclude that when we call `tmp = map_ref1.get_mut(&key)`, the
-lifetime of the input (`'m1`) must outlive the lifetime of the input
+lifetime of the input (`'m1`) must outlive the lifetime of the output
 (`'v1`). Written using outlives notation, that would be that this call
 requires that `'m1: 'v1`. This is the right conclusion, but it may be
 worth digging a bit more into how the type system actually works
