@@ -3,7 +3,7 @@ layout: post
 title: "The 'Tootsie Pop' model for unsafe code"
 date: 2016-05-27 12:12:15 -0400
 comments: false
-categories: [Rust]
+categories: [Rust, Unsafe]
 ---
 
 In my [previous post][pp], I spent some time talking about the idea of
