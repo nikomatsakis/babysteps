@@ -23,9 +23,7 @@ of unsafe code to be "things you could have written using the safe
 code plus a core set of unsafe abstractions" (ignoring the fact that
 the safe implementation would be unusably slow or consume ridiculous
 amounts of memory). This is a helpful and important thing to be able
-to nail down. The post talks about a more principled way to define
-that formally, along with some implications for other aspects of the
-unsafe guidelines (e.g., what kinds of aliasing we might permit).
+to nail down.
 
 [LaCasa]: http://2016.splashcon.org/event/splash-2016-oopsla-lacasa-lightweight-affinity-and-object-capabilities-in-scala
 [Amal Ahmed]: http://www.ccs.neu.edu/home/amal/
@@ -350,7 +348,7 @@ able to do more aggressive things in your unsafe code.
 
 ### Comments
 
-I'll open a discuss thread for this post if you want to leave
-comments.
+Please leave comments in
+[this thread on the Rust internals forum](https://internals.rust-lang.org/t/blog-post-observatonal-equivalence-and-unsafe-code/4148/1).
 
 
