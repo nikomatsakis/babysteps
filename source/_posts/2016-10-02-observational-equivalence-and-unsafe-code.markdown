@@ -7,10 +7,12 @@ categories: [Rust, Unsafe]
 ---
 
 I spent a really interesting day last week at Northeastern University.
-First, I saw a really interesting talk by Philip Haller covering
-[LaCasa], which is a set of extensions to Scala that enable it to
-track ownership so that it can do some of the same things that Rust
-can do. Glad to see more languages moving in this direction.
+First, I saw a fun talk by Philip Haller covering [LaCasa], which is a
+set of extensions to Scala that enable it to track ownership. Many of
+the techniques reminded me very much of Rust (e.g., the use of
+"spores", which are closures that can limit the types of things they
+close over); if I have time, I'll try to write up a more detailed
+comparison in some later post.
 
 Next, I met with [Amal Ahmed] and her group to discuss the process of
 crafting unsafe code guidelines for Rust. This is one very impressive
@@ -166,7 +168,7 @@ the fact that your code runs slower (this is a slight simplification;
 I'll elaborate below). **In contrast, I cannot implement
 setjmp/longjmp using safe code.**
 
-**"But wait", you say, "Just what do you mean by "safe code"?** OK,
+**"But wait", you say, "Just what do you mean by 'safe code'?"** OK,
 That last paragraph was really sloppy. I keep saying things like "you
 could do this in safe Rust", but of course we've already seen that the
 very notion of what "safe Rust" can do is something that **unsafe code
@@ -286,7 +288,7 @@ consistency), then you can definitely observe whether threading is
 truly in use. The same is true for I/O and so forth.
 
 So this is the level that shows that what I wrote earlier, that
-"Rayon's superpower is **observationally equivalent** to safe Rust" is
+"Rayon's superpower is observationally equivalent to safe Rust" is
 actually false. I think it **is** observationally equivalent to "safe
 Rust4", but not Rust5. Basically Rayon serves as a kind of "Rust6", in
 which we grow Rust5 by adding scoped threads, that allow sharing data
