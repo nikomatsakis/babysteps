@@ -259,6 +259,7 @@ for types that support slicing, like `String: AsRef<str>` -- this
 states that an `&String` can be sliced into an `&str` reference.
 
 There are a number of blanket impls for `AsRef` that one might expect:
+
 - Naturally one might expect that `T: AsRef<T>` would always hold.
   That just says that an `&T` reference can be converted into another
   `&T` reference (duh) -- which is sometimes called being *reflexive*.
@@ -333,15 +334,15 @@ must pass):
 The algorithm to test whether an impl I can specialize an impl J is this:
 
 - *Specializes(I, J)*:
-  - If *Type(I, J)* holds:
-    - If *Type(J, I)* does not hold:
-      - true
-    - Otherwise, if *WhereClause(I, J)* holds:
-      - If *WhereClause(J, I)* does not hold:
-        - true
-      - else:
-        - false
-  - false
+    - If *Type(I, J)* holds:
+        - If *Type(J, I)* does not hold:
+            - true
+        - Otherwise, if *WhereClause(I, J)* holds:
+            - If *WhereClause(J, I)* does not hold:
+                - true
+            - else:
+                - false
+    - false
   
 You could also write this as *Specializes(I, J)* is:
 
@@ -368,8 +369,8 @@ specializes the other", we would now add the additional possibility
 that "two impls can overlap so long as some other impl specializes
 both of them".
 
-This is helpful for realizing another pattern that we wanted to get
-out of specialization but which, until now, we could not.
+This is helpful for realizing some other patterns that we wanted to
+get out of specialization but which, until now, we could not.
 
 #### Example: AsRef
 
@@ -549,7 +550,7 @@ one can add blanket impls after the fact, but only if a subtrait
 relationship already existed.**
 
 As an aside, this -- along with the
-[similar example raised by [withoutboats and reddit user oconnor663][neg]
+[similar example raised by withoutboats and reddit user oconnor663][neg]
 -- strongly suggests to me that traits need to "predeclare" strong
 relationships, like subtraits but also mutual exclusion if we ever
 support that, at the point when they are created. I know withoutboats
@@ -575,22 +576,19 @@ precedence**. I claim this rule is intuitive in practice; perhaps more
 intuitive than the current rule.
 
 This predicate allows for a number of scenarios that the current
-specialization rule excludes, but which we wanted initially:
+specialization rule excludes, but which we wanted initially.  The ones
+I have considered mostly fall into the category of adding an impl of a
+supertrait in terms of a subtrait backwards compatibly:
 
-- Adding an impl of a supertrait in terms of a subtrait backwards compatibly:
-  - all items in this new blanket impl must be default
   - `impl<T: Copy> Clone for T { ... }`
   - `impl<T: Eq> PartialEq for T { ... }`
   - `impl<T: Ord> PartialOrd for T { ... }`
-- Ergonomic impls that seek to "tile the space" for conversions:
-  - notably, `impl<T> AsRef<T> for T`
-  - others?
 
-**Especially if combined with the intersection impls, the
-specializaton system becomes very expressive indeed.** (I'd be
-interested to hear about other cases where the coherence rules were
-limiting that may be affected by specializaton, so we can see how they
-fare.)
+If we combine with intersection impls, we can also accommodate the
+`AsRef` impl, and also get better support for having overlapping
+blanket impls. I'd be interested to hear about other cases where the
+coherence rules were limiting that may be affected by specializaton,
+so we can see how they fare.
 
 **One sour note has to do with negative reasoning.** Specialization
 based on where clauses (orthogonally from the changes in this RFC, in
