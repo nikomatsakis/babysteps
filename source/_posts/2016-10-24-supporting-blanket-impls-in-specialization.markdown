@@ -608,4 +608,7 @@ this, by tweaking the *WhereClause(I, J)* test to be more
 conservative, or to be more syntactical in nature. This will require
 some further experimentation and tinkering.
 
+### Comments
 
+Please leave comments in
+[this internals thread](https://internals.rust-lang.org/t/blog-post-supporting-blanket-impls-in-specialization/4264).
