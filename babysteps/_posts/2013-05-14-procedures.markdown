@@ -235,4 +235,4 @@ I have long been unsatisfied with the implicit and confusing divide
 between "by reference" and "copying" closures. Splitting them into two
 concepts seems to address a lot of issues and be an overall win to me.
 
-[dst]: /blog/2013/04/30/dynamically-sized-types/
+[dst]: {{ site.baseurl }}/blog/2013/04/30/dynamically-sized-types/

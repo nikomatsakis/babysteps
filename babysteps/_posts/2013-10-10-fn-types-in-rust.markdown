@@ -330,10 +330,10 @@ excludes procs, because they require a distinct trait
 except on `||` or `proc` types, but that makes them something more
 than syntactic sugar, though not a lot more.
 
-[0]: /blog/2013/04/30/the-case-of-the-recurring-closure/
-[1]: /blog/2013/04/30/dynamically-sized-types/
-[2]: /blog/2013/05/13/mutable-fn-alternatives/
-[3]: /blog/2013/05/14/procedures/
-[4]: /blog/2013/05/30/removing-procs/
-[dp]: /blog/2013/06/11/data-parallelism-in-rust/ 
-[dtor]: /blog/2013/01/17/destructors-and-finalizers-in-rust/
+[0]: {{ site.baseurl }}/blog/2013/04/30/the-case-of-the-recurring-closure/
+[1]: {{ site.baseurl }}/blog/2013/04/30/dynamically-sized-types/
+[2]: {{ site.baseurl }}/blog/2013/05/13/mutable-fn-alternatives/
+[3]: {{ site.baseurl }}/blog/2013/05/14/procedures/
+[4]: {{ site.baseurl }}/blog/2013/05/30/removing-procs/
+[dp]: {{ site.baseurl }}/blog/2013/06/11/data-parallelism-in-rust/ 
+[dtor]: {{ site.baseurl }}/blog/2013/01/17/destructors-and-finalizers-in-rust/

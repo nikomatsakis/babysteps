@@ -83,7 +83,7 @@ It will also fail if the function it is applied to cannot be compiled
 for parallel execution for whatever reason, unlike the higher-level
 ops.
 
-[pjs]: /blog/categories/pjs
+[pjs]: {{ site.baseurl }}/blog/categories/pjs
 [till]: http://www.tillschneidereit.de
 [sq]: http://www.squeak.org/
 [jp]: http://www.research.ibm.com/jalapeno/publication.html

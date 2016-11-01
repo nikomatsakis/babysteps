@@ -108,5 +108,5 @@ approach of controlling aliasing is [Parasail][parasail]. Not
 coincidentally, I would argue, both Rust and Parasail guarantee
 data-race freedom, while most langauges do not.
 
-[pp]: /blog/2013/06/11/data-parallelism-in-rust/
+[pp]: {{ site.baseurl }}/blog/2013/06/11/data-parallelism-in-rust/
 [parasail]: http://parasail-programming-language.blogspot.com/

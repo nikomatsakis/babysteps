@@ -32,6 +32,6 @@ colors, points, and so forth. That should be coming soon. It'll build
 on the API described in the [draft paper][paper], so you might want to
 read that first. ;)
 
-[paper]: /pubs/2014.04.01-TypedObjects.pdf
+[paper]: {{ site.baseurl }}/pubs/2014.04.01-TypedObjects.pdf
 [spec]: https://github.com/dslomov-chromium/typed-objects-es7
 [973238]: https://bugzilla.mozilla.org/show_bug.cgi?id=973238

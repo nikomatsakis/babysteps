@@ -378,6 +378,6 @@ current feature.
 
 [c1]: https://mail.mozilla.org/pipermail/rust-dev/2013-November/006381.html
 [c2]: https://mail.mozilla.org/pipermail/rust-dev/2013-November/006376.html
-[dst]: /blog/2013/04/30/dynamically-sized-types/
+[dst]: {{ site.baseurl }}/blog/2013/04/30/dynamically-sized-types/
 [6515]: https://github.com/mozilla/rust/issues/6515
 [5016]: https://github.com/mozilla/rust/issues/5016

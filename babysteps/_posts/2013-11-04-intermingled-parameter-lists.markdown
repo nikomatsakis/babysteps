@@ -317,9 +317,9 @@ The more detailed rules for my proposal are as follows:
       a parameter to a fn item, and results in a bound parameter
       scoped to the resulting fn type.
       
-[ipl]: /blog/2013/10/29/intermingled-parameter-lists/
-[c1]: /blog/2013/10/29/intermingled-parameter-lists/#comment-1103218392
-[c2]: /blog/2013/10/29/intermingled-parameter-lists/#comment-1103344213
+[ipl]: {{ site.baseurl }}/blog/2013/10/29/intermingled-parameter-lists/
+[c1]: {{ site.baseurl }}/blog/2013/10/29/intermingled-parameter-lists/#comment-1103218392
+[c2]: {{ site.baseurl }}/blog/2013/10/29/intermingled-parameter-lists/#comment-1103344213
 [spj]: http://research.microsoft.com/en-us/um/people/simonpj/papers/higher-rank/
 [hkt]: http://en.wikipedia.org/wiki/Kind_%28type_theory%29
 [skol]: http://demonstrations.wolfram.com/Skolemization/

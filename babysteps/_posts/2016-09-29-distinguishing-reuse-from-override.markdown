@@ -31,7 +31,7 @@ In the previous post, my primary motivating example focused on the
 `Copy` and `Clone` traits. Specifically, I wanted to be able to add an
 impl like the following (we'll call it "impl A"):
 
-[pp]: /blog/2016/09/24/intersection-impls/
+[pp]: {{ site.baseurl }}/blog/2016/09/24/intersection-impls/
 [1210]: https://github.com/rust-lang/rfcs/pull/1210
 
 ```rust

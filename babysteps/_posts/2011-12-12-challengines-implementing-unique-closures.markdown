@@ -131,7 +131,7 @@ implement the [NIC proposal][nic] and fully spec out and implement
 [region support][reg].  However, the third and fourth options are not
 incompatible, so maybe we will see both someday.
 
-[nic]: /rust/no-implicit-copies#dynamically-sized-types
+[nic]: {{ site.baseurl }}/rust/no-implicit-copies#dynamically-sized-types
 [reg]: https://github.com/graydon/rust/wiki/Proposal-for-regions
-[coro]: /blog/2011/12/06/coroutines-for-rust/
-[po]: /blog/2011/12/13/partially-ordered-unique-closures/
+[coro]: {{ site.baseurl }}/blog/2011/12/06/coroutines-for-rust/
+[po]: {{ site.baseurl }}/blog/2011/12/13/partially-ordered-unique-closures/

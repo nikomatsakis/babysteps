@@ -19,4 +19,4 @@ just the ones I've thought about so far.  In some cases, the
 descriptions are quite hand-wavy.  I also think some of them don't
 hang together so well.
 
-[doc]: /rust/regions-tradeoffs
+[doc]: {{ site.baseurl }}/rust/regions-tradeoffs

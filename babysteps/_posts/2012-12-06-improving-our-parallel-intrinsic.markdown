@@ -97,7 +97,7 @@ generate more efficient code.  Generating efficient code is very
 important to parallel execution because, as I explained in
 [an earlier post][rt], efficient code is generally *threadsafe code*.
 
-[rt]: /blog/2012/10/10/rivertrail
+[rt]: {{ site.baseurl }}/blog/2012/10/10/rivertrail
 
 **Enter the warmup phase.** To handle this situation,
 `%ParallelBuildArray()` does something called a warmup.  Basically, it
@@ -317,4 +317,4 @@ In that case, we could rewrite the loop to look something like:
 This would mean that if parallel execution is disabled, we fall right
 through to the plain old sequential execution.
 
-[pure]: /blog/2012/10/24/purity-in-parallel-javascript
+[pure]: {{ site.baseurl }}/blog/2012/10/24/purity-in-parallel-javascript

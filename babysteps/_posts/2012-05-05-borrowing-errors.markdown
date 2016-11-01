@@ -271,4 +271,4 @@ today, it's a moot point anyhow.
 [lpe]: http://infoscience.epfl.ch/record/175240/files/ecoop_1.pdf
 [ffe]: http://stackoverflow.com/questions/4479554/why-vector-methods-iterator-and-listiterator-are-fail-fast
 [1422]: https://github.com/mozilla/rust/issues/1422
-[pp]: /blog/2012/05/01/borrowing
+[pp]: {{ site.baseurl }}/blog/2012/05/01/borrowing

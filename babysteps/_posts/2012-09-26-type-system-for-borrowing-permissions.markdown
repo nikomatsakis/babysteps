@@ -17,7 +17,7 @@ still nicer to read and write notes on...you do the math).  As
 additional motivation, I'm working again on the paper on Rust's new
 borrowed pointers and so I have to catch up on a lot of related work.
 
-[prrf]: /blog/2012/04/25/permission-regions-for-race-free-parallelism/
+[prrf]: {{ site.baseurl }}/blog/2012/04/25/permission-regions-for-race-free-parallelism/
 
 To that end, I downloaded and read
 [*A Type System for Borrowing Permissions*][paper], published at POPL
@@ -124,7 +124,7 @@ misreading the type rules on this point though.  Also, I think Rust's
 notion of inherited mutability could be applied to their system
 without great difficulty.
 
-[gim]: /blog/2012/07/24/generalizing-inherited-mutability/
+[gim]: {{ site.baseurl }}/blog/2012/07/24/generalizing-inherited-mutability/
 
 ### How is it more expressive than Rust?
 

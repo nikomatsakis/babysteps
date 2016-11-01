@@ -521,7 +521,7 @@ and exiting the parallel section which is [crucial to enabling
 better parallel speedups][amdahl].
 
 [wiki]: http://wiki.ecmascript.org/doku.php?id=harmony:typed_objects
-[out]: /blog/2013/05/29/integrating-binary-data-and-pjs
+[out]: {{ site.baseurl }}/blog/2013/05/29/integrating-binary-data-and-pjs
 [ggc]: https://bugzilla.mozilla.org/show_bug.cgi?id=764882
 [amdahl]: http://en.wikipedia.org/wiki/Amdahl%27s_law
 [lc]: https://twitter.com/littlecalculist

@@ -85,7 +85,7 @@ really.  But it's everything that's interesting, I suppose.
 [pjs]: https://github.com/nikomatsakis/pjs
 [pjs-old]: https://github.com/nikomatsakis/pjs-old
 [patpar]: https://github.com/nikomatsakis/patpar
-[typesys]: /blog/2011/12/09/pure-blocks/
+[typesys]: {{ site.baseurl }}/blog/2011/12/09/pure-blocks/
 [rivertrail]: https://github.com/RiverTrail/RiverTrail
-[pjposts]: /blog/2012/01/09/parallel-javascript/
-[composingblocks]: /blog/2011/12/29/composing-blocks/
+[pjposts]: {{ site.baseurl }}/blog/2012/01/09/parallel-javascript/
+[composingblocks]: {{ site.baseurl }}/blog/2011/12/29/composing-blocks/

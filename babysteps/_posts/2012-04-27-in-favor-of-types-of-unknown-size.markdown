@@ -16,7 +16,7 @@ of central data structures so we want them to be as nice as possible,
 both in terms of what you can do with them and in terms of the
 notations we use to work with them.
 
-[bg]: /blog/2012/04/23/vectors-strings-and-slices
+[bg]: {{ site.baseurl }}/blog/2012/04/23/vectors-strings-and-slices
 
 ## Summary
 
@@ -67,7 +67,7 @@ slice of the entire vector.  It is also allowed to take a slice of a
 slice.  This is where the `:` in the slice type comes from: it's
 supposed to echo this syntactic form.
 
-[ref]: /blog/2012/04/25/references
+[ref]: {{ site.baseurl }}/blog/2012/04/25/references
 
 Fixed-length vectors are written `[N]T`.  They are represented just
 like a C vector `T[N]`.  The literal form is `[| v1, ..., vN]`. The

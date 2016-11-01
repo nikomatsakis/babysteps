@@ -203,7 +203,7 @@ Conceivably we could also support `:Clone`, which would permit
 closures to be cloned, but we'd need some magic support in trans (code
 which, admittedly, mostly exists) to make that work.
 
-[cts]: /blog/2012/10/23/function-and-object-types/
+[cts]: {{ site.baseurl }}/blog/2012/10/23/function-and-object-types/
 
 ### Some musings on orthogonality or lack thereof
 

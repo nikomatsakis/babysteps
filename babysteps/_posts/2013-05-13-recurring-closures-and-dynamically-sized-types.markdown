@@ -335,8 +335,8 @@ that we could safely enforce as part of the type system, but it's
 still confusing for users. So I think the DST proposal forces us to be
 more honest, and that's a good thing all around.
 
-[dst]: /blog/2013/04/30/dynamically-sized-types/
-[crc]: /blog/2013/04/30/the-case-of-the-recurring-closure/
-[pjs]: /blog/categories/pjs
+[dst]: {{ site.baseurl }}/blog/2013/04/30/dynamically-sized-types/
+[crc]: {{ site.baseurl }}/blog/2013/04/30/the-case-of-the-recurring-closure/
+[pjs]: {{ site.baseurl }}/blog/categories/pjs
 [epc]: https://www.usenix.org/conference/hotpar12/parallel-closures-new-twist-old-idea
 [pc]: http://en.wikipedia.org/wiki/Parser_combinator

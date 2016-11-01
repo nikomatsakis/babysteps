@@ -164,8 +164,8 @@ Clearly this is an area where reasonable people can differ, though,
 and I would not be surprised if we ultimately decide to guarantee
 determinism where possible (i.e., `map()` and `filter()`).
 
-[purity]: /blog/2012/10/24/purity-in-parallel-javascript/
-[pp]: /blog/2012/12/06/improving-our-parallel-intrinsic/
+[purity]: {{ site.baseurl }}/blog/2012/10/24/purity-in-parallel-javascript/
+[pp]: {{ site.baseurl }}/blog/2012/12/06/improving-our-parallel-intrinsic/
 [branch]: https://github.com/syg/iontrail
 [rope]: http://en.wikipedia.org/wiki/Rope_%28data_structure%29
 [reduce]: http://wiki.ecmascript.org/doku.php?id=strawman:data_parallelism#reduce

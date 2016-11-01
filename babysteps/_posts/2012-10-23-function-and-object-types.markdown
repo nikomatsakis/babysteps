@@ -11,7 +11,7 @@ been tossing the design for these over in my head since the summer and
 I wanted to lay out my plan.  This is a variation of something
 that Ben Blum and I sketched out on a whiteboard.
 
-[fn]: /blog/categories/fntypes
+[fn]: {{ site.baseurl }}/blog/categories/fntypes
 
 ### Closure type
 

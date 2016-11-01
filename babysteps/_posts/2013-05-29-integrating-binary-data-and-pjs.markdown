@@ -220,5 +220,5 @@ result or otherwise escape, but such a pointer cannot be communicated
 betweeen the parallel threads without mutating shared state, and thus
 falling back to sequential execution.
 
-[subset]: /blog/2013/04/30/parallelizable-javascript-subset/
+[subset]: {{ site.baseurl }}/blog/2013/04/30/parallelizable-javascript-subset/
 [bd]: http://wiki.ecmascript.org/doku.php?id=harmony:binary_data

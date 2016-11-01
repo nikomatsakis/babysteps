@@ -248,6 +248,6 @@ new way to better explain that discrepancy: `&[T]` is short for
 `&[T, ..N]` for an unknown `N`, and thus `[T, ..N]` is the memory's
 actual type.
 
-[pp]: /blog/2013/11/26/thoughts-on-dst-1/
-[part3]: /blog/2013/11/26/thoughts-on-dst-3/
-[part4]: /blog/2013/12/02/thoughts-on-dst-4/
+[pp]: {{ site.baseurl }}/blog/2013/11/26/thoughts-on-dst-1/
+[part3]: {{ site.baseurl }}/blog/2013/11/26/thoughts-on-dst-3/
+[part4]: {{ site.baseurl }}/blog/2013/12/02/thoughts-on-dst-4/

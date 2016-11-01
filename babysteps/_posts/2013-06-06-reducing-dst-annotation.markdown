@@ -164,5 +164,5 @@ be applied to `[T]`.
 
 [bblum]: https://github.com/mozilla/rust/issues/6308#issuecomment-18880575
 [deriving]: https://github.com/mozilla/rust/issues/6308#issuecomment-18866391
-[dst]: /blog/2013/04/30/dynamically-sized-types/
-[ft]: /blog/2013/06/03/more-on-fns/
+[dst]: {{ site.baseurl }}/blog/2013/04/30/dynamically-sized-types/
+[ft]: {{ site.baseurl }}/blog/2013/06/03/more-on-fns/

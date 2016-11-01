@@ -288,4 +288,4 @@ inapplicable to the type objects for descriptors and instances.
 **UPDATE 2013.07.19: Tweaked some paragraphs for clarity.**
 
 [578700]: https://bugzilla.mozilla.org/show_bug.cgi?id=578700&sourceid=Mozilla-search
-[pjs]: /blog/2013/05/29/integrating-binary-data-and-pjs/
+[pjs]: {{ site.baseurl }}/blog/2013/05/29/integrating-binary-data-and-pjs/

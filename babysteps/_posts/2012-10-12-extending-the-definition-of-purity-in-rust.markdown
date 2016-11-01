@@ -75,7 +75,7 @@ however that in the HotPar paper I made use of a transitive read-only
 type qualifier to gain the same guarantees that `pure` functions give
 us; using `pure` seems simpler).
 
-[rt]: /blog/2012/10/10/rivertrail/
+[rt]: {{ site.baseurl }}/blog/2012/10/10/rivertrail/
 [hotpar]: https://www.usenix.org/conference/hotpar12/parallel-closures-new-twist-old-idea
 
 ### My proposed extension

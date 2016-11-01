@@ -94,5 +94,5 @@ originally part of this post but this post was rapidly becoming too
 long.
 
 [bd]: http://wiki.ecmascript.org/doku.php?id=harmony:binary_data
-[nondet]: /blog/2013/01/02/deterministic-or-not/
-[det]: /blog/2013/01/03/the-case-for-deterministic-results/
+[nondet]: {{ site.baseurl }}/blog/2013/01/02/deterministic-or-not/
+[det]: {{ site.baseurl }}/blog/2013/01/03/the-case-for-deterministic-results/

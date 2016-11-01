@@ -245,5 +245,5 @@ happen.
 [simd]: http://wiki.ecmascript.org/doku.php?id=strawman:simd_number
 [904913]: https://bugzilla.mozilla.org/show_bug.cgi?id=904913&sourceid=Mozilla-search
 [938728]: https://bugzilla.mozilla.org/show_bug.cgi?id=938728
-[opt]: /blog/2013/11/04/optimizing-complex-typed-object-assignments/
+[opt]: {{ site.baseurl }}/blog/2013/11/04/optimizing-complex-typed-object-assignments/
 [dxr]: http://dxr.mozilla.org/mozilla-central/source/js/src/jit/IonBuilder.cpp#9631

@@ -355,5 +355,5 @@ what most people expect.
 
 [3511]: https://github.com/mozilla/rust/issues/3511
 [8861]: https://github.com/mozilla/rust/issues/8861
-[pp]: /blog/2012/09/15/rvalue-lifetimes/
+[pp]: {{ site.baseurl }}/blog/2012/09/15/rvalue-lifetimes/
 [branch]: https://github.com/nikomatsakis/rust/tree/issue-3511-rvalue-lifetimes

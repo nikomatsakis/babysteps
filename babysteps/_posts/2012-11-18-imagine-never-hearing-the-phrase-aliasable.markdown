@@ -410,7 +410,7 @@ So yes I'm bullish, but more thought and experimentation is certainly
 needed.
 
 [bpt]: http://dl.rust-lang.org/doc/tutorial-borrowed-ptr.html#borrowing-unique-boxes
-[restrict]: /blog/2012/10/24/restrict-pointers/
-[mbt]: /blog/2012/10/01/moves-based-on-type/
+[restrict]: {{ site.baseurl }}/blog/2012/10/24/restrict-pointers/
+[mbt]: {{ site.baseurl }}/blog/2012/10/01/moves-based-on-type/
 [bpt-enum]: http://dl.rust-lang.org/doc/tutorial-borrowed-ptr.html#borrowing-and-enums
 [bpt-purity]: http://dl.rust-lang.org/doc/tutorial-borrowed-ptr.html#purity

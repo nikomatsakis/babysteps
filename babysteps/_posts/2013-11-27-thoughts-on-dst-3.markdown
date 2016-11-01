@@ -145,6 +145,6 @@ dynamic value (that would be the length, vtable, or just `()` for
 non-existential types) that can be used to permit calls to drop and so
 on.
 
-[part1]: /blog/2013/11/26/thoughts-on-dst-1/
-[part2]: /blog/2013/11/26/thoughts-on-dst-2/
-[part4]: /blog/2013/12/02/thoughts-on-dst-4/
+[part1]: {{ site.baseurl }}/blog/2013/11/26/thoughts-on-dst-1/
+[part2]: {{ site.baseurl }}/blog/2013/11/26/thoughts-on-dst-2/
+[part4]: {{ site.baseurl }}/blog/2013/12/02/thoughts-on-dst-4/

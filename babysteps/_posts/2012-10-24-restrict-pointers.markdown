@@ -139,7 +139,7 @@ did not mutate them (as discussed in this post on [purity][purity];
 the current Rust `pure` keyword would be a good match here, but maybe
 we can find other nice solutions too).
 
-[purity]: /blog/2012/10/12/extending-the-definition-of-purity-in-rust/
+[purity]: {{ site.baseurl }}/blog/2012/10/12/extending-the-definition-of-purity-in-rust/
 
 ### What's weird here?
 
@@ -200,6 +200,6 @@ full 1.0 permission, but having less than 1.0 means you are limited to
 reads and cannot move.  But for us there is the possibility that you
 borrow with `&mut`, which permits writes but not move.
 
-[pr]: /blog/2012/09/26/type-system-for-borrowing-permissions/
+[pr]: {{ site.baseurl }}/blog/2012/09/26/type-system-for-borrowing-permissions/
 [alms]: http://www.eecs.harvard.edu/~tov/pubs/alms/
 [c99]: http://en.wikipedia.org/wiki/Restrict

@@ -107,6 +107,6 @@ with the current work has been to lay the foundations to make it
 possible to iterate on APIs and introduce new ones.
 
 [pjs]: http://smallcultfollowing.com/babysteps/blog/2012/01/09/parallel-javascript/
-[split]: /blog/2013/02/26/splitting-the-pjs-api/
+[split]: {{ site.baseurl }}/blog/2013/02/26/splitting-the-pjs-api/
 [semantics1]: http://smallcultfollowing.com/babysteps/blog/2013/01/02/deterministic-or-not/ 
 [semantics2]: http://smallcultfollowing.com/babysteps/blog/2013/01/03/the-case-for-deterministic-results/

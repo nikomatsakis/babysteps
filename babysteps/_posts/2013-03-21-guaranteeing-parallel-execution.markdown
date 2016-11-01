@@ -71,9 +71,9 @@ idioms that "asm.js" codifies.  I hope that as ParallelJS evolves
 we'll also evolve a common set of idioms and "ways of doing things"
 that we can then formalize.
 
-[pp]: /blog/2013/03/20/parallel-js-lands/
+[pp]: {{ site.baseurl }}/blog/2013/03/20/parallel-js-lands/
 [asmjs]: http://asmjs.org/
 [htm]: http://en.wikipedia.org/wiki/Transactional_Synchronization_Extensions
-[equiv]: /blog/2013/01/02/deterministic-or-not/ 
+[equiv]: {{ site.baseurl }}/blog/2013/01/02/deterministic-or-not/ 
 [m]: http://www.mandreel.com/
 [e]: https://github.com/kripken/emscripten

@@ -39,4 +39,4 @@ will be imposed on the other type parameters.  These bounds can take
 the form of subtyping bounds (lower- or upper-bounds, or both) or
 trait bounds.  
 
-[pp]: /blog/2012/10/04/refining-traits-slash-impls/
+[pp]: {{ site.baseurl }}/blog/2012/10/04/refining-traits-slash-impls/

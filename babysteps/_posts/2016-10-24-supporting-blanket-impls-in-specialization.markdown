@@ -17,8 +17,8 @@ couldn't handle before. In particular, they enable us to add blanket
 impls like `impl<T: Copy> Clone for T` in a backwards compatible
 fashion, though only under certain conditions.
 
-[reuse]: /blog/2016/09/29/distinguishing-reuse-from-override/
-[ii]: /blog/2016/09/24/intersection-impls/
+[reuse]: {{ site.baseurl }}/blog/2016/09/29/distinguishing-reuse-from-override/
+[ii]: {{ site.baseurl }}/blog/2016/09/24/intersection-impls/
 [1210]: https://github.com/rust-lang/rfcs/pull/1210
 
 <!-- more -->

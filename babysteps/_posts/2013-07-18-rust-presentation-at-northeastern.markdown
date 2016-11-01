@@ -15,5 +15,5 @@ that I would like to use for the next Rust paper. It was kind of a dry
 run to see if that approach would be understandable and would flow logically;
 overall, I thought it worked reasonably well.
 
-[slides]: /pubs/2013.07.17-NEU.pdf
+[slides]: {{ site.baseurl }}/pubs/2013.07.17-NEU.pdf
 

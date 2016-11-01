@@ -406,4 +406,4 @@ would not expect this situation to arise that frequently, but it will
 come up from time-to-time. The `Add` and `Iterable` traits come to
 mind.
 
-[pp]: /blog/2013/04/02/associated-items
+[pp]: {{ site.baseurl }}/blog/2013/04/02/associated-items

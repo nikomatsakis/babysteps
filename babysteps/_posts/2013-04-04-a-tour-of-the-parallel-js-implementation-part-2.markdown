@@ -189,7 +189,7 @@ check for anything that is missing.
 
 <!-- LINKS -->
 
-[pp]: /blog/2013/03/20/a-tour-of-the-parallel-js-implementation
+[pp]: {{ site.baseurl }}/blog/2013/03/20/a-tour-of-the-parallel-js-implementation
 [paacpp]: http://hg.mozilla.org/mozilla-central/file/c232bec6974d/js/src/ion/ParallelArrayAnalysis.cpp
 [paacat]: http://hg.mozilla.org/mozilla-central/file/c232bec6974d/js/src/ion/ParallelArrayAnalysis.cpp#l121
 [paamacros]: http://hg.mozilla.org/mozilla-central/file/c232bec6974d/js/src/ion/ParallelArrayAnalysis.cpp#l29

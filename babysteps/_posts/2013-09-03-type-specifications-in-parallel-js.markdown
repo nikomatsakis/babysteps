@@ -113,4 +113,4 @@ type (`uint8` vs `ColorType`). Now we can use this type as the type
 annotation for the call to `mapPar`. Furthermore, users can add their
 own methods to `AverageType.prototype` as they choose.
 
-[pp]: /blog/2013/05/29/integrating-binary-data-and-pjs/
+[pp]: {{ site.baseurl }}/blog/2013/05/29/integrating-binary-data-and-pjs/

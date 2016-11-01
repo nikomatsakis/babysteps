@@ -166,7 +166,7 @@ the matter in more detail.
 
 **UPDATE**: I am pretty sure that the termination condition is insufficient.  More to come.
 
-[postscript]: /blog/2012/10/04/a-postscript-on-traits-and-impls/
+[postscript]: {{ site.baseurl }}/blog/2012/10/04/a-postscript-on-traits-and-impls/
 
 ### What if I *want* overloading?
 

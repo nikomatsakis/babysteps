@@ -22,4 +22,4 @@ From the introduction:
 >   is obvious from language syntax;
 > - support dynamically sized records.
 
-[no-implicit-copies]: /rust/no-implicit-copies
+[no-implicit-copies]: {{ site.baseurl }}/rust/no-implicit-copies

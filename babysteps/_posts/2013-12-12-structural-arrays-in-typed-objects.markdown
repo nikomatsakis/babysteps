@@ -226,7 +226,7 @@ have the element type and dimension to construct an array instance,
 one must instead pass in the array type and dimension.
 
 [strawman]: http://wiki.ecmascript.org/doku.php?id=harmony:typed_objects
-[nominal]: /blog/2013/09/03/type-specifications-in-parallel-js/
+[nominal]: {{ site.baseurl }}/blog/2013/09/03/type-specifications-in-parallel-js/
 [intel]: https://github.com/IntelLabs/ParallelJavaScript
 [func]: https://github.com/IntelLabs/ParallelJavaScript/blob/a06e1a9daeadad345b0321313edee556e5f6a774/tutorial/src/complete/filters.js#L210
 [dherman]: https://twitter.com/littlecalculist

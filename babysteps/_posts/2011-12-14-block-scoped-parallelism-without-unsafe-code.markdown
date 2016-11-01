@@ -26,6 +26,6 @@ access to data which is given them through parameters or which they create
 during their own execution. Like all blocks, they may return values as well.
 
 
-[bsp1]: /blog/2011/12/09/pure-blocks/
-[bsp2]: /blog/2011/12/13/const-vs-mutable/
+[bsp1]: {{ site.baseurl }}/blog/2011/12/09/pure-blocks/
+[bsp2]: {{ site.baseurl }}/blog/2011/12/13/const-vs-mutable/
 [fjf]: http://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html

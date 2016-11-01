@@ -415,6 +415,6 @@ None yet, wait for the thrilling part 2!
     
 [10672]: https://github.com/mozilla/rust/issues/10672
 [reddit]: http://www.reddit.com/r/rust/comments/1r082g/meetingweekly20131119_static_linking_wildcards/
-[part2]: /blog/2013/11/26/thoughts-on-dst-2/
-[part3]: /blog/2013/11/26/thoughts-on-dst-3/
-[part4]: /blog/2013/12/02/thoughts-on-dst-4/
+[part2]: {{ site.baseurl }}/blog/2013/11/26/thoughts-on-dst-2/
+[part3]: {{ site.baseurl }}/blog/2013/11/26/thoughts-on-dst-3/
+[part4]: {{ site.baseurl }}/blog/2013/12/02/thoughts-on-dst-4/

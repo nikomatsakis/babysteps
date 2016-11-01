@@ -141,4 +141,4 @@ uses both lifetime and type parameters with trait bounds:
     }
 
 
-[pp]: /blog/2012/12/30/lifetime-notation/
+[pp]: {{ site.baseurl }}/blog/2012/12/30/lifetime-notation/

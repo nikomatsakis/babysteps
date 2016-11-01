@@ -450,10 +450,10 @@ there, many of which boil down to usability things. For example, what
 is the meaning of the literal syntax and so on? I'll leave those
 thoughts for another day.
 
-[tvlc]: /blog/2013/11/14/treating-vectors-like-any-other-container/
-[part1]: /blog/2013/11/26/thoughts-on-dst-1/
-[part1limitation]: /blog/2013/11/26/thoughts-on-dst-1/#limitation
-[part2]: /blog/2013/11/27/thoughts-on-dst-2/
-[part3]: /blog/2013/11/27/thoughts-on-dst-3/
+[tvlc]: {{ site.baseurl }}/blog/2013/11/14/treating-vectors-like-any-other-container/
+[part1]: {{ site.baseurl }}/blog/2013/11/26/thoughts-on-dst-1/
+[part1limitation]: {{ site.baseurl }}/blog/2013/11/26/thoughts-on-dst-1/#limitation
+[part2]: {{ site.baseurl }}/blog/2013/11/27/thoughts-on-dst-2/
+[part3]: {{ site.baseurl }}/blog/2013/11/27/thoughts-on-dst-3/
 [existential]: http://en.wikipedia.org/wiki/Type_system#Existential_types
 [pcwalton]: http://www.reddit.com/r/rust/comments/1rkfqq/thoughts_on_dst_part_1/cdo9iv9
