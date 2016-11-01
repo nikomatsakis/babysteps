@@ -36,6 +36,9 @@ highlighter: rouge
 markdown: kramdown
 theme: minima
 
+feed:
+  path: atom.xml
+
 kramdown:
   input: GFM
   hard_wrap: false
