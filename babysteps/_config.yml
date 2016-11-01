@@ -1,0 +1,53 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing these this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+url: http://smallcultfollowing.com
+title: Baby Steps
+subtitle: A blog about programming, and tiny ways to improve it.
+author: Nicholas D. Matsakis
+description: 
+baseurl: "/babysteps" # the subpath of your site, e.g. /blog
+twitter_username: nikomatsakis
+github_username:  nikomatsakis
+permalink:        /blog/:year/:month/:day/:title/
+
+# Default date format is "ordinal" (resulting in "July 22nd 2007")
+# You can customize the format as defined in
+# http://www.ruby-doc.org/core-1.9.2/Time.html#method-i-strftime
+# Additionally, %o will give you the ordinal representation of the day
+date_format: "ordinal"
+
+excerpt_link: "Read on &rarr;"  # "Continue reading" link text at the bottom of excerpted articles
+excerpt_separator: "<!--more-->"
+
+highlighter: rouge
+markdown: kramdown
+theme: minima
+
+kramdown:
+  input: GFM
+  hard_wrap: false
+
+gems:
+  - jekyll-feed
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+
+collections:
+  rust:
+      output: true
+      permalink: /rust/:title/
