@@ -591,12 +591,12 @@ coherence rules were limiting that may be affected by specializaton,
 so we can see how they fare.
 
 **One sour note has to do with negative reasoning.** Specialization
-based on where clauses (orthogonally from the changes in this RFC, in
-fact) introduces a kind of negative reasoning that is not currently
-subject to the rules in [RFC 1023][1023]. This implies that crates
-cannot add blanket impls with impunity. In particular, introducing
-subtrait relationships can still cause problems, which affects a
-number of suggested "bridge" cases:
+based on where clauses (orthogonally from the changes proposed in this
+post, in fact) introduces a kind of negative reasoning that is not
+currently subject to the rules in [RFC 1023][1023]. This implies that
+crates cannot add blanket impls with impunity. In particular,
+introducing subtrait relationships can still cause problems, which
+affects a number of suggested "bridge" cases:
 
 - `impl<R, T: Add<R> + Clone> AddAssign<R> for T`
   - anything that has `Add` and `Clone` is now `AddAssign`
