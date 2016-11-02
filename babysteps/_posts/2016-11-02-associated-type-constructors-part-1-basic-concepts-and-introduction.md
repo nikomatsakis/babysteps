@@ -184,7 +184,7 @@ list is non-empty, it will return a reference to the `value` field and
 then update the cursor to the next cell. That struct might look
 something like this:
 
-[iter]: /blog/2016/02/19/parallel-iterators-part-1-foundations/
+[iter]: {{ site.baseurl }}/blog/2016/02/19/parallel-iterators-part-1-foundations/
 
 ```rust
 /// Iterator over linked lists.
