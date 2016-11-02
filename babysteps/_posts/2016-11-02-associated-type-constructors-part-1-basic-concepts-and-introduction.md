@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 'Associated type constructors, part 1: basic concepts and introduction'
+categories: [Rust, ATC, HKT, Traits]
 ---
 
 So for the end of last week, I was at Rust Belt Rust. This was
@@ -435,6 +436,11 @@ That's it for today. Let's review what we covered thus far:
     - There are some tricks I didn't cover. =)
 - **Associated type constructors** are basically just "generic" associated types;
   - this is great for modeling `Collection`.
+  
+### Comments
+
+Please leave comments on
+[this internals thread](https://internals.rust-lang.org/t/blog-post-series-alternative-type-constructors-and-hkt/4300).
 
 [RFC 1598]: https://github.com/rust-lang/rfcs/pull/1598
 
