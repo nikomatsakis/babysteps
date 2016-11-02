@@ -38,7 +38,7 @@ relatively simple way.
 
 (Oh, and I'm just trolling about monads. Sorry, couldn't resist. Don't
 hate me. We'll actually be talking about monads -- well, more about
-functors -- in a few posts down the line, of course.)
+functors -- in a few posts down the line.)
 
 <!-- more -->
 
