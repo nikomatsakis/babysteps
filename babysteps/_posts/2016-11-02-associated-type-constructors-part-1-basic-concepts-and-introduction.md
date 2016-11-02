@@ -84,8 +84,8 @@ loop instead of a `for` loop, so as to make the iterator protocol more
 explicit:
 
 ```rust
-fn position<ITER>(mut iterator: ITER, value: ITER::Item) -> Option<usize>
-    where ITER: Iterator, ITER::Item: Eq,
+fn position<I>(mut iterator: I, value: I::Item) -> Option<usize>
+    where I: Iterator, I::Item: Eq,
 {
     let mut index = 0;
     while let Some(v) = iterator.next() {
@@ -99,25 +99,25 @@ fn position<ITER>(mut iterator: ITER, value: ITER::Item) -> Option<usize>
 ```
 
 Take a look at the types in the signature there. The first argument,
-`iterator` is of type `ITER`, which is a generic type parameter; the
-where clause also declares that `ITER: Iterator`. So basically we just
+`iterator` is of type `I`, which is a generic type parameter; the
+where clause also declares that `I: Iterator`. So basically we just
 know that `iterator`'s type is "some kind of iterator". The second
-argument, `value`, has the type `ITER::Item` -- this is also a kind of
+argument, `value`, has the type `I::Item` -- this is also a kind of
 generic type. We're saying that `value` is "whatever kind of item
-`ITER` produces". We could also write that in a slightly different
+`I` produces". We could also write that in a slightly different
 way, using two generic parameters:
 
 ```rust
-fn position<ITER, VALUE>(mut iterator: ITER, value: VALUE) -> Option<usize>
-    where ITER: Iterator<Item=VALUE>, VALUE: Eq
+fn position<I, T>(mut iterator: I, value: T) -> Option<usize>
+    where I: Iterator<Item=T>, T: Eq
 {
     ...
 }
 ```
 
-Here the `where` clause states that `ITER: Iterator<Item=VALUE>`. This
-means "`ITER` is some sort of iterator producing values of type
-`VALUE`".
+Here the `where` clause states that `I: Iterator<Item=T>`. This
+means "`I` is some sort of iterator producing values of type
+`T`".
 
 ### Running example: linked list and iterator
 
@@ -302,18 +302,18 @@ collections, like `List<T>`. Perhaps something like this:
 
 ```rust
 // Collection trait, take 1.
-trait Collection<Item> {
+trait Collection<T> {
     // create an empty collection of this type:
     fn empty() -> Self;
     
     // add `value` to this collection in some way:
-    fn add(&mut self, value: Item);
+    fn add(&mut self, value: T);
 
     // iterate over this collection:
     fn iterate(&self) -> Self::Iter;
     
     // the type of an iterator for this collection (e.g., `ListIter`)
-    type Iter: Iterator<Item=Item>;
+    type Iter: Iterator<Item=T>;
 }
 ```
 
@@ -361,14 +361,14 @@ parameters:
 
 ```rust
 // Collection trait, take 2, using RFC 1598.
-trait Collection<Item> {
+trait Collection<T> {
     // as before
     fn empty() -> Self;
-    fn add(&mut self, value: Item);
+    fn add(&mut self, value: T);
 
     // Here, we use associated type constructors:
     fn iterate<'iter>(&'iter self) -> Self::Iter<'iter>;
-    type Iter<'iter>: Iterator<Item=Item>;
+    type Iter<'iter>: Iterator<Item=T>;
 }
 ```
 
@@ -392,7 +392,7 @@ in the standard library:
 use std::slice;
 impl<T> Collection<T> for Vec<T> {
     fn empty() -> Self { vec![] }
-    fn add(&mut self, value: Item) { self.push(value); }
+    fn add(&mut self, value: T) { self.push(value); }
     fn iterate<'iter>(&'iter) -> slice::Iter<'self, T> { self.iter() }
     type Iter<'iter> = slice::Iter<'iter, T>;
 }
