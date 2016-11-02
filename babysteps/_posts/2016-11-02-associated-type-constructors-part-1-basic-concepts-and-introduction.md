@@ -37,7 +37,8 @@ relevant to your life (unlike monads). So I hope to break it down in a
 relatively simple way.
 
 (Oh, and I'm just trolling about monads. Sorry, couldn't resist. Don't
-hate me.)
+hate me. We'll actually be talking about monads -- well, more about
+functors -- in a few posts down the line, of course.)
 
 <!-- more -->
 
