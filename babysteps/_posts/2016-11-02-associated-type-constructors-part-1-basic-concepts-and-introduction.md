@@ -393,7 +393,7 @@ use std::slice;
 impl<T> Collection<T> for Vec<T> {
     fn empty() -> Self { vec![] }
     fn add(&mut self, value: T) { self.push(value); }
-    fn iterate<'iter>(&'iter) -> slice::Iter<'self, T> { self.iter() }
+    fn iterate<'iter>(&'iter self) -> slice::Iter<'self, T> { self.iter() }
     type Iter<'iter> = slice::Iter<'iter, T>;
 }
 ```
