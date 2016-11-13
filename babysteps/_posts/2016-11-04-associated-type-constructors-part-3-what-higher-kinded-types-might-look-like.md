@@ -2,6 +2,7 @@
 layout: post
 title: 'Associated type constructors, part 3: What higher-kinded types might look
   like'
+categories: [Rust, ATC, HKT, Traits]
 ---
 This post is a continuation of my posts discussing the topic of
 associated type constructors (ATC) and higher-kinded types (HKT):

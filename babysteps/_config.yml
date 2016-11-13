@@ -43,6 +43,7 @@ kramdown:
   input: GFM
   hard_wrap: false
   syntax_highlighter: rouge
+  auto_ids: true
 
 gems:
   - jekyll-feed
