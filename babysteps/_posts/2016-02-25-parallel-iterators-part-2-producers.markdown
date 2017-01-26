@@ -3,7 +3,7 @@ layout: post
 title: "Parallel Iterators Part 2: Producers"
 date: 2016-02-25 11:02:34 -0500
 comments: false
-categories: [Rust]
+categories: [Rust, Rayon]
 ---
 
 This post is the second post in my series on Rayon's parallel
@@ -390,7 +390,7 @@ impl<'m, PROD, MAP_OP, RET> Producer for MapProducer<'m, PROD, MAP_OP, RET>
     fn split_at(self, mid: usize) -> (Self, Self) {
         let (left, right) = self.base.split_at(mid);
         (MapProducer { base: left, map_op: self.map_op },
-         MapProducer { base: left, map_op: self.map_op })
+         MapProducer { base: right, map_op: self.map_op })
     }
 }
 ```
