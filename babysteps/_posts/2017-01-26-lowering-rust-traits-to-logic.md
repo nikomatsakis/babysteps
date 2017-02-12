@@ -491,3 +491,10 @@ to compilation time. But along the way I also plan to write-up as many
 mentoring bugs as I can, both in chalk and in the compiler itself. I
 think this would be a really fun way to get into rustc hacking, and we
 can always use more people who know their way around the trait system!
+
+### Comments?
+
+I started a [thread on internals][] to discuss this post and other
+(forthcoming) posts in the series.
+
+[thread on internals]: https://internals.rust-lang.org/t/blog-series-lowering-rust-traits-to-logic/4673
