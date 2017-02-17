@@ -127,10 +127,11 @@ we can use LLVM to accommodate some of the more annoying features
 [miri]: https://github.com/tsion/miri
 [WASM]: http://webassembly.org/
 [stoklund]: https://github.com/stoklund
+[thread]: https://internals.rust-lang.org/t/possible-alternative-compiler-backend-cretonne/4275
 
 Links:
 
-- [internals thread about Cretonne](https://internals.rust-lang.org/t/possible-alternative-compiler-backend-cretonne/4275)
+- [internals thread about Cretonne][thread]
 - [etherpad](https://public.etherpad-mozilla.org/p/rust-compiler-design-sprint-paris-2017-mir)
 
 ### MIR Optimization
@@ -159,7 +160,7 @@ of debug mode and release mode builds, thus also helping with
 compilation time by allowing people to use debug more builds more
 often.
 
-Finally, we discussed aatch's inlining PR, and iterated around
+Finally, we discussed [aatch's inlining PR][39648], and iterated around
 different designs. In particular, we considered an "on the fly"
 inlining design where we did inlining more like a JIT does it, during
 the lowering to LLVM (or Cretonne, etc) IR.  Ultimately we deciding
@@ -170,6 +171,8 @@ benefit and (B) we can remove a lot of temporaries and so forth, in
 particular around small functions like `Deref::deref`, whereas if we
 do the inlining as we lower, we are ultimately leaving that to LLVM to
 do.
+
+[39648]: https://github.com/rust-lang/rust/pull/39648
 
 - [etherpad](https://public.etherpad-mozilla.org/p/rust-compiler-design-sprint-paris-2017-mir)
 
@@ -301,3 +304,7 @@ can't wait to see these changes play out over the next year. Thanks to
 all the attendees, and particularly those who dialed in remotely at
 indecent hours of the day and night (notably jseyfried and nrc) to
 accommodate the Parisian time zone.
+
+[Comments? Check out the internals thread.][comments]
+
+[comments]: http://smallcultfollowing.com/babysteps/blog/2017/02/12/compiler-design-sprint-summary/
