@@ -378,8 +378,11 @@ twists on this base model.
   cases where storing pointers into an aggregate (e.g., a struct) can
   lose precision versus using variables on the stack, so I'm not sure
   it's worth worrying about.
+  
+Comments? [Let's use this old internals thread.][internals]
 
 [gd]: https://github.com/nikomatsakis/nll/blob/master/test/get-default.nll
 [mutself]: https://internals.rust-lang.org/t/accepting-nested-method-calls-with-an-mut-self-receiver/4588
 [RFC 396]: https://github.com/rust-lang/rfcs/pull/396
 [smr]: https://github.com/Ericson2314/a-stateful-mir-for-rust
+[internals]: https://internals.rust-lang.org/t/non-lexical-lifetimes-based-on-liveness/3428
