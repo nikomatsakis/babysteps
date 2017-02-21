@@ -316,7 +316,7 @@ potential reads of interest.
 ### Conclusion
 
 This post presents a system for computing non-lexical lifetimes. It
-creates that all regions are erased when MIR is created. It uses only
+assumes that all regions are erased when MIR is created. It uses only
 simple compiler concepts, notably liveness, but extends the subtyping
 relation to take into account **where** the subtyping must hold. This
 allows it to disregard unreachable portions of the control-flow.
@@ -346,10 +346,10 @@ It's interesting to compare this with various earlier attempts:
 - An alternative solution might be to consider continuous regions but apply
   an SSA or SSI transform.
   - This allows the example in this post to type, but it falls down on
-    more advanced examples, such as [vec-push-ref][vpr]. In
-    particular, it's possible for subregion relations to arise without
-    a variable being redefined.
-  - You can go farther, and give variables a distinct type type at
+    more advanced examples, such as [vec-push-ref][vpr] (hat tip,
+    Cameron Zwarich). In particular, it's possible for subregion
+    relations to arise without a variable being redefined.
+  - You can go farther, and give variables a distinct type at
     each point in the program, as in Ericson2314's
     [stateful MIR for Rust][smr]. But even then you must contend with
     invariance or you have the same sort of problems.
