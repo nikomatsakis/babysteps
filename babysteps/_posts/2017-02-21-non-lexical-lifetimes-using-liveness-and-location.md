@@ -336,27 +336,34 @@ It's interesting to compare this with various earlier attempts:
 - Our earliest thoughts assumed continuous regions (e.g., [RFC 396]).
   The idea was that the region for a reference ought to correspond to
   some continuous bit of control-flow, rather than having "holes" in
-  the middle. In this work, though, that is not necessarily the case
-  (e.g., the region for the variable `p` in our example includes B/0
-  and B/4 but excludes B/1). Instead, we lean on the **liveness
-  requirements** to ensure that the region contains all paths from
-  where a reference is created to where it is eventually dereferenced.
-- At various points, we toyed with giving variables multiple types,
-  e.g.  by adopting SSA form, or -- in a more extreme variant -- by
-  giving every variable its own type at each point, as in
-  Ericson2314's [stateful MIR for Rust][smr]. Giving variables a
-  single type, however, seems to fit better with Rust (and, not
-  coincidentally, MIR), where local variables are really slots that
-  can be borrowed and mutated indirectly. It is also nice to not need so many
-  region variables for the analysis.
-- As I wrote earlier, at the rustc design sprint we came up with a
-  system that is, I believe, equivalent to this one. In particular,
-  that was the origin of the precise definition of `(R1 <= R2) @ P`
-  constraints, which in my previous post had only a kind of vague
-  semantics. However, that system did not encode liveness constraints
-  directly, but instead arrived at them by using distinct types at
-  each point and adding "transfer" constraints for values that were
-  live across a statement.
+  the middle.
+  - The example in this post shows the limitation of this,
+    however. Note that the region for the variable `p` 
+    includes B/0 and B/4 but excludes B/1.
+  - This is why we lean on **liveness requirements** instead, so as to
+    ensure that the region contains all paths from where a reference is
+    created to where it is eventually dereferenced.
+- An alternative solution might be to consider continuous regions but apply
+  an SSA or SSI transform.
+  - This allows the example in this post to type, but it falls down on
+    more advanced examples, such as [vec-push-ref][vpr]. In
+    particular, it's possible for subregion relations to arise without
+    a variable being redefined.
+  - You can go farther, and give variables a distinct type type at
+    each point in the program, as in Ericson2314's
+    [stateful MIR for Rust][smr]. But even then you must contend with
+    invariance or you have the same sort of problems.
+  - Exploring this led to the development of the "localized" subregion
+    relationship constraint `(r1 <= r2) @ P`, which I had in mind
+    [in my original series][outlives] but which we elaborated more fully at the
+    rustc design sprint.
+  - The change in this post versus what we said at the sprint is that
+    I am using one type per variable instead of one type per variable
+    per statement; I am also explicitly using the results of an
+    earlier liveness analysis to construct the constraints, whereas in
+    the sprint we incorporated the liveness into the region inference
+    itself (by reasoning about which values were live across each
+    individual statement and thus creating many more inequalities).
   
 There are some things I've left out of this post. Hopefully I will get
 to them in future posts, but they all seem like relatively minor
@@ -386,3 +393,5 @@ Comments? [Let's use this old internals thread.][internals]
 [RFC 396]: https://github.com/rust-lang/rfcs/pull/396
 [smr]: https://github.com/Ericson2314/a-stateful-mir-for-rust
 [internals]: https://internals.rust-lang.org/t/non-lexical-lifetimes-based-on-liveness/3428
+[outlives]: http://smallcultfollowing.com/babysteps/blog/2016/05/09/non-lexical-lifetimes-adding-the-outlives-relation/
+[vpr]: https://github.com/nikomatsakis/nll/blob/a6609ab17fd483f8d47ef919af3838bf214954e5/test/vec-push-ref.nll
