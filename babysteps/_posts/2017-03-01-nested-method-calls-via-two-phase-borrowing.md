@@ -511,6 +511,10 @@ second out of a series of three posts that lay out a complete proposal[^overlook
 - nested method calls, this post;
 - incorporating dropck, still to come.
 
+**Comments?** Let's use [this internals thread for comments][comments].
+
+[comments]: https://internals.rust-lang.org/t/blog-post-nested-method-calls-via-two-phase-borrowing/4886
+
 ### Footnotes
 
 [^overlook]: Presuming I'm not overlooking something. =)
