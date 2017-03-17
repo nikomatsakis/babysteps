@@ -108,7 +108,7 @@ The key insight is that, today, when we execute the mutable borrow of
 /* 0 */ tmp0 = &mut vec;   // mutable borrow created here..
 /* 1 */ tmp1 = &vec; // <-- shared borrow overlaps here         |
 /* 2 */ tmp2 = Vec::len(tmp1); //                               |
-/* 3 */ Vec::push(tmp0, tmp1); // ..but not used until here!
+/* 3 */ Vec::push(tmp0, tmp2); // ..but not used until here!
 ```
 
 The proposal -- which I will call **two-phased mutable borrows** -- is
