@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Lowering Rust traits to logic
-categories: [Rust, Traits, PL]
+categories: [Rust, Traits, PL, Chalk]
 ---
 
 Over the last year or two (man, it's scary how time flies), I've been
