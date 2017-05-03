@@ -4,12 +4,15 @@ title: Unification in Chalk, part 1
 categories: [Rust, Traits, Chalk, PL]
 ---
 
-So in my first post on chalk, I mentioned that unification and
+So in [my first post][pp] on [chalk], I mentioned that unification and
 normalization of associated types were interesting topics. I'm going
 to write a two-part blog post series covering that.  This first part
 begins with an overview of how ordinary type unification works during
 compilation. The next post will add in associated types and we can see
 what kinds of mischief they bring with them.
+
+[pp]: {{ site.baseurl }}/blog/2017/01/26/lowering-rust-traits-to-logic/
+[chalk]: https://github.com/nikomatsakis/chalk/
 
 ### What is unification?
 
