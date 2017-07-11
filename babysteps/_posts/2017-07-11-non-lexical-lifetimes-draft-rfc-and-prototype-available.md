@@ -248,6 +248,10 @@ though I've not had time to write in tons of details -- leave a
 comment if something sparks your interest, and I'd be happy to give
 more details and mentor it to completion as well.
 
+### Questions or comments?
+
+[Take it to internals!](https://internals.rust-lang.org/t/non-lexical-lifetimes-draft-rfc-prototype/5527)
+
 #### Appendix: What the proposal won't fix
 
 I also want to mention a few kinds of borrow check errors that the
