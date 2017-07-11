@@ -5,10 +5,13 @@ categories: [Rust, GNOME]
 ---
 
 I recently participated in the GNOME / Rust "dev sprint" in Mexico
-City. While there I spent some time working on the
-[gnome-class plugin](https://github.com/nikomatsakis/gnome-class). The
+City. (A thousand thanks to Federico and Joaquin for organizing!)
+While there I spent some time working on the
+[gnome-class plugin][repo]. The
 goal of gnome-class was to make it easy to write GObject
 implementations in Rust which would fully interoperate with C code.
+
+[repo]: https://github.com/nikomatsakis/gnome-class
 
 Roughly speaking, my goal was that you should be able to write code
 that looked and felt like
@@ -143,8 +146,8 @@ fields are not stored "inline" in your object at some statically
 predicted offset. Instead, when you allocate your object, the GNOME
 memory manage will also allocate space for the private data each class
 needs, and you can ask (dynamically) for the
-offset. ([Appendix A](#appendix-a) goes into details on the actual
-memory layout.)
+offset. ([Appendix A](#appendix-a-memory-layout-of-private-data) goes
+into details on the actual memory layout.)
 
 The `gobject_gen!` macro is setup to always use private data in the
 recommended fashion. If take another look at the header, we can see
@@ -230,8 +233,8 @@ to expose this too, but didn't get around to it. This would be similar
 to `init`, presumably, except that it would give access to a `&self`
 pointer.
 
-Similarly, we could extend `gobject_gen!` does not offer is a more
-""traditional" OO constructor model, similar to the one that Vala
+Similarly, we could extend `gobject_gen!` to offer a more
+"traditional" OO constructor model, similar to the one that Vala
 offers. This too would layer on top of the existing code: so your
 `init()` function would run first, to generate the initial values for
 the private fields, but then you could come afterwards and update
@@ -242,41 +245,6 @@ defining an `fn initialize(&self)` method, effectively.)
 
 So we've seen what does work (or what kind of works, in the case of
 subclassing).  What work is left? Lots, it turns out. =)
-
-#### Subclassing
-
-The `gobject_gen!` macro is *intended* to support subclassing other
-classes, no matter what language they are defined in. However, that
-support is not fully done. I won't go into a lot of detail in this
-blog post, because it's already too long, but there are some
-interesting constraints here. In particular, the procedural macro must
-be able to generate code that permits you to (e.g.) invoke superclass
-methods on a subclass instance, but it should be able to do that
-without necessarily having access to the list of superclass methods.
-I concocted a reasonably nice scheme for this that I *think* will
-work, but it requires
-[overlapping marker traits](https://github.com/rust-lang/rust/issues/29864),
-which
-[have been implemented](https://github.com/rust-lang/rust/pull/40097)
-but are not yet stable. It probably also requires
-[inherent traits](https://internals.rust-lang.org/t/inconvenience-of-using-functions-defined-in-traits-an-ugly-workaround-and-proposed-solution/5166/)
-to work well, since otherwise one must import a trait like
-`CounterTrait` to get access to the methods of a `Counter` value.
-
-#### Procedural macro support on Rust is young 
-
-There is still a long ways to before the `gnome_gen!` plugin is really
-usable. For one thing, it relies on a number of unstable Rust language
-features -- not the least of them being the new procedural macro
-system. It also inherits one very annoying facet of the current
-procedural macros, which is that all source location information is
-lost. This means that if you have type errors in your code it just
-gives you an error like "somewhere in this usage of the `gnome_gen!`
-macro", which is approximately useless since that covers the entire
-class definition. This is obviously something we aim to improve
-through [PRs like #40939][40939].
-
-[40939]: https://github.com/rust-lang/rust/pull/40939 
 
 #### Private data support could be smoother
 
@@ -334,6 +302,10 @@ assigned).
 
 There are also many parts of GNOME that we don't model yet.
 
+We don't really support **subclassing** yet. I have a half-executed
+plan for supporting it, but this is a topic worthy of a post of its
+own, so I'll just leave it at that.
+
 **Properties** are probably the biggest thing; they are fairly simple conceptually,
 but there are lots of knobs and whistles to get right.
 
@@ -361,7 +333,26 @@ Media::with()
 We don't support **signals**, which are a kind of message bus system that I don't
 really understand very well. =)
 
+#### Procedural macro support on Rust is young 
+
+There is still a long ways to before the `gnome_gen!` plugin is really
+usable. For one thing, it relies on a number of unstable Rust language
+features -- not the least of them being the new procedural macro
+system. It also inherits one very annoying facet of the current
+procedural macros, which is that all source location information is
+lost. This means that if you have type errors in your code it just
+gives you an error like "somewhere in this usage of the `gnome_gen!`
+macro", which is approximately useless since that covers the entire
+class definition. This is obviously something we aim to improve
+through [PRs like #40939][40939].
+
+[40939]: https://github.com/rust-lang/rust/pull/40939 
+
 ### Conclusion
+
+Overall, I really enjoyed the sprint. It was great to meet so many
+GNOME contributors in person. I was very impressed with how well
+thought out the GNOME object system is.
 
 Obviously, this macro is in its early days, but I'm really excited
 about its current state nonetheless. I think there is a lot of
@@ -369,10 +360,10 @@ potential for GNOME and Rust to have a truly seamless integration, and
 I look forward to seeing it come together.
 
 I don't know how much time I'm going to have to devote to hacking on
-the macro, but I plan to open up various issues on [the repository]
-over the next little while with various ideas for expansions and/or
-design questions, so if you're interested in seeing the work proceed,
-please get involved!
+the macro, but I plan to open up various issues on
+[the repository][repo] over the next little while with various ideas
+for expansions and/or design questions, so if you're interested in
+seeing the work proceed, please get involved!
 
 Finally, I want to take a moment to give a shoutout to jseyfried and
 dtolnay, who have done excellent work pushing forward with procedural
@@ -383,8 +374,6 @@ spans, first and foremost, but proper hygiene would be nice too, since
 `gobject_gen!` has to generate various names as part of its mapping.
 
 -----
-
-<a id="appendix-b">
 
 ### Appendix A: Memory layout of private data
 
