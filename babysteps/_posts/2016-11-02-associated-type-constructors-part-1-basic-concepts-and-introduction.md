@@ -236,7 +236,7 @@ important when we talk later about higher-kinded types. Imagine that I
 have some code that uses a list like this:
 
 ```rust
-fn list(v: &List<u32>) {
+fn list(list: &List<u32>) {
     let mut iter = list.iter();
     let value = iter.next();
     ...
