@@ -535,7 +535,7 @@ safety here.  I think this is largely due to two key developments:
   be non-aliasable and to remove `const` (read-only, but not
   immutable) references. This basically meant that Rust authors were
   now writing data-race-free code *by default*.
-- [Improved Send traits][SS], or RC 458, which modified the `Send`
+- [Improved Send traits][SS], or RFC 458, which modified the `Send`
   trait to permit borrowed references. Prior to this RFC, which was
   authored by [Joshua Yanovski][py], we had the constraint that for
   data to be `Send`, it had to be `'static` -- meaning it could not
