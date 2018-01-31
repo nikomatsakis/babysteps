@@ -177,11 +177,11 @@ the state of the strand to:
     (Rc<?T>: Debug) :- selected(?T: Debug, A0)
     
 Here, we write `selected(L, An)` to indicate that (a) the literal `L`
-is the selected subgoal and (b) which answer An we are looking for. We
+is the selected subgoal and (b) which answer `An` we are looking for. We
 start out looking for `A0`.
 
 **Processing the selected subgoal.** Next, we have to try and find an
-answer to this 5Aselected goal. To do that, we will u-canonicalize it
+answer to this selected goal. To do that, we will u-canonicalize it
 and try to find an associated table. In this case, the u-canonical
 form of the subgoal is `?0: Debug`: we don't have a table yet for
 that, so we can create a new one, T1. As before, we'll initialize T1
@@ -277,3 +277,45 @@ Here you can see how the forest captures both the answers we have
 created thus far *and* the strands that will let us try to produce
 more answers later on.
 
+### Conclusions
+
+Well, the README stops the story a bit short -- it doesn't explain,
+for example, what happens when there are cycles in the graph and so
+forth. Maybe you can piece it together, though.
+
+The biggest question is: is this a suitable architecture for use in
+rustc? About this, I'm not sure yet. I feel like this route is quite
+promising, however, and it's been an interesting journey for me in any
+case thus far.
+
+One of the tricky things that I don't yet know how to resolve: under
+the current setup, if our root query is generated a diverse set of
+answers, we can quite easily stop asking for more (e.g., to handle
+`exists<T> { T: Sized }`). I think this is by far the more common
+scenario in Rust. However, it's also possible to have a query which
+*internally* has to go through quite a few answers in order to produce
+any results at the root level. I'm imagining something like this:
+
+```
+impl<T> Foo for T
+   where T: Bar, T: Baz,
+```
+
+Under the setup described here, one of these queries -- let's say `T:
+Bar` -- gets chosen somewhat arbitrary to begin producing answers
+first. It might produce a very large number of answers, which will
+then get "fed" to the `Baz` trait, which will effectively filter them
+out. But maybe `T: Baz` is only implemented for a very few types, so
+if we had chosen the other order things would have been far more
+efficient. I can imagine some heuristics helping here -- for example,
+we might take traits like `Sized` or `Debug`, or which have very
+open-ended impls -- and prefer not to select them first. I *suspect* a few
+simple heuristics would get us quite far.
+
+Currently, my biggest concern with this design is the "runaway
+internal query" aspect I just described. But I'm curious if there are
+other things I'm overlooking! As ever, I'll create an internals
+thread, please leave comments there if you have thoughts (also
+suggestions for things I should go and read).
+
+### Footnotes
