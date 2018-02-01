@@ -314,8 +314,11 @@ simple heuristics would get us quite far.
 
 Currently, my biggest concern with this design is the "runaway
 internal query" aspect I just described. But I'm curious if there are
-other things I'm overlooking! As ever, I'll create an internals
-thread, please leave comments there if you have thoughts (also
-suggestions for things I should go and read).
+other things I'm overlooking! As ever,
+[I've created an internals thread][thread], please leave comments
+there if you have thoughts (also suggestions for things I should go
+and read).
+
+[thread]: https://internals.rust-lang.org/t/blog-post-an-on-demand-slg-solver-for-chalk/6676
 
 ### Footnotes
