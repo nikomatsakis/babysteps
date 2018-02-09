@@ -204,9 +204,10 @@ integer and it would behave the same. This is kind of neat.
 necessarily want to have a "different interface" than ordinary ones.**
 For example, as an experimental side project, I created a persistent
 vector library called [dogged][][^name]. Dogged offers a vector type
-called [`DVec`], which is based on the persistent vectors offered by
-Clojure. But if you look at the methods that [`DVec`] offers, you'll
-see they're kind of the standard set (`push`, etc).
+called [`DVec`], which is based on the
+[persistent vectors offered by Clojure][clojure]. But if you look at
+the methods that [`DVec`] offers, you'll see they're kind of the
+standard set (`push`, etc).
 
 [dogged]: https://crates.io/crates/dogged
 [`DVec`]: https://docs.rs/dogged/0.2.0/dogged/struct.DVec.html
@@ -222,15 +223,16 @@ for element in &x { ... }
 ```
 
 Nonetheless, a `DVec` *is* a persistent data structure. Under the
-hood, a `DVec` is implemented as a ["digit-indexed trie"][trie].  It
-contains an [`Arc`] (ref-counted value) that refers to its internal
-data. When you call `push`, we will update that `Arc` to refer to the
-new vector, leaving the old data in place.
+hood, a `DVec` is implemented as a [trie].  It contains an [`Arc`]
+(ref-counted value) that refers to its internal data. When you call
+`push`, we will update that `Arc` to refer to the new vector, leaving
+the old data in place.
 
 [trie]: https://en.wikipedia.org/wiki/Trie
 [`Arc`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
+[clojure]: http://hypirion.com/musings/understanding-persistent-vector-pt-1
 
-(As an aside, [`Arc::get_mut`] is a **really cool** method. It
+(As an aside, [`Arc::make_mut`] is a **really cool** method. It
 basically tests the reference count of your `Arc` and -- if it is 1 --
 gives you unique (mutable) access to the contents. If the reference
 count is **not** 1, then it will clone the `Arc` (and its contents) in
@@ -239,7 +241,7 @@ recall how persistent data structures tend to work, this is *perfect*
 for updating a tree as you walk. It lets you avoid cloning in the case
 where your collection is not yet aliased.)
 
-[`Arc::get_mut`]: https://doc.rust-lang.org/std/sync/struct.Arc.html#method.get_mut
+[`Arc::make_mut`]: https://doc.rust-lang.org/std/sync/struct.Arc.html#method.make_mut
 
 ### But persistent collections *are* different
 
@@ -248,6 +250,13 @@ operations it offers, but in **how much they cost**. That is, when you
 `push` on a standard `Vec`, it is an O(1) operation. But when you
 clone, that is O(n). For a `DVec`, those costs are sort of inverted:
 pushing is O(log n), but cloning is O(1).
+
+**In particular, with a `DVec`, the `clone` operation just increments
+a reference count on the internal `Arc`, whereas with an ordinary
+vector, `clone` must clone of all the data.** But, of course, when you do
+a `push` on a `DVec`, it will clone some portion of the data as it
+rebuilds the affected parts of the tree (whereas a `Vec` typically can
+just write into the end of the array).
 
 But this "big O" notation, as everyone knows, only talks about
 asymptotic behavior. One problem I've seen with `DVec` is that it's
