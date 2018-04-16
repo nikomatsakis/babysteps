@@ -19,7 +19,7 @@ here goes nothing =).
 *Anyway*, I've been thinking about the upcoming Rust Epoch. We've been
 iterating over the final list of features to be included and I think
 it seems pretty exciting.  But there is one "fancy type system"
-feature that's been languishing for sometime:
+feature that's been languishing for some time:
 **specialization**. Accepted to much fanfare as [RFC 1210][], we've
 been kind of stuck since then trying to figure out how to solve an
 underlying soundness challenge.
@@ -315,7 +315,7 @@ the never type `!` to be converted into *any* type (since such a value
 cannot exist in practice:
 
 ```rust
-impl<T> From<T> for ! { .. }
+impl<T> From<!> for T { .. }
 ```
 
 However, this impl overlaps with the reflexive impl. Therefore, we'd
