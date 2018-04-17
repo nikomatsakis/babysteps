@@ -4,9 +4,9 @@ title: 'Rust pattern: Rooting an Rc handle'
 categories: [Rust]
 ---
 
-I've decided to do a little series of posts about borrowck
-errors. Each one will talk about a particular borrowck error that I
-got recently and try to explain (a) why I am getting it and (b) how I
+I've decided to do a little series of posts about Rust compiler
+errors. Each one will talk about a particular error that I got
+recently and try to explain (a) why I am getting it and (b) how I
 fixed it. The purpose of this series of posts is partly to explain
 Rust, but partly just to gain data for myself. I may also write posts
 about errors I'm not getting -- basically places where I anticipated
@@ -100,7 +100,7 @@ other people editing this code now and in the future know and
 understand that invariant? Maybe there will be a need to swap in new
 data in the future.
 
-To fix this borrow checker bug, we need to ensure that mutatin `self`
+To fix this borrow checker bug, we need to ensure that mutating `self`
 cannot cause `datum` to get freed. Since the data is in an `Rc`, one
 easy way to do this is to get a second handle to that `Rc`, and store
 it on the stack:
@@ -120,6 +120,10 @@ and with good reason: even if `process_datum` were to modify
 `self.data` now, we have a second handle onto the original data, and
 it will not be deallocated until the loop in `process_data` completes.
 
+(Note that invoking `clone` on an `Rc`, as we do here, merely
+increases the reference count; it doesn't do a deep clone of the
+data.)
+
 ### How the compiler thinks about this
 
 OK, now that we understand intuitively what's going on, let's dive in
@@ -134,7 +138,9 @@ that, for example, you are free to modify the body of a function and
 it won't cause your callers to stop compiling[^crash]. It also ensures
 that the analysis is scalable to large programs, since adding
 functions doesn't make checking any individual function harder (so
-total time scales linearly with the number of functions).
+total time scales linearly with the number of functions[^time]).
+
+[^time]: Total time for the safety check, that is. Optimizations and other things are sometimes inter-procedural.
 
 [^crash]: Or crash, as would happen without the compiler's checks.
 
@@ -155,7 +161,8 @@ compiler's job here is to ensure that, so long as the reference
 So, for example, it would be an error to write `*self = ...`, because
 that would overwrite `self` with a new value, which might cause the
 old value of `data` to be freed, which in turn would free the vector
-within, which would invalidate `datum`.
+within, which would invalidate `datum`. Similarly, writing `self.data
+= ...` could cause the vector to be freed as well (as we saw earlier).
 
 In the actual example, we are not directly mutating `self`, but we are
 invoking `process_datum`, which takes an `&mut self` argument:
@@ -198,9 +205,11 @@ Sometimes it is useful to clone the data you are iterating over into a
 local variable, so that the compiler knows it will not be freed. If
 the data is immutable, storing that data in an `Rc` or `Arc` makes
 that clone cheap (i.e., O(1)). (Another way to make that clone cheap
-is to use a [persistent collection type].)
+is to use a [persistent collection type] -- such as those provided by
+the [im] crate.)
 
-[persistent collection]: /blog/2018/02/01/in-rust-ordinary-vectors-are-values/
+[persistent collection type]: {{ site.baseurl }}/blog/2018/02/01/in-rust-ordinary-vectors-are-values/
+[im]: https://crates.io/crates/im
 
 If the data *is* mutable, there are various other patterns that you
 could deploy, which I'll try to cover in follow-up articles -- but
