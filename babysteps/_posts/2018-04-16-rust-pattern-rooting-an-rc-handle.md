@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Rust pattern: Rooting an Rc handle'
-categories: [Rust]
+categories: [Rust, RustPattern]
 ---
 
 I've decided to do a little series of posts about Rust compiler
