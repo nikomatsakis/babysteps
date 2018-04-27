@@ -8,8 +8,8 @@ Ever since the Rust All Hands, I've been experimenting with an
 alternative formulation of the Rust borrow checker. The goal is to
 find a formulation that is as expressive as the current "non-lexical
 lifetimes" proposal (more expressive, actually[^fn47680]) while also being
-faster to compute[^nomeasure]. This blog post aims to explain how the new proposal
-works.
+faster to compute[^nomeasure]. This blog post aims to explain how this new
+design works.
 
 [^fn47680]: In particular, I want to overcome [#47680] in a natural way.
 
@@ -17,19 +17,15 @@ works.
 
 [#47680]: https://github.com/rust-lang/rust/issues/47680#issuecomment-363131420
 
-Actually, this is the second or third rewrite I've done of the borrow
-check in recent weeks. In fact, this *specific* iteration is very new
--- I dreamed it up the day before yesterday while brainstorming with
-aturon about shortcomings in the prior iteration. I'm going to explain
-it very "operationally" -- that is, how the analysis works -- but I
-hope we can lift from there to a more "semantic" explanation at some
-point.
-
-I want to emphasize that this is **work in progress**. This whole
-proposal may be fatally flawed and I may have to hang my head in shame
-for posting it. But I will say that I have implemented the proposal as
-a prototype, and it seems to basically pass our test suite, so I guess
-it's not *completely* off base. =)
+Also, I want to emphasize that this is **work in progress**. This
+whole proposal may be fatally flawed and I may have to hang my head in
+shame for posting it. That said, I have implemented this analysis, and
+it passes the full test suite, so I guess it's not *completely* off
+base. =) Unfortunately, the performance of the current prototype is
+not good: it is even slower than the existing NLL analysis! But I haven't even
+begun to optimize yet, and I know I am doing some naive and
+inefficient things that can definitely be done better; so I am still
+optimistic we'll be able to make big strides there.
 
 Also, it was pointed out to me that yesterday, April 26, is the sixth
 "birthday" of the borrow check -- it's fun to look at [my commit from
@@ -837,13 +833,14 @@ write some heuristics to decide what to extract out.
 
 Traditionally, however, Datalog executes bottom-up -- that is, it
 computes all the base facts, then the facts derived from those, and so
-on. This is more efficient, but it can be wasteful if all those facts
-are not ultimately needed. There are techniques for combining top-down
-and bottom-up propagation (e.g., [magic sets]); there are also
-techniques for getting "explanations" out of Datalog -- basically, a
-minimal set of facts that are needed to derive a given tuple (like
-`error(P)`). [One such technique][t] was even [implemented][expl] and
-defined using [differential-dataflow], which is great.
+on. This can be more efficient, but it can be wasteful if all those
+facts are not ultimately needed. There are techniques for combining
+top-down and bottom-up propagation (e.g., [magic sets]); there are
+also techniques for getting "explanations" out of Datalog --
+basically, a minimal set of facts that are needed to derive a given
+tuple (like `error(P)`). [One such technique][t] was even
+[implemented][expl] and defined using [differential-dataflow], which
+is great.
 
 [magic sets]: https://www.sciencedirect.com/science/article/pii/S0004370212000562
 [t]: http://www.vldb.org/pvldb/vol9/p1137-chothia.pdf
