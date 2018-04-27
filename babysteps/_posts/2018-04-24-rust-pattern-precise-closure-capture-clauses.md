@@ -4,11 +4,16 @@ title: 'Rust pattern: Precise closure capture clauses'
 categories: [Rust, RustPattern]
 ---
 
-This is the second in a series of posts about borrowck errors. Each
-one will talk about a particular borrowck error that I get and try to
-explain why I am getting it and how I fixed it. The purpose of this
-series of posts is partly to explain Rust, but partly just to gain
-data for myself about possible areas of future improvement.
+This is the **second** in a series of posts about Rust compiler
+errors. Each one will talk about a particular error that I got
+recently and try to explain (a) why I am getting it and (b) how I
+fixed it. The purpose of this series of posts is partly to explain
+Rust, but partly just to gain data for myself. I may also write posts
+about errors I'm not getting -- basically places where I anticipated
+an error, and used a pattern to avoid it. I hope that after writing
+enough of these posts, I or others will be able to synthesize some of
+these facts to make intermediate Rust material, or perhaps to improve
+the language itself.
 
 Other posts in this series:
 
@@ -212,7 +217,7 @@ control over what is borrowed and how. In this case, the closure might look like
 ```rust
 {
   let input = &self.input;
-  move |v| input.get(v).cloned().unwrap_or(0))
+  move |v| input.get(v).cloned().unwrap_or(0)
 }
 ```
 
