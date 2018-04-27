@@ -6,26 +6,17 @@ categories: [Rust, NLL]
 
 Ever since the Rust All Hands, I've been experimenting with an
 alternative formulation of the Rust borrow checker. The goal is to
-find a formulation that is as expressive as the current "non-lexical
-lifetimes" proposal (more expressive, actually[^fn47680]) while also being
-faster to compute[^nomeasure]. This blog post aims to explain how this new
-design works.
-
-[^fn47680]: In particular, I want to overcome [#47680] in a natural way.
-
-[^nomeasure]: Caveat: I have not yet measured performance.
+find a formulation that overcomes some shortcomings of the current
+proposal while hopefully also being faster to compute. I have
+implemented a prototype for this analysis. It passes the full NLL test
+suite and also handles a few cases -- such as [#47680] -- that the
+current NLL analysis cannot handle. However, the performance has a
+long way to go (it is currently slower than existing analysis). That
+said, I haven't even begun to optimize yet, and I know I am doing some
+naive and inefficient things that can definitely be done better; so I
+am still optimistic we'll be able to make big strides there.
 
 [#47680]: https://github.com/rust-lang/rust/issues/47680#issuecomment-363131420
-
-Also, I want to emphasize that this is **work in progress**. This
-whole proposal may be fatally flawed and I may have to hang my head in
-shame for posting it. That said, I have implemented this analysis, and
-it passes the full test suite, so I guess it's not *completely* off
-base. =) Unfortunately, the performance of the current prototype is
-not good: it is even slower than the existing NLL analysis! But I haven't even
-begun to optimize yet, and I know I am doing some naive and
-inefficient things that can definitely be done better; so I am still
-optimistic we'll be able to make big strides there.
 
 Also, it was pointed out to me that yesterday, April 26, is the sixth
 "birthday" of the borrow check -- it's fun to look at [my commit from
