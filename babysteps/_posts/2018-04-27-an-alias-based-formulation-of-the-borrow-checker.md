@@ -841,6 +841,12 @@ I've not really done much in this direction yet -- I'm still trying to ensure
 this is the analysis we want -- but it seems clear that if we go this
 way we should be able to get good error information out.
 
+### Questions?
+
+I've opened an [thread on the Rust internals board][thread] for discussion.
+
+[thread]: https://internals.rust-lang.org/t/blog-post-an-alias-based-formulation-of-the-borrow-checker/7411
+
 ### Thanks
 
 I want to take a moment to say thanks to a few people and projects who
