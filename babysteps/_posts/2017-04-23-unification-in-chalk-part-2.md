@@ -480,7 +480,7 @@ it.
 
 I'll be monitoring [the internals thread] for comments and discussion. =)
 
-[internals comment thread]: https://internals.rust-lang.org/t/blog-series-lowering-rust-traits-to-logic/4673
+[the internals thread]: https://internals.rust-lang.org/t/blog-series-lowering-rust-traits-to-logic/4673
 
 ### Footnotes
 

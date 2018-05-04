@@ -704,7 +704,7 @@ let y = 44;
 let p: &'0 i32 = &'1 x;
 let q: &'4 i32 = &'3 y;
 x += 1;
-print(*p);
+print(*q);
 ```
 
 But that's not a very satisfying answer. Another possibility would be
@@ -776,7 +776,7 @@ the analysis was getting tripped up with the loop.
 
 Under the new rules, however, we can see that -- along the `Some` path
 -- the loan gets killed, because `temp` is reassigned. Meanwhile --
-along the `None` path -- the `restricts` relation is dropped, because
+along the `None` path -- the `requires` relation is dropped, because
 it is only associated with dead regions at that point. So the program
 is accepted.
 
@@ -868,3 +868,5 @@ on alias analysis on large C programs. This, combined with a lot of
 experimentation and iteration, led me here. So thanks all!
 
 [viper]: http://www.pm.inf.ethz.ch/research/viper.html
+
+### Footnotes

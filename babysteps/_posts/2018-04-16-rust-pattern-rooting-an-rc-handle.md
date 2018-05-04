@@ -230,7 +230,7 @@ ovewrite that field, but that gets complicated in the face of
 generics. For example, one can mutate the field `data` not just by
 doing `self.data = ...` but by doing `*self = ...`; and the latter
 might be in generic code that works for any `&mut T`: this implies
-we'd have to start categorizing the types `T` into "assigable or
+we'd have to start categorizing the types `T` into "assignable or
 not"[^cpp]. I suspect we would not go in this direction.
 
 [^cpp]: Interestingly, C++ does this when you have `const` fields.
