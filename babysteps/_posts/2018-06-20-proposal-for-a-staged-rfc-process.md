@@ -74,7 +74,7 @@ The TL;DR of the proposal is as follows:
   Trait`](https://internals.rust-lang.org/t/help-test-impl-trait/6516),
   aturon's call to [benchmark incremental
   compilation](https://internals.rust-lang.org/t/help-us-benchmark-incremental-compilation/6153),
-  or Alex's [push to stabilize some subset of procedural
+  or alexcrichton's [push to stabilize some subset of procedural
   macros](https://internals.rust-lang.org/t/help-stabilize-a-subset-of-macros-2-0/7252)
   -- but each of those was an informal effort, rather than an explicit
   part of the RFC process.  
@@ -135,7 +135,9 @@ oh-so-important emojis work better):
 
 [diagram]: https://docs.google.com/drawings/d/11KtHLYsqJzi2_Y3mOBz2FbXeG3verSHz-PFBuiwYIQw/edit?usp=sharing
 
-<img src="http://smallcultfollowing.com/rfc-stages.svg" width=893 height=760>
+<div>
+<img src="{{ site.baseurl }}/assets/2018-06-20-rfc-stages.svg" width="893" height="760"/>
+</div>
 
 You'll notice that the stages are divided into two groups. **The
 stages on the left represent phases where significant work is being
@@ -239,7 +241,7 @@ like a [summary comment][] today. This issue can go through an FCP
 period in the same way as today (though without the need for
 checkmarks) to give people a chance to review the summary.
 
-[summary comment]: XXX
+[summary comment]: https://github.com/rust-lang/rfcs/pull/1909#issuecomment-327565150
 
 At that point, the team champion will open a PR on the **main
 repository** (`rust-rfcs/rfcs`).  This PR itself will not have a lot
@@ -266,6 +268,41 @@ asynchronous, in part so that we can be more friendly to people from
 all time zones, and to ease language barriers. But there is still a
 need to ensure that progress is made. I expect that weekly meetings will
 continue to play a role here, if only to nag people.
+
+### Using stages to guide conversation
+
+One of the things I am excited about in this proposal is that we can
+use the explicit stage -- as well as the dedicated repository! -- to
+help guide conversations. For example, during the spitballing phase,
+it seems clear that the conversation should be focused on exploring
+the motivation and unearthing constraints. Similarly, it often happens
+we come across quandries that are hard to resolve until after we have
+gained more experience using the feature -- often choosing what should
+be the default behavior has this character, for example. The staged
+process lets us explicitly revisit those concerns at the right time.
+
+However, one concern that has arisen in the TC39 process is that this
+same character can make it hard to object to a feature on "global" or
+"cross-cutting" grounds. For example, it may be that there are two
+features which are individually acceptable but which -- taken together
+-- seem to blow the language complexity budget. How do you decide
+between them and when does this decision get made?
+
+In the current proposal, I think that the answer is *most likely* at
+the Proposal stage. More generally, we aim to address these sorts of
+concerns of controlling scope in a few ways:
+
+- By ensuring that features are tied to the roadmap, which should
+  ensure they have solid (and timely) motivation.
+- By requiring a Team Champion to advance through the process, which
+  should generally ensure that there is enough interest in a proposal
+  and bandwidth to see it through.
+- By having frequent check-ins with teams, who are charged to care for
+  cross-cutting concerns.
+
+Overall, though, I think this is an area where we will continue
+iterating -- we might want some more dedicated way of tracking the
+"overall budget" for Rust as a whole.
 
 ### Making implicit stages explicit
 
@@ -338,7 +375,7 @@ As I noted earlier, we've done this before, but always informally:
 
 - cramertj's [call for feedback on `impl Trait`](https://internals.rust-lang.org/t/help-test-impl-trait/6516);
 - aturon's call to [benchmark incremental compilation](https://internals.rust-lang.org/t/help-us-benchmark-incremental-compilation/6153);
-- Alex's [push to stabilize some subset of procedural macros](https://internals.rust-lang.org/t/help-stabilize-a-subset-of-macros-2-0/7252).
+- alexcrichton's [push to stabilize some subset of procedural macros](https://internals.rust-lang.org/t/help-stabilize-a-subset-of-macros-2-0/7252).
 
 Once the evaluation phase seems to have reached a conclusion, we would
 move to **stabilize** the feature. The explainer docs would then
