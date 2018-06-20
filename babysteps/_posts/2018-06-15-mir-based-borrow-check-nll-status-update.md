@@ -9,8 +9,8 @@ lifetimes" (NLL) -- or, as I prefer to call it these days, the
 MIR-based borrow checker -- so I wanted to post a status
 update.
 
-The single most important fact is that the MIR-based borrow check is
-feature complete and available on nightly. **What this means is that
+**The single most important fact is that the MIR-based borrow check is
+feature complete and available on nightly. What this means is that
 the behavior of `#![feature(nll)]` is roughly what we intend to ship
 for "version 1", except that (a) the performance needs work and (b) we
 are still improving the diagnostics.** (More on those points later.)
@@ -41,16 +41,18 @@ weekly meetings on Tuesdays (3:30pm Eastern time) where we discuss the
 priorities for the week and try to dole out tasks. If that time
 doesn't work for you, you can of course pop in any time and
 communicate asynchronously. You can also always go look for work to do
-amongst [the list of GitHub issues].
+amongst [the list of GitHub issues][ghi] -- probably the [diagnostics
+issues][diag] are the best place to start.
 
 [zulip]: https://rust-lang.zulipchat.com/#narrow/stream/122657-wg-nll
-[the GitHub issues]: https://github.com/rust-lang/rust/issues?utf8=%E2%9C%93&q=is%3Aopen+label%3AWG-compiler-nll+-label%3ANLL-deferred
+[ghi]: https://github.com/rust-lang/rust/issues?utf8=%E2%9C%93&q=is%3Aopen+label%3AWG-compiler-nll+-label%3ANLL-deferred
+[diag]: https://github.com/rust-lang/rust/labels/NLL-diagnostics
 
 ### Transition period
 
 As I mentioned earlier, the MIR-based borrow checker [fixes a lot of
 bugs] -- this is largely a side effect of making the check operate
-over the [MIR]. This is great, but it does mean that we can't just
+over the [MIR]. This is great! However, as a result, we can't just
 "flip the switch" and enable the MIR-based borrow checker by default,
 since that would break existing crates (I don't really know how many
 yet). The plan therefore is to have a transition period. 
@@ -104,7 +106,7 @@ big strides here. (For example, I've got a [PR up right now][51460]
 that [adds some simple memoization for a 20% win][20%], and I'm
 working on follow-ups that add much more aggressive memoization.)
 
-(There is an interesting corolllary to this: after the transition
+(There is an interesting corollary to this: after the transition
 period, the first type check will have no need to consider lifetimes
 *at all*, which I think means we should be able to make it run quite a
 bit faster as well, which should mean a shorter "time till first
@@ -163,7 +165,7 @@ Other times, though, the errors from the new checker are not as good.
 This is particularly true when it comes to suggestions and tips for
 how to fix things. We've gone through all of our internal diagnostic
 tests and drawn up a [list of about 37
-issues](https://github.com/rust-lang/rust/labels/NLL-diagnostics),
+issues][diag],
 documenting each point where the checker's message is not as good as
 the old one, and we're working now on drilling through this list.
 
