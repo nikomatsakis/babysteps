@@ -269,20 +269,19 @@ all time zones, and to ease language barriers. But there is still a
 need to ensure that progress is made. I expect that weekly meetings will
 continue to play a role here, if only to nag people.
 
-### Using stages to guide conversation
+### How stages affect conversation
 
 One of the things I am excited about in this proposal is that we can
-use the explicit stage -- as well as the dedicated repository! -- to
-help guide conversations. For example, during the spitballing phase,
-it seems clear that the conversation should be focused on exploring
-the motivation and unearthing constraints. Similarly, it often happens
-we come across quandries that are hard to resolve until after we have
-gained more experience using the feature -- often choosing what should
-be the default behavior has this character, for example. The staged
-process lets us explicitly revisit those concerns at the right time.
+use the explicit stage to help focus conversations. For example,
+during the spitballing phase, the goal is to explore the motivation
+and unearth constraints. Similarly, it often happens we come across
+quandries that are hard to resolve until after we have gained more
+experience using the feature -- choosing a default behavior can have
+this character, for example. The staged process lets us explicitly
+revisit those concerns at the right time.
 
-However, one concern that has arisen in the TC39 process is that this
-same character can make it hard to object to a feature on "global" or
+However, one concern that has arisen in the TC39 process is that
+stages can also make it hard to object to a feature on "global" or
 "cross-cutting" grounds. For example, it may be that there are two
 features which are individually acceptable but which -- taken together
 -- seem to blow the language complexity budget. How do you decide
@@ -407,11 +406,13 @@ team. Similarly, I think that having a list of RFCs that are in the
 "implementation" phase might be a way to help engage people who'd like
 to hack on the compiler.
 
-**Credits.** As I noted before, this proposal is heavily shaped by
-[the TC39 process][tc39]. This particular version was largely drafted
-in a big group discussion with [wycats], [aturon], [ag_dubs],
-[steveklabnik], [nrc], [jntrnr], [erickt], and [oli-obk], though
-earlier proposals also involved a few others.
+### Credit where credit is due
+
+This proposal is heavily shaped by [the TC39 process][tc39]. This
+particular version was largely drafted in a big group discussion with
+[wycats], [aturon], [ag_dubs], [steveklabnik], [nrc], [jntrnr],
+[erickt], and [oli-obk], though earlier proposals also involved a few
+others.
 
 [aturon]: https://github.com/aturon
 [wycats]: https://twitter.com/wycats
@@ -420,6 +421,6 @@ earlier proposals also involved a few others.
 [erickt]: https://github.com/erickt/
 [steveklabnik]: https://github.com/steveklabnik/
 [nrc]: https://github.com/nrc/
-[oli]: https://github.com/oli-obk/
+[oli-obk]: https://github.com/oli-obk/
 
 
