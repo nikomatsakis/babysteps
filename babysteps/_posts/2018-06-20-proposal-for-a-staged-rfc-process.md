@@ -33,7 +33,10 @@ about the RFC process, not a final decision. I'd love to get feedback
 on this proposal and I expect further iteration on the details. In any
 case, until the Rust 2018 Edition work is complete, we don't really
 have the bandwidth to make a change like this. (And, indeed, most of
-my personal attention remains on NLL at the moment.)
+my personal attention remains on NLL at the moment.) If you'd like to
+discuss the ideas here, [I opened an internals thread][it].
+
+[it]: https://internals.rust-lang.org/t/blog-post-proposal-for-a-staged-rfc-process/7766
 
 [tc39]: https://tc39.github.io/process-document/
 
@@ -269,6 +272,8 @@ all time zones, and to ease language barriers. But there is still a
 need to ensure that progress is made. I expect that weekly meetings will
 continue to play a role here, if only to nag people.
 
+<!--
+
 ### How stages affect conversation
 
 One of the things I am excited about in this proposal is that we can
@@ -303,6 +308,8 @@ Overall, though, I think this is an area where we will continue
 iterating -- we might want some more dedicated way of tracking the
 "overall budget" for Rust as a whole.
 
+-->
+
 ### Making implicit stages explicit
 
 There are two new points in the process that I want to highlight.
@@ -325,8 +332,15 @@ The main questions to be answered at the proposal have to do with
 - Is this a problem we want to solve?
   - And, specifically, is this a problem we want to solve **now**?
 - Do we think we have some realistic ideas for solving it?
-  - Are there major things that we ought to dig into.
-  
+  - Are there major things that we ought to dig into?
+- Are there cross-cutting concerns and interactions with other features?
+  - It may be that two features which are individually quite good, but
+    which -- taken together -- blow the language complexity budget.
+    We should always try to judge how a new feature might affect the
+    language (or libraries) as a whole.
+  - We may want to extend the process in other ways to make identification
+    of such "cross-cutting" or "global" concerns more first class.
+
 The expectation is that all major proposals need to be connected to
 the roadmap. This should help to keep us focused on the work we are
 supposed to be doing. (I think it is possible for RFCs to advance that
@@ -344,8 +358,8 @@ hard to do).
 
 The Proposal point also offers a chance for other team members to
 point out constraints that may have been overlooked. These constraints
-wouldn't really serve to derail the proposal, just to add new points
-that should be addressed during the Designing phase.
+don't necessarily have to derail the proposal, they may just add new
+points to be addressed during the Designing phase.
 
 #### The Candidate point and the Evaluating phase
 
@@ -368,7 +382,8 @@ is that, once implementation is complete, we should do two things:
   uncover bugs, but also surprising failure modes, ergonomic hazards,
   or other pitfalls with the design. If any significant problems are
   found, we can correct them, update the explainer, and repeat until
-  we are satisfied.
+  we are satisfied (or until we decide the idea isn't going to work
+  out).
 
 As I noted earlier, we've done this before, but always informally:
 
@@ -406,6 +421,10 @@ team. Similarly, I think that having a list of RFCs that are in the
 "implementation" phase might be a way to help engage people who'd like
 to hack on the compiler.
 
+### Comments?
+
+Please leave comments in [the internals thread for this post][it].
+
 ### Credit where credit is due
 
 This proposal is heavily shaped by [the TC39 process][tc39]. This
@@ -413,6 +432,12 @@ particular version was largely drafted in a big group discussion with
 [wycats], [aturon], [ag_dubs], [steveklabnik], [nrc], [jntrnr],
 [erickt], and [oli-obk], though earlier proposals also involved a few
 others.
+
+### Updates
+
+(I made various simplifications shortly after publishing, aiming to
+keep the length of this blog post under control and remove what seemed
+to be somewhat duplicated content.)
 
 [aturon]: https://github.com/aturon
 [wycats]: https://twitter.com/wycats
