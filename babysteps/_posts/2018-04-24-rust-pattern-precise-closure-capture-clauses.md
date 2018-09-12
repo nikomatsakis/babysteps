@@ -278,3 +278,10 @@ post](https://internals.rust-lang.org/t/fields-in-traits/6933/12). I
 think that once we tackle NLL and a few other pending challenges,
 finding some way to express "views" seems like a clear way to help
 make Rust more ergonomic.
+
+### Discussion
+
+I've opened [a users
+thread](https://users.rust-lang.org/t/blog-post-series-rust-patterns/20080)
+to discuss this blog post (along with other Rust pattern blog posts).
+

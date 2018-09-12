@@ -235,5 +235,11 @@ not"[^cpp]. I suspect we would not go in this direction.
 
 [^cpp]: Interestingly, C++ does this when you have `const` fields.
 
+### Discussion
+
+I've opened [a users
+thread](https://users.rust-lang.org/t/blog-post-series-rust-patterns/20080)
+to discuss this blog post (along with other Rust pattern blog posts).
+
 ### Footnotes
 
