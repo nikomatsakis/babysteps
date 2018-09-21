@@ -1,0 +1,24 @@
+---
+layout: page
+title: Categories
+---
+
+{% for tag in site.categories %}
+<a name="{{ tag[0] }}"></a>
+<details>
+  <summary>
+    <a href="#{{ tag[0] }}"><b id="{{ tag[0] | slugify }}">{{ tag[0] }}</b></a>
+  </summary>
+  
+  <ul class="tags-expo-posts">
+    {% for post in tag[1] %}
+    <li>
+      <a href="{{ site.baseurl }}{{ post.url }}">
+        {{ post.title | escape }}
+      </a> ({{ post.date | date_to_string }})
+    </li>
+    {% endfor %}
+  </ul>
+</details>
+{% endfor %}
+
