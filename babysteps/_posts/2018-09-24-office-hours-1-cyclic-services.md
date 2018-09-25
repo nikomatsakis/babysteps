@@ -10,6 +10,8 @@ with one another. This is a classic kind of problem in Rust: how to
 deal with cyclic data. Usually, the answer is that the cycle is not
 necessary (as in this case).
 
+[oh]: https://github.com/nikomatsakis/office-hours
+
 ### The setup
 
 To start, let's imagine that we were working in a GC'd language, like
@@ -29,13 +31,13 @@ function setup() {
 }
 
 function Service1(directory) {
-  self.directory = directory;
+  this.directory = directory;
   directory.service1 = self;
   ...
 }
 
 function Service2(directory) {
-  self.directory = directory;
+  this.directory = directory;
   directory.service1 = self;
   ...
 }
