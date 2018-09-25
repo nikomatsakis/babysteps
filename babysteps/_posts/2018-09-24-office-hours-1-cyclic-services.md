@@ -38,7 +38,7 @@ function Service1(directory) {
 
 function Service2(directory) {
   this.directory = directory;
-  directory.service1 = self;
+  directory.service2 = self;
   ...
 }
 ```
@@ -266,7 +266,7 @@ impl<T: Send> Receiver<T> {
         return value;
       }
 
-      // wait until the receiver reads
+      // wait until the sender sends
       shared_value = self.shared.condvar.wait(shared_value).unwrap();
     }
   }
