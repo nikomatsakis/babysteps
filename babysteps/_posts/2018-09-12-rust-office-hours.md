@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Rust office hours
-category: [Rust]
+categories: [Rust, OfficeHours]
 ---
 
 Hello, all! Beginning this Friday (in two days)[^earlier], I'm going

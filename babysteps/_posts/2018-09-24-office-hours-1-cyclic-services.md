@@ -142,7 +142,7 @@ fn make_directory() {
 
   // Start the actors
   start_service1(&directory, receiver1);
-  start_service2(&directory, receiver1);
+  start_service2(&directory, receiver2);
 }
 ```
 
