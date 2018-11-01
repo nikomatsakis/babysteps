@@ -13,13 +13,13 @@ things to work.
 [rust-blog]: https://blog.rust-lang.org/2018/10/30/help-test-rust-2018.html
 [last update]: {{ site.baseurl }}/blog/2018/06/15/mir-based-borrow-check-nll-status-update/
 
-## Rust 2018 will use NLL now, Rust 2015 support coming soon
+## Rust 2018 will use NLL now
 
 Let's get the highlights out of the way. Most importantly, **Rust 2018
 crates will use NLL by default**. Once the Rust 2018 release candidate
-becomes stable, I hope to switch Rust 2015 crates to use NLL as well,
-but we're holding off until we have some more experience with people
-using it in the wild.
+becomes stable, **we plan to switch Rust 2015 crates to use NLL as
+well**, but we're holding off until we have some more experience with
+people using it in the wild.
 
 ## NLL is awesome
 
@@ -28,10 +28,10 @@ imagine going back. Recently I've been working in my spare time on
 [the salsa crate][salsa][^plug], which uses Rust 2018, and I've really
 noticed how NLL makes a lot of "complex" borrowing interactions work
 out quite smoothly. These are all instances of the [problem cases #1
-and #2] I highlighted way back when[^pc3], but they interact in
+and #2][pc12] I highlighted way back when[^pc3], but they interact in
 interesting ways I did not fully anticipate.
 
-[original problems]: http://smallcultfollowing.com/babysteps/blog/2016/04/27/non-lexical-lifetimes-introduction/
+[pc12]: {{ site.baseurl }}/blog/2016/04/27/non-lexical-lifetimes-introduction/
 [salsa]: https://github.com/salsa-rs/salsa
 [^plug]: Did you see how smoothly I worked in that plug for [salsa][]? I'll write a post about it soon, I promise.
 [^pc3]: Note that the current NLL implementation does not solve Problem Case #3. See [the "What Next?" section][wn] for more.
@@ -43,7 +43,7 @@ of code that routes messages, which look like this:
 ```rust
 enum Message {
     Letter { recipient: String, data: String },
-    // ... other cases here ...
+    // ... maybe other cases here ...
 }
 ```
 
@@ -70,6 +70,8 @@ fn router(me: &str, rx: Receiver<Message>, tx: Sender<Message>) {
           process(data);
         }
       }
+
+      // ... maybe other cases here ...
     }
   }
 }
@@ -85,7 +87,7 @@ branch of the match, the borrow is still in use (in the form of the
 call `tx.send(message)` and move the message). Before NLL, this would
 have required some significant contortions to achieve ([try it
 yourself if you
-like](https://play.rust-lang.org/?version=nightly&mode=debug&edition=2015)
+like](https://play.rust-lang.org/?version=nightly&mode=debug&edition=2015&gist=ee86bacf163aab324692f0297fc05eee)
 -- that's a link to the same code, but with Rust 2015 edition set).
 
 [^intern]: Interestingly, I remember an example almost exactly like this being shown to me by a Servo intern -- I forget which one -- many years ago. At the time, it didn't seem like a big deal to do the workarounds, but I realize now I was wrong about that. Ah well.
@@ -95,7 +97,7 @@ like](https://play.rust-lang.org/?version=nightly&mode=debug&edition=2015)
 We've also put a lot of effort into NLL diagnostics and I think that
 by and large they are even better than the old borrow checker (which
 were already quite good). This is particularly true for the 'lifetime
-error messages'.  Unfortunately, you won't see all of those
+error messages'.  Unfortunately, you won't see *all* of those
 improvements yet on Rust 2018 -- the reason has to do with
 **migration**.
 
@@ -120,11 +122,11 @@ this means that errors will just get better.
 <a name="what-next"></a>
 
 Finally, those of you who read the previous posts may remember that
-the performance of the NLL checker was a big stumbling block. I'm
-happy to report that the performance issues were largely addressed:
-there remains some slight overhead to using NLL, but it is largely not
-noticeable in practice, and I expect we'll continue to improve it over
-time.
+compilation times when using the NLL checker was a big stumbling
+block. I'm happy to report that the performance issues were largely
+addressed: there remains some slight overhead to using NLL, but it is
+largely not noticeable in practice, and I expect we'll continue to
+improve it over time.
 
 ### What next?
 
@@ -160,4 +162,4 @@ prioritize future improvements to Rust.
 
 [Polonius]: https://github.com/rust-lang-nursery/polonius/
 [alias-based]: {{ site.baseurl }}/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
-[pc3-link]: {{ sit.baseurl }}/blog/2016/04/27/non-lexical-lifetimes-introduction/#problem-case-3-conditional-control-flow-across-functions
+[pc3-link]: {{ site.baseurl }}/blog/2016/04/27/non-lexical-lifetimes-introduction/#problem-case-3-conditional-control-flow-across-functions
