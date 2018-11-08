@@ -59,7 +59,7 @@ along, but it seems like something we could do more formally.
 
 ### Borrow checker field guide
 
-Yesterday I had a very nice conversation with Will Creigthon and Anna
+Yesterday I had a very nice conversation with Will Crichton and Anna
 Zeng. They were presenting the results of work they have been doing to
 identify barriers to adoption for Rust ([they have a paper you can
 download here to learn more][wcaz]). Specifically, they've been
