@@ -149,7 +149,7 @@ original NLL introduction, along with some other cases where the
 current analysis falls short.
 
 In the **longer term**, well, that's an open question, and one where I
-would like to here from you, dear reader. Over the next week or so, I
+would like to hear from you, dear reader. Over the next week or so, I
 am planning to write up a series of blog posts. Each will describe
 what I consider to be a common "tricky scenario" where people hit
 problems with the borrow checker, and none of which are solved by NLL.
