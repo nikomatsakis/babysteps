@@ -153,7 +153,7 @@ Chalk over the finish line!)
 ### Logic 
 
 Finally, I had a very long conversation with Will Byrd and Michael
-Ballantyne about how Chalk works. We discussed some details of how
+Ballantyne about how [Chalk] works. We discussed some details of how
 MiniKanren's search algorithm works and also some details how Chalk
 lowering works. I won't try to summarize here, except to say that Will
 gave me an exciting pointer to something called ["default logic"][dl],
@@ -161,6 +161,7 @@ which I had never heard of, but which seems like a very good match for
 specialization. I look forward to reading more about it.
 
 [dl]: https://en.wikipedia.org/wiki/Default_logic
+[Chalk]: https://github.com/rust-lang-nursery/chalk
 
 ### Me talking about Rust
 
