@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Salsa: Incremental recompilation'
-categories: [Rust, NLL]
+categories: [Rust, Salsa]
 ---
 
 So for the last couple of months or so, I've been hacking in my spare
