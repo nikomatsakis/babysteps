@@ -87,9 +87,9 @@ community.
 
 The thing is, running a working group can be quite a big job --
 particularly a working group that aims to incorporate a lot of
-contributors. Traditionally, we've thought of a working has having a
-**lead** -- maybe, at best, two leads -- and a bunch of participants,
-most of whom are being mentored:
+contributors. Traditionally, we've thought of a working group as
+having a **lead** -- maybe, at best, two leads -- and a bunch of
+participants, most of whom are being mentored:
 
 ```
            +-------------+
