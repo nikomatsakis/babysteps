@@ -75,7 +75,7 @@ Midori error handling][midori].
 [keynote]: https://www.youtube.com/watch?v=CuD7SCqHB7k
 
 Having used `?` for a long time now, I can definitely attest that (a)
-it is very nice to be able to propoagate errors in a light-weight
+it is very nice to be able to propagate errors in a light-weight
 fasion and (b) having the explicit marker is very useful. Many times
 I've found bugs by scrutinizing the code for `?`, uncovering
 surprising control flow I wasn't considering.
