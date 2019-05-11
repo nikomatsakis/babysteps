@@ -12,8 +12,9 @@ the problems we aim to solve, the good things we aim to keep -- and
 then move on to draw up more details plans. I expect this discussion
 will intersect the RFC process quite heavily (at least when it comes
 to language design changes). Should be interesting! It's all happening
-in the open, so if talking about talking is your thing, you should
-[check it out][i].
+in the open, and a major goal of mine is for this to be easy to follow
+along with from the outside -- so if talking about talking is your
+thing, you should [check it out][i].
 
 
 [i]: https://internals.rust-lang.org/t/announcing-lang-team-meta-working-group/9900
