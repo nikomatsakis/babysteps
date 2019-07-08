@@ -153,7 +153,7 @@ important steps[^forgot]:
   heroically fixed a number of minor bugs that were filed as fallout
   from this change.
 - **tmandry** dramatically reduced the size of futures at runtime.
-- gilescope improved a number of error messages and helped to reduce
+- **gilescope** improved a number of error messages and helped to reduce
   errors.
 - **matthewjasper** reworked some details of the compiler transform to
   solve a large number of ICEs.
