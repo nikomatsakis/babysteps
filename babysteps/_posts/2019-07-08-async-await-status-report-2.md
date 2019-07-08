@@ -47,7 +47,10 @@ at the end of this post!
 
 The current support we are aiming to stabilize permits `async fn`, but
 only outside of traits and trait implementations. This means that you
-can write free functions like this one:
+can write free functions like this one:[^highlight]
+
+[^highlight]: Sadly, it seems like [rouge] hasn't been updated yet to highlight the async or await keywords. Or maybe I just don't understand how to upgrade it. =)
+[rouge]: https://github.com/rouge-ruby/rouge
 
 ```rust
 // When invoked, returns a future that (once awaited) will yield back a result:
