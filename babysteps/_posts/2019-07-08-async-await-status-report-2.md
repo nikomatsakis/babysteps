@@ -142,8 +142,8 @@ future work:
 
 There's been a lot of great work on the `async fn` implementation
 since my first post -- we've closed over [40 blocker issues]!  I want
-to give a special shout out to a few folks who made particularly
-important steps[^forgot]:
+to give a special shout out to the folks who worked on those
+issues:[^forgot]
 
 [40 blocker issues]: https://github.com/rust-lang/rust/issues?q=is%3Aissue+label%3AAsyncAwait-Blocking+is%3Aclosed
 [^forgot]: I culled this list by browsing the closed issues and who they were assigned to. I'm sorry if I forgot someone or minimized your role! Let me know and I'll edit the post. <3
