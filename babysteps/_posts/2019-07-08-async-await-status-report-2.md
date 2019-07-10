@@ -16,22 +16,23 @@ foundations" working group. This post aims to cover three things:
 We are currently working on stabilizing what we call the **async-await
 MVP** -- as in, "minimal viable product". As the name suggests, the
 work we're doing now is basically the minimum that is needed to
-"unlock" async-await. After this work is done, it will be possible to
+"unlock" async-await. After this work is done, it will be easier to
 build async I/O based applications in Rust, though a number of rough
 edges remain.
 
 The MVP consists of the following pieces:
 
-- the `std::future::Future` trait, which defines the core future protocol (stabilized in [1.36.0]!);
+- the [`Future`] trait, which defines the core future protocol (stabilized in [1.36.0]!);
 - basic async-await syntax;
 - a "first edition" of [the "async Rust" book][a-b].
 
+[`Future`]: https://doc.rust-lang.org/std/future/trait.Future.html
 [1.36.0]: https://blog.rust-lang.org/2019/07/04/Rust-1.36.0.html
 
 ### The future trait
 
 The first of these bullets, the future trait, was stabilized in the
-[1.36.0] release. This is important because the `Future` trait is the
+[1.36.0] release. This is important because the [`Future`] trait is the
 core building block for the whole Async I/O ecosystem. Having a stable
 future trait means that we can begin the process of consolidating the
 ecosystem around it.
@@ -67,8 +68,8 @@ or inherent methods:
 
 ```rust
 impl MyType {
-  // Same as above, but defined as a method on `MyType`:
-  async fn process(data: TcpStream) -> Result<(), Box<dyn Error>> { .. }
+    // Same as above, but defined as a method on `MyType`:
+    async fn process(data: TcpStream) -> Result<(), Box<dyn Error>> { .. }
 }
 ```
 
@@ -87,9 +88,9 @@ runtime::spawn(async move {
 })
 ```
 
-Eventually, we plan to extend support so that any place you can write
-a function, you can use an async variant of it -- but there are some
-complications to be resolved first, as will be discussed shortly.
+Eventually, we plan to permit `async fn` in other places, but there
+are some complications to be resolved first, as will be discussed
+shortly.
 
 ### The async book
 
@@ -97,7 +98,7 @@ One of the goals of this stabilization is that, once async-await
 syntax becomes available, there should be **really strong
 documentation to help people get started**. To that end, we're
 rejuvenating [the "async Rust" book][a-b]. This book covers the nuts
-and bots of Async I/O in Rust, ranging from simple examples with
+and bolts of Async I/O in Rust, ranging from simple examples with
 `async fn` all the way down to the details of how the future trait
 works, writing your own executors, and so forth. Take a look!
 
@@ -126,9 +127,9 @@ future work:
   syntax][for-await] (although that is not a given).
 - **Generators and async generators.** The same core compiler
   transform that enables async await should enable us to support
-  Python- or JS-like generators, making it easy to write
-  iterators. Those same generators can then be made asynchronous to
-  produce streams of data.
+  Python- or JS-like generators as a way to write iterators. Those
+  same generators can then be made asynchronous to produce streams of
+  data.
 - **Async fn in traits and trait impls.** Writing generic crates and
   interfaces that work with `async fn` is possible in the MVP, but not
   as clean or elegant as it could be. Supporting `async fn` in traits
