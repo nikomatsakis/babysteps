@@ -45,7 +45,7 @@ kramdown:
   syntax_highlighter: rouge
   auto_ids: true
 
-gems:
+plugins:
   - jekyll-feed
 
 exclude:
