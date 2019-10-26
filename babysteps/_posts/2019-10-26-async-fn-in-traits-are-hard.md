@@ -1,6 +1,6 @@
 ---
 layout: post
-title: async fn in traits are hard
+title: why async fn in traits are hard
 categories: [Rust, AsyncAwait]
 ---
 
