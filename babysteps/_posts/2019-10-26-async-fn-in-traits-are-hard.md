@@ -176,7 +176,7 @@ user. Since we're going to be spawning a thread with the result from
 we're going to want to write a function that looks *something* like
 this[^scoped]:
 
-[^scoped]: Astute readers might note that I'm eliding a further challenge, which is that you need a scoping mechanism here to handle the lifetimes. Let's assume we have something like [Rayon's scope][scope] or [crossbeam's scope] available.
+[^scoped]: Astute readers might note that I'm eliding a further challenge, which is that you need a scoping mechanism here to handle the lifetimes. Let's assume we have something like [Rayon's scope] or [crossbeam's scope] available.
 
 [Rayon's scope]: https://docs.rs/rayon/1.2.0/rayon/fn.scope.html
 [crossbeam's scope]: https://docs.rs/crossbeam/0.7.2/crossbeam/thread/struct.Scope.html
