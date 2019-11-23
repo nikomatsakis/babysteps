@@ -100,7 +100,9 @@ Learning from this, our current design is intentionally much more
 "open-ended" and permits runtimes to be added as simple crates on
 crates.io. Right now, to my knowledge, we have at least five distinct
 async runtimes for Rust, and I wouldn't be surprised if I've forgotten
-a few:
+a few:[^drone-os]
+
+[^drone-os]: Indeed, shortly after I published this post, I [was directed](https://twitter.com/redtwitdown/status/1198001288648069120) to the [drone-os](https://www.drone-os.com/) project.
 
 * [fuschia's runtime], used for the Fuschia work at Google;
 * [tokio], a venerable, efficient runtime with a rich feature set;
