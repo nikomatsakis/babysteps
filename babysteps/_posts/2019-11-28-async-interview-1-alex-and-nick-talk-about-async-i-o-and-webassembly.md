@@ -1,10 +1,11 @@
 ---
 layout: post
 title: 'Async Interview #1: Alex and Nick talk about async I/O and WebAssembly'
+categories: [Rust, AsyncInterviews]
 ---
 
 Hello from Iceland! (I'm on vacation.) I've just uploaded [the first
-of the Async Interviews] to YouTube. It is a conversation with Alex
+of the Async Interviews][video] to YouTube. It is a conversation with Alex
 Crichton ([alexcrichton]) and Nick Fitzgerald ([fitzgen]) about how
 WebAssembly and Rust's Async I/O system interact. When you watch it,
 you will probably notice two things:
@@ -22,7 +23,14 @@ you will probably notice two things:
   confused. =)
 
 [^planning]: Yeah... I've been planning to start these async interviews for a while! Just been busy.
-[the first of the Async Interviews]: https://youtu.be/vR0Ry830Hw8
+[video]: https://youtu.be/vR0Ry830Hw8
+
+### Video
+
+You can view the [video][video] on YouTube, but it is also embedded
+here if that's easier for you.
+
+<center><iframe width="560" height="315" src="https://www.youtube.com/embed/vR0Ry830Hw8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
 ### Rust futures, meet JavaScript promises
 
@@ -160,5 +168,12 @@ things to say:
   
 [async-trait]: https://github.com/dtolnay/async-trait
 [host of reasons]: http://smallcultfollowing.com/babysteps/blog/2019/10/26/async-fn-in-traits-are-hard/
+
+### Comments?
+
+There is a [thread on the Rust users forum][thread] for questions and
+discussion.
+
+[thread]: https://users.rust-lang.org/t/async-interviews/35167
 
 ### Footnotes

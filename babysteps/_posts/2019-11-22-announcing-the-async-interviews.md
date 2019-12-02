@@ -234,4 +234,11 @@ I think these interviews are going to be a lot of fun, and I expect to
 learn a lot. Stay tuned for the first blog post, coming next week,
 about **Async I/O and WebAssembly**.
 
+### Comments?
+
+There is a [thread on the Rust users forum][thread] for questions and
+discussion.
+
+[thread]: https://users.rust-lang.org/t/async-interviews/35167
+
 ### Footnotes
