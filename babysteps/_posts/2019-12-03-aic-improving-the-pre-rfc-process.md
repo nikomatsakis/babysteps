@@ -1,3 +1,9 @@
+---
+layout: post
+title: "[AiC] Improving the pre-RFC process"
+categories: [Rust, Consensus]
+---
+
 I want to write about an idea that Josh Triplett and I have been
 iterating on to revamp the lang team RFC process. I have written a
 [draft] of an RFC already, but this blog post aims to introduce the
