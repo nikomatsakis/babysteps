@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "[AiC] Improving the pre-RFC process"
+title: "AiC: Improving the pre-RFC process"
 categories: [Rust, Consensus]
 ---
 
