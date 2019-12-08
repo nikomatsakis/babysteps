@@ -154,6 +154,7 @@ discuss and decide definitively whether we can indeed move forward or
 not.
 
 [RFC 2580]: https://github.com/rust-lang/rfcs/pull/2580
+[3.0]: http://smallcultfollowing.com/babysteps/blog/2019/09/11/aic-shepherds-3-0/
 
 ### Conclusion
 
