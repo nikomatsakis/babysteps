@@ -38,10 +38,10 @@ and use Async I/O. This means that, in Fuchsia, two things
 
 ### Fuchsia uses its own unique executor and runtime
 
-Because Fuchsia is not a unix system, it doesn't have concepts like
-epoll or unix sockets. Fuchsia therefore uses its own custom executor
-and runtime, rather than building on a separate stack like tokio or
-async-std.
+Because Fuchsia is not a unix system, its kernel primitives, like
+sockets and events, work quite differently. Fuchsia therefore uses its
+own custom executor and runtime, rather than building on a separate
+stack like tokio or async-std.
 
 ### Fuchsia benefits from interoperability
 
