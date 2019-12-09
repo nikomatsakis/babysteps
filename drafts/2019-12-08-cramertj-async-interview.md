@@ -1,6 +1,6 @@
 For the second async interview, I spoke with Taylor Cramer -- or
 cramertj, as I'll refer to him. cramertj is a member of the compiler
-and lang teams and was -- until recently -- working on Fuschia at
+and lang teams and was -- until recently -- working on Fuchsia at
 Google. They've been a key player in Rust's Async I/O design and in
 the discussions around it. They were also responsible for a lot of the
 implementation work to make `async fn` a reality.
@@ -27,27 +27,28 @@ The blog post is mostly covering what cramertj had to say, though in
 some cases I'm also adding in various bits of background information
 or my own editorialization. I'm trying to mark it when I do that. =)
 
-### On Fuschia
+### On Fuchsia
 
 We kicked off the discussion talking a bit about the particulars of
-the Fuschia project. Fuschia is a microkernel architecture and thus a
+the Fuchsia project. Fuchs
+ia is a microkernel architecture and thus a
 lot of the services one finds in a typical kernel are implemented as
-independent Fuschia processes. These processes are implemented in Rust
-and use Async I/O. This means that, in Fuschia, two things
+independent Fuchsia processes. These processes are implemented in Rust
+and use Async I/O. This means that, in Fuchsia, two things
 
-### Fuschia uses its own unique executor and runtime
+### Fuchsia uses its own unique executor and runtime
 
-Because Fuschia is not a unix system, it doesn't have concepts like
-epoll or unix sockets. Fuschia therefore uses its own custom executor
+Because Fuchsia is not a unix system, it doesn't have concepts like
+epoll or unix sockets. Fuchsia therefore uses its own custom executor
 and runtime, rather than building on a separate stack like tokio or
 async-std.
 
-### Fuschia benefits from interoperability
+### Fuchsia benefits from interoperability
 
-Even though Fuschia uses its own executor, it is able to reuse a lot
-of libraries from the ecosystem. For example, Fuschia uses Hyper for
+Even though Fuchsia uses its own executor, it is able to reuse a lot
+of libraries from the ecosystem. For example, Fuchsia uses Hyper for
 its HTTP parsing. This is possible because Hyper offers a generic
-interface based on traits that Fuschia can implement.
+interface based on traits that Fuchsia can implement.
 
 In general, cramertj feels that the best way to achieve interop is to
 offer trait-based interfaces. There are other projects, for example,

@@ -1,6 +1,6 @@
 This blog post is continuing my conversatio with cramertj.
 
-In the first post, I covered what we said about Fuschia,
+In the first post, I covered what we said about Fuchsia,
 interoperability, and the organization of the futures crate.  This
 post covers cramertj's take on the [`Stream`] trait as well as the
 [`AsyncRead`] and [`AsyncWrite`] traits.
@@ -260,7 +260,7 @@ there have been attempts to modify the trait to deal with (e.g., the
 `AsyncRead` trait][async-init]). cramertj felt that it makes sense for
 the sync and async I/O traits to be consistent in their handling of
 uninitialized memory. cramertj also felt that the costs of zeroing, in
-Fuschia at least, were not especially significant (although fuschia
+Fuchsia at least, were not especially significant (although fuschia
 doesn't use `AsyncRead` and `AsyncWrite` that broadly).
 
 [sync-init]: https://doc.rust-lang.org/std/io/trait.Read.html#method.initializer

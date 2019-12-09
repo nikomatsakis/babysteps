@@ -1,7 +1,7 @@
 This blog post is continuing my conversatio with cramertj. This
 will be the last post.
 
-In the [first post], I covered what we said about Fuschia,
+In the [first post], I covered what we said about Fuchsia,
 interoperability, and the organization of the futures crate. 
 
 In the [second post], I covered cramertj's take on the [`Stream`]
