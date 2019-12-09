@@ -9,6 +9,10 @@ trait, and discussed the various kinds of
 
 In this post, we'll talk about async closures.
 
+You can watch the [video] on YouTube.
+
+[video]: https://youtu.be/NF_qyiypnOs
+
 ### Async closures
 
 Next we discussed async closures. You may have noticed that while you

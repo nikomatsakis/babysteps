@@ -5,6 +5,10 @@ interoperability, and the organization of the futures crate.  This
 post covers cramertj's take on the [`Stream`] trait as well as the
 [`AsyncRead`] and [`AsyncWrite`] traits.
 
+You can watch the [video] on YouTube.
+
+[video]: https://youtu.be/NF_qyiypnOs
+
 ### The need for "streaming" streams and iterators
 
 Next, cramertj and I turned to discussing some of the specific traits

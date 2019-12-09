@@ -5,6 +5,16 @@ Google. They've been a key player in Rust's Async I/O design and in
 the discussions around it. They were also responsible for a lot of the
 implementation work to make `async fn` a reality.
 
+### Video
+
+You can watch the [video] on YouTube. I've also embedded a copy here
+for your convenience:
+
+[video]: https://youtu.be/NF_qyiypnOs
+
+<center><iframe width="560" height="315" src="https://www.youtube.com/embed/NF_qyiypnOs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+
+
 ### Spreading this out over a few posts
 
 So, cramertj and I had a long conversation, with a lot of technical
