@@ -5,6 +5,18 @@ Google. They've been a key player in Rust's Async I/O design and in
 the discussions around it. They were also responsible for a lot of the
 implementation work to make `async fn` a reality.
 
+### Spreading this out over a few posts
+
+So, cramertj and I had a long conversation, with a lot of technical
+detail. I was trying to get this blog post finished by last Friday but
+it took a lot of time! I decided it's probably too much material to
+post in one go, so I'm going to break up the blog post into a few
+pieces (I'll post the whole video though).
+
+The blog post is mostly covering what cramertj had to say, though in
+some cases I'm also adding in various bits of background information
+or my own editorialization. I'm trying to mark it when I do that. =)
+
 ### On Fuschia
 
 We kicked off the discussion talking a bit about the particulars of
@@ -168,281 +180,45 @@ simply [re-exported from libcore].)
 
 [`futures-io`]: https://crates.io/crates/futures-io
 
-### The stream trait maybe should be streaming
+### on the extension traits
 
-Next, cramertj and I turned to discussing some of the specific traits
-from the futures crate. One of the traits that we covered was stream.
-
-The [current `Stream`
-trait](https://docs.rs/futures-core/0.3.1/src/futures_core/stream.rs.html#27-93)
-found in [`futures-core`] is very similar to the [`Iterator`] trait, but
-asynchronous. In (slightly) simplified form, it is as follows:
-
-[`Iterator`]: https://doc.rust-lang.org/std/iter/trait.Iterator.html
+One of the interesting points that cramertj made, though not until
+later in the interview, is that when it comes to futures there are a
+number of "smaller design decisions" on might make when it comes to
+combinators. For example, consider a function like [`Stream::filter`].
+As defined in the future crates, this function returns a "future to a
+boolean", so it has a signature like:
 
 ```rust
-pub trait Stream {
-    type Item;
-    fn poll_next(
-        self: Pin<&mut Self>,
-        cx: &mut Context<'_>,
-    ) -> Poll<Option<Self::Item>>;
-}
+impl FnMut(&Item) -> impl Future<Output = bool>
 ```
 
-The main concern that cramertj raised with this trait is that, like
-`Iterator`, it always gives ownership of each item back to its
-caller. This falls out from its structure, which requires the
-implementor to specify an `Item` type, and that `Item` type cannot
-borrow from the `self` reference given to `poll_next`.
+This is effectively an async closure; I'll summarize what cramertj had
+to say about async closures in one of the upcoming blog
+posts. However, you might plausibly wish instead to have a signature
+that just returns a boolean directly, like so:
 
-In practice, many stream implementors might like to have some internal
-storage that they re-use over and over. For example, they might have
-an internal buffer, and when `poll_next` is called, they would give
-back (upon completion) a **reference** to that buffer. The idea would
-be that once `poll_next` is called again, they would start to re-use
-the same buffer.
-
-In fact, the same thing would be useful for standard synchronous
-iterators.  It is sometimes called a "streaming iterator". Hence, one
-might wish to have a "streaming stream". Obviously this terminology is
-sub-optimal. I'm not sure what the best terminology is. 
-
-In the call, I mentioned the term "detached", which I sometimes use to
-refer to the current `Iterator`/`Stream`.  The idea is that `Item`
-that gets returned by `Stream` is "detached" from `self`, which means
-that it can be stored and moved about independently from `self`. In
-contrast, in a "streaming stream" design, the return value may be
-borrowed from `self`, and hence is "attached" -- it can only be used
-so long as the `self` reference remains live.
-
-In truth, I sort of prefer "borrowing/owned iterator" to
-"attached/detached iterator", because it seems to introduce fewer
-terms. However, I fear that these terms will be confused for the
-distinction between `vec.into_iter()` and `vec.iter()`. Both of these
-methods exist today, of course, and they both yield "detached"
-iterators; however, the former takes ownership of `vec` and the latter
-borrows from it. The key point is that `vec.iter()` is giving back
-borrowed values, but they are borrowed *from the vector*, not from the
-*iterator*.
-
-### The natural way to write "attached" streams is with GATs
-
-In any case, the challenge here is that, without generic associated
-types, there is no nice way to write the "attached" (or "streaming")
-version of `Stream`. You really want to be able to write a definition
-like:
+[`Stream::filter`]: https://docs.rs/futures/0.3.1/futures/stream/trait.StreamExt.html#method.filter 
 
 ```rust
-trait AttachedStream {
-    type Item<'s> where Self: 's;
-    //       ^^^^ ^^^^^^^^^^^^^^ (we likely need an annotation like this
-    //       |                    too, for reasons I'll cover in an appendix)
-    //       note the `'s` here!
-
-    fn poll_next<'s>(
-        self: Pin<&'s mut Self>,
-        cx: &mut Context<'_>,
-    ) -> Poll<Option<Self::Item<'s>>>;
-    //                         ^^^^
-    // `'s` is the lifetime of the `self` reference.
-    // Thus, the `Item` that gets returned may
-    // borrow from `self`.
-}
+impl FnMut(&Item) -> bool
 ```
 
-### "Attached" streams would be used differently than the current ones
+For this reason, cramertj felt that it may make sense not to add these
+sorts of utilities into the standard library (or at least not yet),
+and instead to leave those extension traits in "user space". Maybe when we have
+more experience we'll be able to say what the best definition would be for
+the standard library.
 
-There are real implications to adopting an "attached" definition of
-stream or iterator.  In short, particularly in a generic context where
-you don't know all the types involved, you wouldn't be able to get
-back two values from an "attached" stream/iterator at the same time,
-whereas you can with the "detached" streams and iterators we have
-today.
+(If I may editorialize, I do think it's important that we add these
+sorts of helper methods to std eventually; even if there's no single
+best choice, we should make some decisions, because it'll be quite
+annoying to force everything to pull in utility crates for simple
+things.)
 
-For the most common use case of iterating over each element in turn,
-this doesn't matter, but it's easy to define functions that rely on
-it. Let me illustrate with `Iterator` since it's easier. Today, this
-code compiles:
+### upcoming posts
 
-```rust
-/// Returns the next two elements in the iterator.
-/// Panics if the iterator doesn't have at least two elements.
-fn first_two<I>(iterator: I) -> (I::Item, I::Item) 
-where 
-    I: Iterator,
-{
-    let first_item = iterator.next().unwrap();
-    let second_item = iterator.next().unwrap();
-    (first_item, second_item) 
-}
-```
-
-However, given an "attached" iterator design, the first call to `next`
-would "borrow" `iterator`, and hence you could not call `next()` again
-so long as `first_item` is still in use.
-
-### Concerns with blocking the streaming trait
-
-If I may editorialize a bit, in re-watching the video, I had a few thoughts:
-
-First, I don't want to block a stable `Stream` on generic associated
-types. I do think we should prioritize shipping GATs and I would
-expect to see progress nex year, but I think we need *some* form of
-`Stream` sooner than that.
-
-Second, the existing `Stream` is very analogous to
-`Iterator`. Moreover, there has been a long-standing desire for
-attached iterators. Therefore, it seems reasonable to move forward
-with stabilizing stream today, and then expect to revisit both traits
-in a consistent fashion once generic associated types are available.
-
-### "Detached" streams can be converted into "attached" ones
-
-Let's assume then that we choose to stabilize `Stream` as it exists
-today. Then we may want to add an `AttachedStream` later on.  In
-principle, it should then be possible to add a "conversion" trait such
-that anything which implements `Steam` also implements
-`AttachedStream`:
-
-```
-impl<S> AttachedStream for S
-where
-    S: Stream,
-{
-    type Item<'_> = S::Item;
-    
-    fn poll_next<'s>(
-        self: Pin<&'s mut Self>,
-        cx: &mut Context<'_>,
-    ) -> Poll<Option<Self::Item<'s>>> {
-        Stream::poll_next(self, cx)
-    }
-}
-```
-
-The idea here is that the `AttachedStream` trait gives the
-*possibility* of returning values that borrow from `self`, but it
-doesn't *require* that the returned values do so.
-
-As far as I know, the above scheme above would work. In general,
-interconversion traits like these sometimes are tricky around
-coherence, but you can typically get away with "one" such impl. It
-would mean that types can implement `AttachedStream` if they need to
-re-use an internal buffer and `Stream` if they do not, which is a
-reasonable design. (I'd be curious to know if there are fatal flaws
-here.)
-
-### Things that consume streams would typically want `AttachedStream`
-
-One downside of adding `Stream` now and `AttachedStream` later is that
-functions which *consume* streams would at first all be written to work with `Stream`,
-when in fact they probably would later want to be rewritten to take `AttachedStream`.
-In other words, given some code like:
-
-```rust
-fn consume_stream(s: impl Stream) { .. }
-```
-
-it is quite likely that the signature should be `impl
-AttachedStream`. The idea is that you only want to "consume" a stream
-if you need to have two items from the stream existing at the same
-time. Otherwise, if you're jus going to iterate over the stream one
-element at a time, attached stream is the more general variant.
-
-### Syntactic support for streams and iterators
-
-cramertj and I didn't talk *too* much about it directly, but there
-have been discussion about adding two forms of syntactic support for
-streams/iterators. The first would be to extend the for loop so that
-it works over streams as well, as boats covers in their blog post on
-[for await loops][].
-
-The second would be to add a new form of "generator", as found in many
-other languages. The idea would be to introduce a new form of
-function, written `gen fn` in synchronous code and `async gen fn` in
-asynchronous code, that can contain `yield` statements. Calling such a
-function would yield an `impl Iterator` or `impl Stream`, for sync and
-async respectively.
-
-[for await loops]: https://boats.gitlab.io/blog/post/for-await-i/
-
-One point that cramertj made is that we should hold off on adding
-syntactic support until we have some form of "attached" stream trait
--- or at least until we have a fairly clear idea what its design will
-be. The idea is that we would likely want (e.g.) a for-await sugar to
-operate over both detached and attached streams, and similarly we may
-want `gen fn` to generate attached streams, or to have the ability to
-do so.
-
-### The `AsyncRead` and `AsyncWrite` traits
-
-Next cramertj and I discussed the [`AsyncRead`] and [`AsyncWrite`]
-traits.  As currently defined in [`futures-io`], these traits are the
-"async analog" of the corresponding synchronous traits [`Read`] and
-[`Write`]. For example, somewhat simplified, [`AsyncRead`] looks like:
-
-```rust
-trait AsyncRead {
-    fn poll_read(
-        self: Pin<&mut Self>,
-        cx: &mut Context<'_>,
-        buf: &mut [u8],
-    ) -> Poll<Result<usize, Error>>;
-}
-```
-
-These have been a topic of recent discussion because the tokio crate
-has been [considering adopting a new definition of
-`AsyncRead`/`AsyncWrite`][tokio#1744]. The primary concern has to do
-with the `buf: &mut [u8]` method. This method is supplying a buffer
-where the data should be written. Therefore, typically, it doesn't
-really matter what the contents of that buffer when the function is
-called, as it will simply be overwritten with the data
-generated. *However,* it is of course *possible* to write a
-`AsyncRead` implementation that does read from that buffer. This means
-that you can't supply a buffer of uninitialized bytes, since reading
-from uninitialized memory is undefined behavior and can cause LLVM to
-perform mis-optimizations.
-
-[tokio#1744]: https://github.com/tokio-rs/tokio/pull/1744
-
-cramertj and I didn't go too far into discussing the alternatives here
-so I won't either (this blog post is already *way* too long). I hope
-to dig into it in future interviews. The main point that cramertj made
-is that the same issue effects the standard `Read` trait, and indeed
-there have been attempts to modify the trait to deal with (e.g., the
-[`initializer`][sync-init] method, which also has an [analogue in the
-`AsyncRead` trait][async-init]). cramertj felt that it makes sense for
-the sync and async I/O traits to be consistent in their handling of
-uninitialized memory.
-
-[sync-init]: https://doc.rust-lang.org/std/io/trait.Read.html#method.initializer
-[async-init]: https://docs.rs/futures/0.3.1/futures/io/trait.AsyncRead.html#method.initializer
-
-
-### Async closures
-
-Next we discussed async closures. You may have noticed that while you
-can write an `async fn`:
-
-```rust
-async fn foo() {
-    ...
-}
-```
-
-you cannot write the analogous syntax with closures:
-
-```rust
-let foo = async || ...;
-```
-
-The only thing you can write is a closure that returns an async block:
-
-```rust
-let foo = || async move { ... };
-```
-
-
-
+OK, that wraps it up for the first post. I have two more coming. In
+the next post, we'll discuss the design of the `Stream`, `AsyncRead`,
+and `AsyncWrite` traits, and what we might want to change there. In
+the final post, we'll discuss async closures.
