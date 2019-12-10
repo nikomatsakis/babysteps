@@ -280,7 +280,8 @@ solution to the problem of uninitialized memory would be to have some
 such that it can be accessed without UB, though it would contain
 "random" bytes (this is basically what people intuitively expected
 from uninitialized memory, though in fact it is [not an accurate
-model][uninit]).
+model][uninit]). Unfortunately, figuring out how to implement such a
+thing in LLVM is a pretty open question.
 
 [uninit]: https://www.ralfj.de/blog/2019/07/14/uninit.html
 
