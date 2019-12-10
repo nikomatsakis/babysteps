@@ -217,7 +217,16 @@ syntactic support until we have some form of "attached" stream trait
 be. The idea is that we would likely want (e.g.) a for-await sugar to
 operate over both detached and attached streams, and similarly we may
 want `gen fn` to generate attached streams, or to have the ability to
-do so.
+do so. 
+
+In fact, generators give a nice way to get an intuitive understanding
+of the difference between "attached" and "detached" streams: given
+attached streams, a generator yield could return references to local
+variables.  But if we only have detached streams, as today, then you
+could only yield things that you own or things that were borrowed from
+your caller (i.e., references derived from other references that you
+got as parameters). In other words, yield would have the same
+limitations as return does today.
 
 ### The `AsyncRead` and `AsyncWrite` traits
 
@@ -252,18 +261,30 @@ perform mis-optimizations.
 [tokio#1744]: https://github.com/tokio-rs/tokio/pull/1744
 
 cramertj and I didn't go too far into discussing the alternatives here
-so I won't either (this blog post is already *way* too long). I hope
-to dig into it in future interviews. The main point that cramertj made
-is that the same issue affects the standard `Read` trait, and indeed
+so I won't either (this blog post is already long enough). I hope to
+dig into it in future interviews. The main point that cramertj made is
+that the same issue affects the standard `Read` trait, and indeed
 there have been attempts to modify the trait to deal with (e.g., the
 [`initializer`][sync-init] method, which also has an [analogue in the
-`AsyncRead` trait][async-init]). cramertj felt that it makes sense for
-the sync and async I/O traits to be consistent in their handling of
-uninitialized memory. cramertj also felt that the costs of zeroing, in
-Fuchsia at least, were not especially significant (although fuschia
-doesn't use `AsyncRead` and `AsyncWrite` that broadly).
+`AsyncRead` trait][async-init]). Moreover, for many scenarios (notably
+including Fuchsia), the costs of zeroing are not significant (in the
+case of Fuchsia, that may be because Fuchsia doesn't use `AsyncRead`
+and `AsyncWrite` that broadly).
 
 [sync-init]: https://doc.rust-lang.org/std/io/trait.Read.html#method.initializer
 [async-init]: https://docs.rs/futures/0.3.1/futures/io/trait.AsyncRead.html#method.initializer
 
+As a final point, cramertj and I both agree that by far the *nicest*
+solution to the problem of uninitialized memory would be to have some
+"poison" function that can take uninitialized memory and "bless" it
+such that it can be accessed without UB, though it would contain
+"random" bytes (this is basically what people intuitively expected
+from uninitialized memory, though in fact it is [not an accurate
+model][uninit]).
 
+[uninit]: https://www.ralfj.de/blog/2019/07/14/uninit.html
+
+### Conclusion
+
+This was part two of my conversation with cramertj. Stay tuned for
+part 3, where we talk about async closures!
