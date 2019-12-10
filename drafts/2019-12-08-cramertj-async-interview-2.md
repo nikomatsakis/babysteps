@@ -263,25 +263,24 @@ perform mis-optimizations.
 cramertj and I didn't go too far into discussing the alternatives here
 so I won't either (this blog post is already long enough). I hope to
 dig into it in future interviews. The main point that cramertj made is
-that the same issue affects the standard `Read` trait, and indeed
-there have been attempts to modify the trait to deal with (e.g., the
-[`initializer`][sync-init] method, which also has an [analogue in the
-`AsyncRead` trait][async-init]). Moreover, for many scenarios (notably
-including Fuchsia), the costs of zeroing are not significant (in the
-case of Fuchsia, that may be because Fuchsia doesn't use `AsyncRead`
-and `AsyncWrite` that broadly).
+that the same issue affects the standard `Read` trait and that it
+would make sense to address the design in the same way in both traits.
+(Indeed, there have been attempts to modify the trait to deal with
+(e.g., the [`initializer`][sync-init] method, which also has an
+[analogue in the `AsyncRead` trait][async-init]).)
 
 [sync-init]: https://doc.rust-lang.org/std/io/trait.Read.html#method.initializer
 [async-init]: https://docs.rs/futures/0.3.1/futures/io/trait.AsyncRead.html#method.initializer
 
-As a final point, cramertj and I both agree that by far the *nicest*
-solution to the problem of uninitialized memory would be to have some
+cramertj's preferred solution to the problem would be to have some
 "poison" function that can take uninitialized memory and "bless" it
 such that it can be accessed without UB, though it would contain
 "random" bytes (this is basically what people intuitively expected
 from uninitialized memory, though in fact it is [not an accurate
 model][uninit]). Unfortunately, figuring out how to implement such a
-thing in LLVM is a pretty open question.
+thing in LLVM is a pretty open question, and there are also other
+problems (such as linux's `MADV_FREE` feature) that may make this
+infeasible.
 
 [uninit]: https://www.ralfj.de/blog/2019/07/14/uninit.html
 
