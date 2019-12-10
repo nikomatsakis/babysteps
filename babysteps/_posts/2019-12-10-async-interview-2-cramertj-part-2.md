@@ -4,7 +4,7 @@ title: 'Async Interview #2: cramertj, part 2'
 categories: [Rust, AsyncInterviews]
 ---
 
-This blog post is continuing my conversation with cramertj.
+This blog post is continuing [my conversation with cramertj](http://smallcultfollowing.com/babysteps/blog/2019/12/09/async-interview-2-cramertj/).
 
 In the first post, I covered what we said about Fuchsia,
 interoperability, and the organization of the futures crate.  This
@@ -23,6 +23,8 @@ from the futures crate. One of the traits that we covered was
 of the [`Iterator`] trait. In (slightly) simplified form, it is as
 follows:
 
+[`AsyncRead`]: https://docs.rs/futures/0.3.1/futures/io/trait.AsyncRead.html
+[`AsyncWrite`]: https://docs.rs/futures/0.3.1/futures/io/trait.AsyncWrite.html
 [`Stream`]: https://docs.rs/futures-core/0.3.1/futures_core/stream/trait.Stream.html
 [`Iterator`]: https://doc.rust-lang.org/std/iter/trait.Iterator.html
 
@@ -75,6 +77,10 @@ iterators; however, the former takes ownership of `vec` and the latter
 borrows from it. The key point is that `vec.iter()` is giving back
 borrowed values, but they are borrowed *from the vector*, not from the
 *iterator*.
+
+(One final note is that this same concept of 'attached' vs 'detached'
+will come up when discussing async closures again, which further
+argues for using terminology other than "streaming".)
 
 ### The natural way to write "attached" streams is with GATs
 
@@ -183,7 +189,7 @@ re-use an internal buffer and `Stream` if they do not, which is a
 reasonable design. (I'd be curious to know if there are fatal flaws
 here.)
 
-### Things that consume streams would typically want `AttachedStream`
+### Things that consume streams would typically want an attached stream
 
 One downside of adding `Stream` now and `AttachedStream` later is that
 functions which *consume* streams would at first all be written to work with `Stream`,
@@ -240,6 +246,10 @@ Next cramertj and I discussed the [`AsyncRead`] and [`AsyncWrite`]
 traits.  As currently defined in [`futures-io`], these traits are the
 "async analog" of the corresponding synchronous traits [`Read`] and
 [`Write`]. For example, somewhat simplified, [`AsyncRead`] looks like:
+
+[`futures-io`]: https://crates.io/crates/futures-io
+[`Read`]: https://doc.rust-lang.org/std/io/trait.Read.html
+[`Write`]: https://doc.rust-lang.org/std/io/trait.Write.html
 
 ```rust
 trait AsyncRead {

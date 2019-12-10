@@ -37,11 +37,10 @@ or my own editorialization. I'm trying to mark it when I do that. =)
 ### On Fuchsia
 
 We kicked off the discussion talking a bit about the particulars of
-the Fuchsia project. Fuchs
-ia is a microkernel architecture and thus a
+the Fuchsia project. Fuchsia is a microkernel architecture and thus a
 lot of the services one finds in a typical kernel are implemented as
 independent Fuchsia processes. These processes are implemented in Rust
-and use Async I/O. This means that, in Fuchsia, two things
+and use Async I/O.
 
 ### Fuchsia uses its own unique executor and runtime
 
@@ -211,7 +210,7 @@ simply [re-exported from libcore].)
 
 One of the interesting points that cramertj made, though not until
 later in the interview, is that when it comes to futures there are a
-number of "smaller design decisions" on might make when it comes to
+number of "smaller design decisions" one might make when it comes to
 combinators. For example, consider a function like [`Stream::filter`].
 As defined in the future crates, this function returns a "future to a
 boolean", so it has a signature like:
