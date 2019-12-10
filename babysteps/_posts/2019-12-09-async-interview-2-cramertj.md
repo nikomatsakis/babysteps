@@ -7,8 +7,8 @@ categories: [Rust, AsyncInterviews]
 For the second [async interview], I spoke with Taylor Cramer -- or
 cramertj, as I'll refer to him. cramertj is a member of the compiler
 and lang teams and was -- until recently -- working on Fuchsia at
-Google. They've been a key player in Rust's Async I/O design and in
-the discussions around it. They were also responsible for a lot of the
+Google. He's been a key player in Rust's Async I/O design and in the
+discussions around it. He was also responsible for a lot of the
 implementation work to make `async fn` a reality.
 
 [async interview]: http://smallcultfollowing.com/babysteps/blog/2019/12/09/async-interview-2-cramertj/
