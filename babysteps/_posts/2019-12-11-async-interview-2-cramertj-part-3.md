@@ -11,8 +11,14 @@ will be the last post.
 In the [first post], I covered what we said about Fuchsia,
 interoperability, and the organization of the futures crate. 
 
-In the [second post], I covered cramertj's take on the [`Stream`]
-trait, and discussed the various kinds of 
+In the [second post], I covered cramertj's take on the [`Stream`],
+[`AsyncRead`], and [`AsyncWrite`] traits. We also discused the idea of
+[attached] streams and the imporance of GATs for modeling those.
+
+[`Stream`]: https://docs.rs/futures-core/0.3.1/futures_core/stream/trait.Stream.html
+[`AsyncRead`]: https://docs.rs/futures/0.3.1/futures/io/trait.AsyncRead.html
+[`AsyncWrite`]: https://docs.rs/futures/0.3.1/futures/io/trait.AsyncWrite.html
+[attached]: http://smallcultfollowing.com/babysteps/blog/2019/12/10/async-interview-2-cramertj-part-2/#terminology-note-detachedattached-instead-of-streaming
 
 In this post, we'll talk about async closures.
 
@@ -46,8 +52,6 @@ more complex than their synchronous counterparts -- to get the
 behavior we probably want, it turns out that they too would require
 some support for generic associated types (GAT), because they sort of
 want to be "[attached] closures".
-
-[attached]: http://smallcultfollowing.com/babysteps/blog/2019/12/10/async-interview-2-cramertj-part-2/#terminology-note-detachedattached-instead-of-streaming
 
 ### An example using iterator
 
@@ -140,4 +144,22 @@ reference, you'll get an error).
 ### Conclusion
 
 This wraps up my 3-part summary of my conversation with cramertj.
+Looking back, I think the main take-aways are:
 
+* We could stabilize [`AsyncRead`] and [`AsyncWrite`] and resolve the
+  questions of uninitialized memory (and presumably vectorized writes,
+  which we didn't discuss explicitly) in some analogous way with the
+  sync version of the traits.
+* [`Stream`] and async closures would benefit from being "attached",
+  which requires us to make progress on GATs.
+    * In particular, we would not want to add generator syntax until
+      we have a convincing and complete story.
+* Similarly, until the async closures story is more complete, we
+  probably want to hold off on adding too many utility functions in
+  the stdlib. Auxiliary libraries like [`futures`] allow us to
+  introduce such functions and later make changes.
+* The `select!` macro is cool and everybody should read the
+  [async book chapter] to learn why. =)
+  
+[`futures`]: https://github.com/rust-lang-nursery/futures-rs/
+[async book chapter]: https://rust-lang.github.io/async-book/06_multiple_futures/03_select.html
