@@ -289,7 +289,7 @@ would make sense to address the design in the same way in both traits.
 [async-init]: https://docs.rs/futures/0.3.1/futures/io/trait.AsyncRead.html#method.initializer
 
 cramertj's preferred solution to the problem would be to have some
-"poison" function that can take uninitialized memory and "bless" it
+"freeze" function that can take uninitialized memory and "bless" it
 such that it can be accessed without UB, though it would contain
 "random" bytes (this is basically what people intuitively expected
 from uninitialized memory, though in fact it is [not an accurate
@@ -299,6 +299,11 @@ problems (such as linux's `MADV_FREE` feature) that may make this
 infeasible.
 
 [uninit]: https://www.ralfj.de/blog/2019/07/14/uninit.html
+
+**EDIT:** An earlier draft of this post mistakely said that we would
+want some "poison" function, but really the proper term is "freeze".
+In other words, some function that -- given a bit of uninitialized
+data -- makes it initialized but with some arbitrary value.
 
 ### Conclusion
 
