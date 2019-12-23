@@ -1,14 +1,15 @@
 ---
 layout: post
-title: 'Async Interview #2: Carl Lerche'
+title: 'Async Interview #3: Carl Lerche'
 ---
 
-Hello! For the latest async interview, I spoke with Carl Lerche
+Hello! For the latest [async interview], I spoke with Carl Lerche
 ([carllerche]). Among many other crates[^loom], Carl is perhaps best
 known as one of the key authors behind [tokio] and [mio]. These two
 crates are quite widely used through the async ecosystem. Carl and I
 spoke on December 3rd.
 
+[async interview]: http://smallcultfollowing.com/babysteps/blog/2019/12/09/async-interview-2-cramertj/
 [tokio]: https://github.com/tokio-rs/tokio 
 [mio]: https://github.com/tokio-rs/mio
 [carllerche]: https://github.com/carllerche/
@@ -185,5 +186,7 @@ mentioned that a lot of the ecosystem is currently using things like
 [proc-macro-hack] to support these, so perhaps a good thing to focus
 on would be improving procedural macro support so that it can handle
 expression level macros more cleanly.
+
+## Footnotes
 
 [proc-macro-hack]: https://crates.io/crates/proc-macro-hack
