@@ -68,6 +68,9 @@ difficult for a lot of reasons][aft]. The current plan is to adopt
 use the `async fn` sugar. (Which seems like a good starting place,
 -ed.)
 
+[aft]: http://smallcultfollowing.com/babysteps/blog/2019/10/26/async-fn-in-traits-are-hard/
+[`Pin`]: https://doc.rust-lang.org/std/pin/struct.Pin.html
+
 Returning to the overall async stack, atop protocol servers like
 hyper, you find web frameworks, such as [warp] -- and (finally) within
 those you have middleware and the actual applications.
@@ -84,7 +87,7 @@ I'm really interested to get a better understanding of what we can do
 to help the various layers described above operate independently, so
 that people can mix-and-match.
 
-[Fuchsia]: 
+[Fuchsia]: https://fuchsia.googlesource.com/
 [async-std]: https://async.rs/
 
 To that end, I asked Carl what it would take to use (say) Warp on
