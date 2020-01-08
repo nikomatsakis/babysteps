@@ -19,9 +19,14 @@ teaching people to use async Rust now since Rust's 1.0 release.
 You can watch the [video] on YouTube. I've also embedded a copy here
 for your convenience:
 
-[video]: XXX
+[video]: https://youtu.be/Ezwd1vKSfCo
 
-<center><iframe width="560" height="315" src="XXX" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+<center><iframe width="560" height="315" src="https://youtu.be/Ezwd1vKSfCo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+
+One note: something about our setup meant that I was hearing a lot of
+echo. I think you can sometimes hear it in the recording, but not
+nearly as bad as it was live. So if I seem a bit spacey, or take very
+long pauses, you might know the reason why!
 
 ### Prioritize stability, read/write traits
 
