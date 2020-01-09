@@ -242,4 +242,4 @@ this post. To collect feedback, I've created a [thread on
 internals]. As ever, I'll read all the responses, and I'll do my best
 to respond where I can. Thanks!
 
-[thread on internals]: XXX
+[thread on internals]: https://internals.rust-lang.org/t/blog-post-towards-a-rust-foundation/11601
