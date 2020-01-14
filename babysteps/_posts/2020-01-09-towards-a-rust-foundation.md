@@ -63,7 +63,7 @@ Another reason to start small is being able to move more quickly. I'd
 like to see us setup a foundation like the one I am discussing as soon
 as this year.
 
-### Goal #1: Clarifying's Rust status as an independence project
+### Goal #1: Clarifying Rust's status as an independent project
 
 So let's talk a bit more about the two goals that I set forth for a
 Rust foundation. The first was to clarify Rust's status as an
