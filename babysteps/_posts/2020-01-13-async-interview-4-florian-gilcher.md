@@ -80,7 +80,7 @@ shifting under their feet.
 ### Deprioritize: Attached and detached streams
 
 I asked Florian how much he thought it made sense to wait on things
-like streams until the GAT sory is straightened out, so that we might
+like streams until the GAT story is straightened out, so that we might
 have support for "attached" streams. He felt like it would be better
 to move forward with what we have now, and consider extensions
 later. 
@@ -103,19 +103,19 @@ little. Until now, we've been tinkering about with the most primitive
 layers of the async ecosystem, such as the `Future` trait, async-await
 syntax, etc. As these primitives are stabilized, we're going to see a
 lot more tinkering with the "next level up" of patterns. These might
-be questions like "how do I stop a stream?" But it's going to be hard
-for people to focus on these higher-level patterns (and in particular
-to find new, innovative solutions to them) until the primitives even
-out.
+be questions like "how do I stop a stream?", or "how do I construct my app?".
+But it's going to be hard for people to focus on these higher-level patterns
+(and in particular to find new, innovative solutions to them) until the
+primitives even out.
 
 As these patterns evolve, they can be extracted into crates and types
 and shared and reused in many contexts. He gave the example of the
 [async-task] crate, which extracts out quite a bit of the complexity
-of managing an async task. This allows other runtimes to reuse that
+of managing allocation of an async task. This allows other runtimes to reuse that
 fairly standard logic. (Editor's note: If you haven't seen async-task,
 you should check it out, it's quite cool.)
 
-[async-task]: https://docs.rs/async-task/1.0.0/async_task/
+[async-task]: https://docs.rs/async-task/newest/async_task/
 
 ### Odds and ends
 
@@ -186,3 +186,8 @@ I think the main points from the conversation were:
   * We shouldn't necessarily try to make those traits be as generic as
     possible, but instead focus on building something usable and
     simple that meets the most important needs right now.
+* We need to give time for people to develop patterns and best
+  practices, and in particular to figure out how to "capture" them as
+  APIs and crates.  This isn't really something that the *Rust
+  organization* can do, it comes from the ecosystem, by library and
+  application developers.

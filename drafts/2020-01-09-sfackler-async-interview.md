@@ -33,102 +33,112 @@ There are two of them:
   backing buffer;
 * there is no way to test presently whether a given reader supports
   vectorized operations.
-  
-## The same issues arise with the sync `Read` trait
+
+## This blog post will focus on uninitialized memory
+
+sfackler and I spent most of our time talking about uninitialized
+memory. We did also discuss vectorized writes, and I'll include some
+notes on that at the end, but by and large sfackler felt that the
+solutions there are much more straightforward.
+
+## Important: The same issues arise with the sync `Read` trait
 
 Interestingly, neither of these issues is specific to `AsyncRead`.  As
 defined today, the `AsyncRead` trait is basically just the async
 version of [`Read`] from `std`, and both of these concerns apply there
 as well. In fact, part of why I wanted to talk to sfackler
 specifically is that he is the author of an [excellent paper
-document][doc] that
-covers the problem of using uninitialized memory in great depth. A lot
-of what we talked about on this call is also present in that document.
-Definitely give it a read.
+document][doc] that covers the problem of using uninitialized memory
+in great depth. A lot of what we talked about on this call is also
+present in that document.  Definitely give it a read.
 
 [doc]: https://paper.dropbox.com/doc/MvytTgjIOTNpJAS6Mvw38
 [`Read`]: https://doc.rust-lang.org/std/io/trait.Read.html
 
-## Uninitialized memory
+## Read interface doesn't support uninitialized memory
 
-The heart of the problem here lies in the signature of `read`:
+The heart of the `Read` trait is the `read` method:
 
 ```rust
 fn read(&mut self, buf: &mut [u8]) -> io::Result<usize>
 ```
 
-The *expectation* here is that the `read` impl is going to write into `buf`
-but not read from it. But nothing actually *stops* them from reading from `buf`,
-which means we can't supply uninitialized memory without safe code being
-able to read it (which would be UB).
+This method reads data and writes it into `buf` and then -- assuming
+no error -- returns `Ok(n)` with the number `n` of bytes written.
 
-There is another problem too: `read` is going to return the number of
-bytes written. If the caller supplies an uninitialized buffer, then it
-will want to trust this return value and go ahead and read from those
-next N bytes (which should now be initialized). But there is no
-guarantee that the callee actually initiaized the .
+Ideally, we would like it if `buf` could be an uninitialized buffer.
+After all, the `Read` trait is not supposed to be *reading* from
+`buf`, it's just supposed to be *writing* into it -- so it shouldn't
+matter what data is in there.
 
-## Vectorized reads and writes
+## Problem 1: The impl might read from the buf, even if it shouldn't
 
-This problem is somewhat simpler. The standard `read` interface takes
-a single buffer to write the data into. But a *vectorized* interface
-takes a series of buffers -- if there is more data than will fit in
-the first one, then the data will be written into the second one, and
-so on until we run out of data or buffers. Vectorized reads and writes
-can be much more efficient in some cases.
-
-Unfortunately, not all readers support vectorized reads. For that
-reason, the "vectorized read" method has a fallback: by default, it
-just calls the normal read method using the first non-empty buffer in
-the list. This is theoretically equal, but obviously it could be a lot
-less efficient -- imagine that I have supplied one buffer of size 1K
-and one buffer of size 16K. The default vectorized read method will
-just always use that single 1K buffer, which isn't great -- but still,
-not much to be done about it. Some readers just cannot support
-vectorized reads.
-
-The problem here then is that it would be nice if there were some way
-to *detect* when a reader supports vectorized reads. This would allow
-the caller to choose between a "vectorized" call path, where it tries
-to supply many buffers, or a single-buffer call path, where it just
-allocates a big buffer.
-
-Apparently hyper will do this today, but using a heuristic: if a call
-to the vectorized read method returns *just enough* data to fit in the
-first buffer, hyper guesses that in fact vectorized reads are not
-supported, and switches dynamically to the "one big buffer" strategy.
-(Neat.)
-
-There is perhaps a second, more ergonomic issue: since the vectorized
-read method has a default implementation, it is easy to forget to
-implement it, even if you would have been able to do so.
-
-In any case, this problem is relatively easy to solve: we basically
-need to add a new method like
+However, in practice, there are two problems with using uninitialized
+memory for `buf`. The first one is relatively obvious: although it
+isn't *supposed* to, the `Read` impl can trivially read from `buf` without
+using any unsafe code:
 
 ```rust
-fn supports_vectorized_reads(&self) -> bool
+impl Read for MyReader {
+  fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+    let x = buf[0];
+    ...
+  }
+}
 ```
 
-to the trait.
+Reading from an uninitialized buffer is Undefined Behavior and could
+cause crashes, segfaults, or worse.
 
-The matter of decided whether or not to supply a default is a bit
-trickier.  If you don't supply a default, then everybody has to
-implement it, even if they just want the default behavior. But if you
-*do*, people who wished to implement the method may forget to do so --
-this is particularly unfortunate for reads that are wrapping another
-reader, which is a pretty common case.
+## Problem 2: The impl might not really initialize the buffer
 
-## Focus on uninitialized buffers: lots of wrong ways to fix it
+There is also a second problem that is often overlooked: when the
+`Read` impl returns, it returns a value `n` indicating how many bytes
+of the buffer were written. In principle, if `buf` was uninitialized
+to start, then the first `n` bytes should be written now -- but *are*
+they? Consider a `Read` impl like this one:
 
-Since the vectorized read case is relatively simple, I'm going to
-focus on uninitialized buffers. A lot of our discussion was spent
-discussing the downsides of the various proposed solutions thus far.
-I'm going to skip most of that in this blog post and just focus on two of
-the ideas:
+```rust
+impl Read for MyReader {
+  fn read(&mut self, buf: &mut [u8]) -> io::Result<usize> {
+    Ok(buf.len())
+  }
+}
+```
 
-* a "freeze" operation
-* taking a `&mut dyn BufMut` trait argment instead of `&mut [u8]`
+This impl has no unsafe code. It *claims* that it has initialized the
+entire buffer, but it hasn't done any writes into `buf` at all! Now if
+the caller tries to read from `buf`, it will be reading uninitialized
+memory, and causing UB.
+
+One subtle point here. The problem isn't that the read impl could
+return a false value about how many bytes it has written. **The
+problem is that it can lie without ever using any unsafe code at
+all.** So if you are auditing your code for unsafe blocks, you would
+overlook this.
+
+## Constraints and solutions
+
+There have been a lot of solutions proposed to this problem. sfackler
+and I talked about all of them, I think, but I'm going to skip over
+most of the details. You can find them either in the video or in [in
+sfackler's paper document][doc], which covers much of the same
+material.
+
+In this post, I'll just cover what we said about three of the options:
+
+* First, adding a `freeze` operation.
+  * This is in some ways the simplest, as it requires no change to
+    `Read` at all.
+  * Unfortunately, it has a number of limitations and downsides.
+* Second, adding a second `read` method that takes a `&mut dyn BufMut` dyn value.
+  * This is the solution initially proposed in [tokio-rs/tokio#1744].
+  * It has much to recommend it, but requires virtual calls in a core API, although
+    initial benchmarks suggest such calls are not a performance problem.
+* Finally, creating a struct `BufMuf` in the stdlib for dealing with partially initialized
+  buffers, and adding a `read` method for *that*.
+  * This overcomes some of the downsides of using a trait, but at the
+    cost of flexibility.
 
 ## Digression: how to think about uninitialized memory
 
@@ -215,7 +225,17 @@ if index < length {
 In a similar way, if we have a reference to an uninitialized buffer,
 we could conceivably "freeze" that reference to convert it to a reference
 of random bytes, and then we can safely use that to invoke `read`.
-That's the idea, anyway.
+The idea would be that callers do something like this:
+
+```rust
+let uninitialized_buffer = ...;
+let buffer = freeze(uninitialized_buffer);
+let n = reader.read(&mut buffer)?;
+...
+```
+
+If we could do this, it would be great, because the existing `read`
+interface wouldn't have to change at all!
 
 There are a few complications though. First off, there is no such
 `freeze` operation in LLVM today. There is talk of adding one, but
@@ -228,7 +248,8 @@ the `&mut [u8]` *reference*, we need to fix the memory it *refers to*.
 Secondly, that primitive would only apply to compiler optimizations.
 It wouldn't protect against kernel optimizations like `MADV_FREE`. To
 handle that, we have to do something extra, such as writing one byte
-per memory page. That's conceivable, of course, but there are some downsides:
+per memory page. That's conceivable, of course, but there are some
+downsides:
 
 * It feels fragile. What if linux adds some new optimizations in the
   future, how will we work around those?
@@ -257,7 +278,7 @@ not the right solution here.
 
 [ctj]: http://smallcultfollowing.com/babysteps/blog/2019/12/10/async-interview-2-cramertj-part-2/#the-asyncread-and-asyncwrite-traits
 
-## Fallback and interop
+## Fallback and efficient interoperability
 
 If we don't take the approach of adding a `freeze` primitive, then
 this implies that we are going to have to extend the `Read` trait with
@@ -295,10 +316,7 @@ pub trait BufMut {
     fn remaining_mut(&self) -> usize;
     unsafe fn advance_mut(&mut self, cnt: usize);
     unsafe fn bytes_mut(&mut self) -> &mut [u8];
-    unsafe fn bytes_vec_mut<'a>(
-        &'a mut self, 
-        dst: &mut [IoSliceMut<'a>]
-    ) -> usize { ... }
+    ...
 }
 ```
 
@@ -328,14 +346,14 @@ have two `read` methods, one for normal and one for vectorized writes.
 
 ## Variant: use a struct, instead of a trait
 
-Another variant is to replace the `BufMut` trait with a struct. (Carl
-Lerche proposed something similar on the tokio thread
-[here](https://github.com/tokio-rs/tokio/pull/1744#issuecomment-553575438).)
-The API of this struct would be fairly similar to the trait above,
-except that it wouldn't make much attempt to unify vectorized and
-non-vectorized writes.
+The variant that sfackler prefers is to replace the `BufMut` trait
+with a struct.[^carl] The API of this struct would be fairly similar
+to the trait above, except that it wouldn't make much attempt to unify
+vectorized and non-vectorized writes.
 
-Basically we'd have a struct that encapsulates a "partially
+[^carl]: Carl Lerche proposed something similar on the tokio thread [here](https://github.com/tokio-rs/tokio/pull/1744#issuecomment-553575438).
+
+Basically, we'd have a struct that encapsulates a "partially
 initialized slice of bytes". You could create such a struct from a
 standard slice, in which case all things are initialized, or you can
 create it from a slice of "maybe initialized" bytes (e.g., `&mut
@@ -343,21 +361,187 @@ create it from a slice of "maybe initialized" bytes (e.g., `&mut
 `BufMut` that refers to the uninitialized tail of bytes from a `Vec`
 (i.e., pointing into the vector's internal buffer).
 
-The BufMut API would generally only permit writing to the buffer, at
-least safely.  This avoids the safety problem of a `read`
-implementation reading uninitialized data.
+The safe methods of the `BufMut` API would permit
 
-If you needed to fallback to the old `read` API, you would be able to
-ask the `BufMut` for a standard `&mut [u8]`. In this case, it can zero
-the uninitialized parts of the buffer before it gives it to you -- but
-it can also record that those parts are now initialized. This avoids
-the "zeroing more than once" performance cliff.
+* writing to the buffer, which will track the bytes that were initialized;
+* getting access to a slice, but only one that is guaranteed to be initialized.
 
-Finally, to address the other half of unsafety in which the caller of
-`read` must trust the `callee` to correctly report how many bytes they
-read, we can have an `unsafe` method where the callee asserts how much
-data was written into the buffer. This would be useful when handing a
-buffer to a syscall, for example. (Alternatively, the callee can write
-data using more limited APIs that guarantees safety).
+There would be unsafe methods for getting access to memory that may be
+uninitialized, or for asserting that you have initialized a big swath
+of bytes (e.g., by handing the buffer off to the kernel to get written
+to).
 
-## How can we go about
+The buffer has state: it can track what has been initialized. This
+means that any given part of the buffer will get zeroed at most
+once. This ensures that fallback from the new `read2` method to the
+old `read` method is reasonably efficient.
+
+## Sync vs async, how to proceed
+
+So, given the above thoughts, how should we proceed with `AsyncRead`?
+sfackler felt that the question of how to handle uninitialized output
+buffers was basically "orthogonal" from the question of whether and
+when to add `AsyncRead`. In others, sfackler felt that the `AsyncRead`
+and `Read` traits should mirror one another, which means that we could
+add `AsyncRead` now, and then add a solution for uninitialized memory
+later -- or we could do the reverse order.
+
+One minor question has to do with defaults. Currently the `Read` trait
+requires an implementation of `read` -- any new method (`read_uninit`
+or whatever) will therefore have to have a default implementation that
+invokes `read`.  But this is sort of the wrong incentive: we'd prefer
+if users implemented `read_uninit`, and implemented `read` in terms of
+the new method. We could conceivably reverse the defaults for the
+`AsyncRead` trait to this preferred style. Alternatively, sfackler
+noted that we could make *both* `read` and `read_uninit` have a
+default implementation, one implementing in terms of the other. In
+this case, users would have to implement one or the other
+(implementing *neither* would lead to an infinite loop, and we would
+likely want a lint for that case).
+
+We also discussed what it would mean it tokio adopted its own
+`AsyncRead` trait that diverged from std. While not ideal, sfackler
+felt like it wouldn't be that big a deal either way, since it ought to
+be possible to efficiently interconvert between the two. The main
+constraint is having some kind of stateful entity that can remember
+the amount of uninitialized data, thus preventing the inefficient
+fallover behavior.
+
+## Is the ability to use uninitialized memory even a problem?
+
+We spent a bit of time at the end discussing how one could gain data
+on this problem. There are two things that would be nice to know.
+
+First, how big is the performance impact from zeroing? Second, how
+ergonomic is the proposed API to use in practice?
+
+Regarding the performance impact, I asked the same question on
+[tokio-rs/tokio#17144], and I did get back some interesting results,
+[which I summarized in this hackmd at the time][tokio-hackmd]. In
+short, hyper's benchmarks show a fairly sizable impact, with
+uninitialized data getting speedups[^speedup] of 1.3-1.5x. Other
+benchmarks though are much more mixed, showing either no diference or
+small differences on the order of 2%. Within the stdlib, we found
+about a [7% impact on microbenchmarks][#26950].
+
+[^speedup]: I am defining a "speedup" here as the ratio of `U/Z`, where `U/Z` are the throughput with uninitialized/zeroed buffers respectively.
+[tokio-hackmd]: https://hackmd.io/ukeyehx7Ta-6KhaVRFi2mg#Measuring-the-impact
+[#26950]: https://github.com/rust-lang/rust/pull/26950
+
+Still, sfackler raised another interesting data point (both [on the
+thread] and in our call). He was pointing out [#23820], a PR which
+rewrote [`read_to_end`] in the stdlib. The older implementation was
+simple and obvious, but suffered from massive performance cliffs
+related to the need to zero buffers. The newer implementation is fast,
+but much more complex. Using one of the APIs described above would
+permit us to avoid this complexity.
+
+[`read_to_end`]: https://doc.rust-lang.org/std/io/trait.Read.html#method.read_to_end
+[#23820]: https://github.com/rust-lang/rust/pull/23820
+[on the thread]: https://github.com/tokio-rs/tokio/pull/1744#issuecomment-553179399
+
+Regarding ergonomics, as ever, that's a tricky thing to judge. It's
+hard to do better than prototyping as well as offering the API on
+nightly for a time, so that people can try it out and give feedback.
+
+Having the API on nightly would also help us to make branches of
+frameworks like tokio and async-std so we can do bigger measurements.
+
+## Higher levels of interoperability
+
+sfackler and I talked a bit about what the priorities should be beyond
+`AsyncRead`. One of the things we talked about is whether there is a
+need for higher-level traits or libraries that expose more custom
+information beyond "here is how to read data". One example that has
+come up from time to time is the need to know, for example, the URL or
+other information associated with a request.
+
+Another example might be the role of crates like `http`, which aims to
+define Rust types for things like HTTP header codes that are fairly
+standard. These would be useful types to share across all HTTP
+implementations and libraries, but will we be able to achieve that
+sort of sharing without offering the crate as part of the stdlib (or
+at last part of the Rust org)? I don't think we had a definitive
+answer here.
+
+## Priorities beyond async read
+
+We next discussed what other priorities the Rust org might have
+around Async I/O. For sfackler, the top items would be
+
+* better support for GATs and async fn in traits;
+* some kind of generator or syntactic support for streams;
+* improved diagnostics, particularly around send/sync.
+
+## Conclusion
+
+sfackler and I focused quite heavily on the `AsyncRead` trait
+and how to manage uninitialized memory. I think that it would be
+fair to summarize the main points of our conversation as:
+
+* we should add `AsyncRead` to the stdlib and have it mirror `Read`;
+* in general, it makes sense for the synchronous and asynchronous
+  versions of the traits to be analogous;
+* we should extend both traits with a method that takes a `BufMut`
+  struct to manage uninitialized output buffers, as the other options
+  all have a crippling downside;
+* we should extend both traits with a "do you support vectorized output?"
+  callback as well;
+* beyond that, the Rust org should focus heavily on diagnostics for
+  async/await, but streams and async fns in traits would be great
+  too. =)
+
+## Appendix: Vectorized reads and writes
+
+There is one minor subthread that I've skipped over -- vectorized
+reads and writes. I skipped it in the blog post because this problem
+is somewhat simpler. The standard `read` interface takes a single
+buffer to write the data into. But a *vectorized* interface takes a
+series of buffers -- if there is more data than will fit in the first
+one, then the data will be written into the second one, and so on
+until we run out of data or buffers. Vectorized reads and writes can
+be much more efficient in some cases.
+
+Unfortunately, not all readers support vectorized reads. For that
+reason, the "vectorized read" method has a fallback: by default, it
+just calls the normal read method using the first non-empty buffer in
+the list. This is theoretically equal, but obviously it could be a lot
+less efficient -- imagine that I have supplied one buffer of size 1K
+and one buffer of size 16K. The default vectorized read method will
+just always use that single 1K buffer, which isn't great -- but still,
+not much to be done about it. Some readers just cannot support
+vectorized reads.
+
+The problem here then is that it would be nice if there were some way
+to *detect* when a reader supports vectorized reads. This would allow
+the caller to choose between a "vectorized" call path, where it tries
+to supply many buffers, or a single-buffer call path, where it just
+allocates a big buffer.
+
+Apparently hyper will do this today, but using a heuristic: if a call
+to the vectorized read method returns *just enough* data to fit in the
+first buffer, hyper guesses that in fact vectorized reads are not
+supported, and switches dynamically to the "one big buffer" strategy.
+(Neat.)
+
+There is perhaps a second, more ergonomic issue: since the vectorized
+read method has a default implementation, it is easy to forget to
+implement it, even if you would have been able to do so.
+
+In any case, this problem is relatively easy to solve: we basically
+need to add a new method like
+
+```rust
+fn supports_vectorized_reads(&self) -> bool
+```
+
+to the trait.
+
+The matter of decided whether or not to supply a default is a bit
+trickier.  If you don't supply a default, then everybody has to
+implement it, even if they just want the default behavior. But if you
+*do*, people who wished to implement the method may forget to do so --
+this is particularly unfortunate for reads that are wrapping another
+reader, which is a pretty common case.
+
+## Footnotes
