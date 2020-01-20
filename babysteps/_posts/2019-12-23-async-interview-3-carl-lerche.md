@@ -189,6 +189,10 @@ mentioned that a lot of the ecosystem is currently using things like
 [proc-macro-hack] to support these, so perhaps a good thing to focus
 on would be improving procedural macro support so that it can handle
 expression level macros more cleanly.
+  
+## Comments?
+
+There is a [thread on the Rust users forum](https://users.rust-lang.org/t/async-interviews/35167/) for this series.
 
 ## Footnotes
 

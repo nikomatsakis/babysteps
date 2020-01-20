@@ -248,3 +248,7 @@ OK, that wraps it up for the first post. I have two more coming. In
 the next post, we'll discuss the design of the [`Stream`], [`AsyncRead`],
 and [`AsyncWrite`] traits, and what we might want to change there. In
 the final post, we'll discuss async closures.
+  
+## Comments?
+
+There is a [thread on the Rust users forum](https://users.rust-lang.org/t/async-interviews/35167/) for this series.

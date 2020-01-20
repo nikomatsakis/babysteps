@@ -309,3 +309,7 @@ data -- makes it initialized but with some arbitrary value.
 
 This was part two of my conversation with cramertj. Stay tuned for
 part 3, where we talk about async closures!
+  
+## Comments?
+
+There is a [thread on the Rust users forum](https://users.rust-lang.org/t/async-interviews/35167/) for this series.

@@ -191,3 +191,7 @@ I think the main points from the conversation were:
   APIs and crates.  This isn't really something that the *Rust
   organization* can do, it comes from the ecosystem, by library and
   application developers.
+  
+## Comments?
+
+There is a [thread on the Rust users forum](https://users.rust-lang.org/t/async-interviews/35167/) for this series.

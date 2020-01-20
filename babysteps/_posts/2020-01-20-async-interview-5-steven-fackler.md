@@ -504,6 +504,10 @@ fair to summarize the main points of our conversation as:
 * beyond that, the Rust org should focus heavily on diagnostics for
   async/await, but streams and async fns in traits would be great
   too. =)
+  
+## Comments?
+
+There is a [thread on the Rust users forum](https://users.rust-lang.org/t/async-interviews/35167/) for this series.
 
 ## Appendix: Vectorized reads and writes
 

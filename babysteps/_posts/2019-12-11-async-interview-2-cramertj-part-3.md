@@ -161,5 +161,9 @@ Looking back, I think the main take-aways are:
 * The `select!` macro is cool and everybody should read the
   [async book chapter] to learn why. =)
   
+## Comments?
+
+There is a [thread on the Rust users forum](https://users.rust-lang.org/t/async-interviews/35167/) for this series.
+  
 [`futures`]: https://github.com/rust-lang-nursery/futures-rs/
 [async book chapter]: https://rust-lang.github.io/async-book/06_multiple_futures/03_select.html
