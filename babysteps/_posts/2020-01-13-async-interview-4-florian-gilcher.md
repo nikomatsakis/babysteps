@@ -10,7 +10,7 @@ that also does a lot of trainings. In that capacity, he's been
 teaching people to use async Rust now since Rust's 1.0 release.
 
 [Ferrous Systems]: https://ferrous-systems.com/
-[async interview]: http://smallcultfollowing.com/babysteps/blog/2019/12/09/async-interview-2-cramertj/
+[async interview]: http://smallcultfollowing.com/babysteps/blog/2019/11/22/announcing-the-async-interviews/
 [skade]: https://github.com/skade/
 [async-std]: https://async.rs
 

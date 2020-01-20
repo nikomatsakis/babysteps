@@ -11,6 +11,7 @@ crates], most notably [tokio-postgres].
 [sfackler]: https://github.com/sfackler/
 [a lot of crates]: https://crates.io/users/sfackler
 [tokio-postgres]: https://crates.io/crates/tokio-postgres
+[async interview]: http://smallcultfollowing.com/babysteps/blog/2019/11/22/announcing-the-async-interviews/
 
 I particularly wanted to talk to sfackler about the `AsyncRead` and
 `AsyncWrite` traits. These traits are on everybody's list of
