@@ -21,7 +21,7 @@ for your convenience:
 
 [video]: https://youtu.be/Ezwd1vKSfCo
 
-<center><iframe width="560" height="315" src="https://youtu.be/Ezwd1vKSfCo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
+<center><iframe width="560" height="315" src="https://www.youtube.com/embed/Ezwd1vKSfCo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
 One note: something about our setup meant that I was hearing a lot of
 echo. I think you can sometimes hear it in the recording, but not
