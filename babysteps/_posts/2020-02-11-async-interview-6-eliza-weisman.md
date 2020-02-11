@@ -14,7 +14,7 @@ before async-await. This range of experience gives Eliza an interesting
 
 [mycoliza on twitter]: https://twitter.com/mycoliza
 [linkerd]: https://linkerd.io/
-[hawkw]: https://github.com/sfackler/
+[hawkw]: https://github.com/hawkw/
 [async interview]: http://smallcultfollowing.com/babysteps/blog/2019/11/22/announcing-the-async-interviews/
 [tracing]: https://crates.io/crates/tracing
 
@@ -299,6 +299,10 @@ flags that "accidentally" works -- i.e., I depend on feature flag X,
 but I don't specify it; it just gets enabled via some other dependency
 of mine. This also makes testing of feature flags hard. rustdoc
 integration could be better. All true, all challenging. =)
+
+### Comments?
+
+There is a [thread on the Rust users forum](https://users.rust-lang.org/t/async-interviews/35167/) for this series.
 
 
 
