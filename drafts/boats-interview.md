@@ -3,6 +3,8 @@ interview] with withoutboats. This particularly interview took place
 way back on January 14th, but the intervening months have been a bit
 crazy and I didn't get around to writing it up till now.
 
+[async interview]: http://smallcultfollowing.com/babysteps/blog/2019/11/22/announcing-the-async-interviews/
+
 ## Next steps for async
 
 Before I go into boats' interview, I want to talk a bit about the
@@ -196,7 +198,9 @@ async fn main() {
 Similarly, if you wanted to adopt async-std, you could add
 `#[async::main]`. (In fact, since async-std's runtime starts
 implicitly in a background thread when you start using it, you could
-use async-std libraries without any additional setup.)
+use async-std libraries without any additional setup.) I imagine that
+other executors offer something similar -- or if they don't yet,
+they'll add it. =)
 
 Overall, this seems pretty nice to me. Basically, when you write
 `async fn main`, you get Rust's "default executor", which presently is
@@ -207,13 +211,19 @@ switch to a more full-featured executor, you simply add a
 [tokio]: https://tokio.rs/
 [async-std]: https://async.rs/
 
-(Side note: This isn't something that boats and I talked about, but I
-imagine that having a "native" concept of `async fn main` might help
-for some platforms where there is already a native executor. I'm
-thinking of things like [GStreamer] or perhaps iOS with Grand Central
-Dispatch. In short, I imagine there are environments where the notion
-of a "main function" isn't really a great fit anyhow, although it's
-possible I have no idea what I'm talking about.)
+(Side note #1: This isn't something that boats and I talked about, but
+I wonder about adding a more general attribute, like
+`#[async_runtime(foo)]` that just desugars to a call like
+`foo::main_wrapper(...)`, which is expected to do whatever setup is
+appropriate for the crate `foo`.)
+
+(Side note #2: This *also* isn't something that boats and I talked
+about, but I imagine that having a "native" concept of `async fn main`
+might help for some platforms where there is already a native
+executor. I'm thinking of things like [GStreamer] or perhaps iOS with
+Grand Central Dispatch. In short, I imagine there are environments
+where the notion of a "main function" isn't really a great fit anyhow,
+although it's possible I have no idea what I'm talking about.)
  
 [GStreamer]: https://gstreamer.freedesktop.org/
 
@@ -327,9 +337,6 @@ yields (in the case of streams, we *would* pass in data, but only the
 iterators and streams don't produce a "final value" when they're done,
 so these functions would always just return unit.
 
-Like iterators (and streamsWhen it returns, it always returns a unit value.
-It never needs to take 
-
 Adopting a more narrow focus wouldn't close the door to exposing our
 internal mechanism as a first-class language feature at some point,
 but it would help us to solve urgent problems sooner, and it would
@@ -359,7 +366,7 @@ to maintain the principle that the async and synchronous versions of
 the traits should align as closely as possible. This matches the
 overarching design vision of minimizing the differences between "async
 Rust" and "sync Rust". It also argues in favor of the proposal that
-[sfackler proposed in their interview][sf], where we address the
+[sfackler proposed in their interview][sfackler], where we address the
 questions of how to handle uninitialized memory in an analogous way
 for both `Read` and `AsyncRead`.
 
@@ -395,7 +402,7 @@ probably not a good short-term goal.
 For one thing, there were a lot of unresolved questions about just
 what features this global executor should support. But for another,
 the main goal here is to enable libraries to write "executor
-independent" code, but it's not clera how many libraries spawn tasks
+independent" code, but it's not clear how many libraries spawn tasks
 **anyway** -- that's usually done more at the application
 level. Libraries tend to instead return a future and let the
 application do the spawning (interestingly, one place this doesn't
@@ -426,6 +433,8 @@ are the points where you need a more full-fledged reactor or
 runtime. But there are lots of utilities that don't need that and
 which could profitably level in the std library.
 
+## Where to put async things in the stdlib? 
+
 One theme that boats and I did not discuss, but which has come up when
 I've raised this question with others, is *where* to put async-aware
 traits in the std hierarchy, particularly when there are sync
@@ -438,7 +447,7 @@ different names, or should we carve out a space for "async-enabled"
 traits and use the same names? An interesting question, and I don't
 have an opinion yet.
 
-## Conclusion
+## Conclusion and some of my thoughts
 
 I always enjoy talking with boats, and this time was no exception.  I
 think boats raised a number of small, practical ideas that hadn't come
@@ -447,3 +456,8 @@ fundamental building blocks like `AsyncRead`, we also consider
 improvements to the ergonomic experience with smaller changes like
 `async fn main`, and I agree with the guiding principle that boats
 raised of keeping async and sync code as "analogous" as possible.
+
+### Comments?
+
+There is a [thread on the Rust users forum](https://users.rust-lang.org/t/async-interviews/35167/) for this series.
+
