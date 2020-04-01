@@ -1,9 +1,23 @@
+---
+layout: post
+title: 'Async Interview #7: Withoutboats'
+---
+
 Hello everyone! I'm happy to be posting a transcript of my [async
 interview] with withoutboats. This particularly interview took place
 way back on January 14th, but the intervening months have been a bit
 crazy and I didn't get around to writing it up till now.
 
 [async interview]: http://smallcultfollowing.com/babysteps/blog/2019/11/22/announcing-the-async-interviews/
+
+### Video
+
+You can watch the [video] on YouTube. I've also embedded a copy here
+for your convenience:
+
+[video]: https://youtu.be/a-kZhPMqXRs
+
+<center><iframe width="560" height="315" src="https://www.youtube.com/embed/a-kZhPMqXRs" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>
 
 ## Next steps for async
 
@@ -182,25 +196,34 @@ main thread until `main` completes (exactly what we want). For simple
 programs and examples, this will be exactly what you want.
 
 But most real programs will ultimately want to start some other
-executor to get more features. In fact, many executors already offer a
-procedural macro that lets you write an async main. So, for example,
-if you had a `async fn main` program and you wanted to start using
-tokio, all you have to do is add `#[tokio::main]` to your function and
-it would work just fine:
+executor to get more features. In fact, [following the lead of the
+runtime crate][rc], many executors already offer a procedural macro
+that lets you write an async main. So, for example, [tokio] and
+[async-std] offer attributes called [`#[tokio::main]`][tma] and
+[`#[async_std::main]`][ama] respectively, which means that if you have an
+`async fn main` program you can pick an executor just by adding the
+appropriate attribute:
 
 ```rust
-#[tokio::main]
+#[tokio::main] // or #[async_std::main], etc
 async fn main() {
     ..
 }
 ```
 
-Similarly, if you wanted to adopt async-std, you could add
-`#[async::main]`. (In fact, since async-std's runtime starts
-implicitly in a background thread when you start using it, you could
-use async-std libraries without any additional setup.) I imagine that
-other executors offer something similar -- or if they don't yet,
-they'll add it. =)
+[rc]: https://github.com/rustasync/runtime#attributes
+
+I imagine that other executors offer a similar procedural macro -- or
+if they don't yet, they could add one. =)
+
+(In fact, since async-std's runtime starts implicitly in a background
+thread when you start using it, you could use async-std libraries
+without any additional setup as well.)
+
+[tokio]: https://tokio.rs/
+[async-std]: https://async.rs/
+[tma]: https://book.async.rs/tutorial/accept_loop.html
+[ama]: https://docs.rs/async-std/1.5.0/async_std/#examples
 
 Overall, this seems pretty nice to me. Basically, when you write
 `async fn main`, you get Rust's "default executor", which presently is
@@ -461,3 +484,4 @@ raised of keeping async and sync code as "analogous" as possible.
 
 There is a [thread on the Rust users forum](https://users.rust-lang.org/t/async-interviews/35167/) for this series.
 
+### Footnotes
