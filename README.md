@@ -1,5 +1,9 @@
 To setup the environment.
 
+## Install graphviz
+
+Some of the posts rely on graphviz, so install it.
+
 ## Using rbenv
 
 I've used rbenv in the past, though the most recent time I didn't bother.

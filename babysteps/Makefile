@@ -1,11 +1,15 @@
 help:
 	@echo "try:"
 	@echo "  make serve"
+	@echo "  make serve-drafts"
 	@echo "  make generate deploy"
 	@echo "  make post NAME='Foo'"
 
 serve:
 	bundle exec jekyll serve --incremental
+
+serve-drafts:
+	bundle exec jekyll serve --incremental --drafts
 
 generate:
 	bundle exec jekyll build
