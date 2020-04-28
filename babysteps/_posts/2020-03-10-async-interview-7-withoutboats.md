@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 'Async Interview #7: Withoutboats'
+categories: [Rust, AsyncInterviews]
 ---
 
 Hello everyone! I'm happy to be posting a transcript of my [async

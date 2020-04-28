@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 'Async Interview #5: Steven Fackler'
+categories: [Rust, AsyncInterviews]
 ---
 
 Hello! For the latest [async interview], I spoke with Steven Fackler

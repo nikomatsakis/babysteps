@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 'Async Interview #6: Eliza Weisman'
+categories: [Rust, AsyncInterviews]
 ---
 
 Hello! For the latest [async interview], I spoke with Eliza Weisman

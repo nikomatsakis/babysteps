@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 'Async Interview #4: Florian Gilcher'
+categories: [Rust, AsyncInterviews]
 ---
 
 Hello! For the latest [async interview], I spoke with Florian Gilcher

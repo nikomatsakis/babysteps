@@ -1,6 +1,7 @@
 ---
 layout: post
 title: 'Async Interview #3: Carl Lerche'
+categories: [Rust, AsyncInterviews]
 ---
 
 Hello! For the latest [async interview], I spoke with Carl Lerche
