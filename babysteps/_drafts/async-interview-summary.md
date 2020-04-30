@@ -85,12 +85,12 @@ compiler, to the standard library and the language. I'd like to see
 the stdlib include building blocks like async-aware mutexes and
 channels, for example, as well as smaller utilities like
 [`task::block_on`]. YoshuaWuyts recently proposed adding some simple
-constructors, like [`future::{pending,
-ready}`](https://github.com/rust-lang/rust/pull/70834) which I think
-could fit in this category. A key constraint here is that these should
-be libraries and APIs that are portable across all executors and
+constructors, like [`future::{pending, ready}`] which I think could
+fit in this category. A key constraint here is that these should be
+libraries and APIs that are portable across all executors and
 runtimes.
 
+[`future::{pending, ready}`]: https://github.com/rust-lang/rust/pull/70834
 [`task::block_on`]: http://smallcultfollowing.com/babysteps/blog/2020/03/10/async-interview-7-withoutboats/#block_on-in-the-std-library
 
 ### Polish in the language: async main, async drop
@@ -270,7 +270,7 @@ that too.
 
 Looking further out, I think there are some bigger goals that we
 should be thinking about. The largest is probably adding some form of
-**generator syntax**. Acedotally, I definitely hear about a fair
+**generator syntax**. Anecdotally, I definitely hear about a fair
 number of folks working with streams and encountering difficulties
 doing so. As [boats said], writing `Stream` implementations is a
 common reason that people have to interact directly with `Pin`, and
