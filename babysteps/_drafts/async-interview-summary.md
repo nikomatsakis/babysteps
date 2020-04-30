@@ -11,8 +11,6 @@ interviewing someone else, give my opinion on some of the immediate
 next steps, and a bit about the medium to longer term. I'm also going
 to talk a bit about what I see as some of the practical challenges.
 
-https://zulip-archive.rust-lang.org/187312wgasyncfoundations/81944meeting20200428.html#195596002
-
 ### Focus for the immediate term: interoperability and polish
 
 At the highest level, I think we should be focusing on two things in
@@ -22,19 +20,65 @@ the "short to medium" term: **enabling interoperability** and
 By **interoperability**, I mean the ability to write libraries and
 frameworks that can be used with many different executors/runtimes.
 Adding the `Future` trait was a big step in this direction, but
-there's plenty more to go.
+there's plenty more to go. 
+
+My dream is that eventually people are able to write portable async
+apps, frameworks, and libraries that can be moved easily between async
+executors. We won't get there right away, but we can get closer.
 
 By **polish**, I mean "small things that go a long way to improving
 quality of life for users". These are the kinds of things that are
-easy to overlook, because no individual item is a big milestone. We've
-been focusing on diagnostics, and we should continue that, but I also
-think we want to broaden the scope a bit. On Zulip, for example,
-[LucioFranco suggested][LF] that we could add a lint to warn about
-things that should not be live across yields (e.g., lock guards).
+easy to overlook, because no individual item is a big milestone.
+
+### Polish in the compiler: diagnostics, lints, smarter analyses
+
+Most of the focus of [wg-async-foundations] recently has been on
+polish work on the compiler, and we've made quite a lot of
+progress. Diagnostics have [notably] [improved], and we've been
+working on [inserting] [helpful] [suggestions], [fixing compiler
+bugs], and [improving efficiency]. One thing I'm especially excited
+about is that we [no longer rely on thread-local storage in the `async
+fn` transformation][tls], which means that async-await is now
+compatible with `#[no_std]` environments and hence embedded
+development.
+
+I want to give a 👏 "shout-out" 👏 to 👏 [tmandry] 👏 for leading this
+polish effort, and to point out that if you're interested in
+contributing to the compiler, this is a great place to start! Here are
+some [tips for how to get involved][g-i].
+
+[g-i]: https://github.com/rust-lang/wg-async-foundations#getting-involved
+[wg-async-foundations]: https://github.com/rust-lang/wg-async-foundations
+[tmandry]: https://github.com/tmandry
+[notably]: https://github.com/rust-lang/rust/pull/64895
+[improved]: https://github.com/rust-lang/rust/pull/65345
+[inserting]: https://github.com/rust-lang/rust/pull/70906
+[helpful]: https://github.com/rust-lang/rust/pull/68212
+[suggestions]: https://github.com/rust-lang/rust/pull/71174
+[fixing compiler bugs]: https://github.com/rust-lang/rust/pull/68884
+[improving efficiency]: https://github.com/rust-lang/rust/pull/69837
+[tls]: https://github.com/rust-lang/rust/pull/69033
+
+
+
+I think it's also a good idea to be looking a bit more broadly.  On
+Zulip, for example, [LucioFranco suggested][LF] that we could add a
+lint to warn about things that should not be live across yields (e.g.,
+lock guards), and I think that's a great idea (there is a [clippy
+lint] already, though it's specific to `MutexGuard`; maybe this should
+just be promoted to the compiler and generalized).
 
 [LF]: https://zulip-archive.rust-lang.org/187312wgasyncfoundations/81944meeting20200428.html#195598667
+[clippy lint]: https://github.com/rust-lang/rust-clippy/issues/4226
 
-### Polish in the standard library
+Another, more challenging area is improving the precision of the
+async-await transformation and analysis. Right now, for example, the
+compiler "overapproximates" what values are live across a yield, which
+sometimes yields spurious errors about whether a future needs to be
+`Send` or not. Fixing this is, um, "non-trivial", but it would be a
+major quality of life improvement.
+
+### Polish in the standard library: adding utilities
 
 When it comes to polish, I think we can extend that focus beyond the
 compiler, to the standard library and the language. I'd like to see
@@ -43,9 +87,11 @@ channels, for example, as well as smaller utilities like
 `task::block_on`. YoshuaWuyts recently proposed adding some simple
 constructors, like [`future::{pending,
 ready}`](https://github.com/rust-lang/rust/pull/70834) which I think
-could fit in this category.
+could fit in this category. A key constraint here is that these should
+be libraries and APIs that are portable across all executors and
+runtimes.
 
-### Polish in the language
+### Polish in the language: async main, async drop
 
 Polish extends to the language, as well. The idea here is to find
 small, contained changes that fix specific pain points or limitations.
@@ -153,9 +199,13 @@ both sync and async applications, well, synchronously[^resist].
 
 I also think we should add [`AsyncRead`] and [`AsyncWrite`] to the
 standard library, also in roughly the form they have today in
-futures. In contrast to [`Stream`], I do expect this to be
-controversial, for a few reasons. But much like [`Stream`], I still
-think it's the right thing to do, and actually for much the same reasons.
+futures. In short, stable, interoperable traits for reading and writing enables
+a whole lot of libraries and middleware. After all, the main reason
+people are using async is to do I/O.
+
+In contrast to [`Stream`], I do expect this to be controversial, for a
+few reasons. But much like [`Stream`], I still think it's the right
+thing to do, and actually for much the same reasons.
 
 [`AsyncRead`]: https://docs.rs/futures/0.3.4/futures/io/trait.AsyncRead.html
 [`AsyncWrite`]: https://docs.rs/futures/0.3.4/futures/io/trait.AsyncWrite.html
@@ -213,43 +263,154 @@ and experimenting with the [`AsyncRead`] and [`AsyncWrite`]. It's time
 to standardize them and to allow people to build I/O libraries based
 on them.
 
-### Real artists ship
+### Looking further out
 
-You may have noticed a theme here, but I think it's worth stating it
-explicitly: Real artists ship! Actually, I am just now reading the
-story on [folklore.org] about this, and it seems like the quote was
-meant to endorse super stressful all nighters. That's not what I think
-about when I hear it. I think about how there are always "new and
-better" things on the horizon, but at some point you have to stop
-improving, and start building.
+Looking further out, I think there are some bigger goals that we
+should be thinking about. The largest is probably adding some form of
+**generator syntax**. Acedotally, I definitely hear about a fair
+number of folks working with streams and encountering difficulties
+doing so. As [boats said], writing `Stream` implementations is a
+common reason that people have to interact directly with `Pin`, and
+that's something we want to minimize. Further, in a synchronous
+setting, generator syntax would also give us syntactic support for
+writing iterators, which would benefit Rust overall. **Enabling
+support for async functions in traits** would also be high on my list,
+along with **async closures**. (The latter in particular would enable
+us to bring in a lot more utility methods and combinators for futures
+and streams, which would be great.)
 
-[folklore.org]: https://www.folklore.org/StoryView.py?story=Real_Artists_Ship.txt
+[boats said]: http://smallcultfollowing.com/babysteps/blog/2020/03/10/async-interview-7-withoutboats/#supporting-generators-iterators-and-async-generators-streams
 
-Moreover, once you do so, there is always room to come back and make
-improvements, release a 2.0 release, and so forth. The only reason
-that a 2.0 release would be difficult is because so many people have
-been building and shipping successful systems on the thing you made,
-and they don't want to change -- and that's not so bad, is it?
+I think though that it's worth waiting a bit before we pursue these, for
+several reasons.
 
-Anyway, there's obviously some give and take here, but it seems to me
-that when it comes to both `Stream` and `AsyncRead` and `AsyncWrite`,
-it's time for us to move forward.
+* Generator syntax would build on a `Stream` trait anyhow, so having
+  that in the standard libary is an obvious first step.
+* There is ongoing work on GATs and chalk integration in the context
+  of wg-traits, and we're making quite rapid progress there. The above
+  items all potentially interact with GATs in some way, and it'd be
+  nice if we had more of an implementation available before we started
+  in on them (though it may not be a hard requirement).
+* Quite frankly, we don't have the bandwidth. We need to work on
+  building up an effective wg-async-foundations group before we can
+  take on these sorts of projects. More on this point later.
 
-### Some things I think we should not do
+### The role of the ecosystem
 
-There are a few things I think we should *not* do
+I'm focusing in this post on what steps I think the Rust organization
+should take, but I think it's also worth thinking about what is most
+needed within the greater ecosystem. My feeling is that this is a
+fertile time for exploration. I'd like to see a big push around shared
+components and interoperability. 
 
-### An interesting wildcard: generator syntax
+We've actually got a lot of great, interoperable crates already.  I'm
+thinking of crates like [async-task], that can help implementors by
+encapsulating a common task, but also things like [tracing], which
+factors out end-user functionality into a generic, reusable
+package. Another good example is [surf], a high-level interface for
+making HTTP requests that works across many backends, including hyper,
+libcurl, and WebAssembly. For that matter, [hyper] itself can be used
+with any executor via the `AsyncRead` and `AsyncWrite` traits, which
+is why [Fuchsia 
 
+which enables HTTP requests
+across many different backends, including [hyper] can be used
 
-### XXXX
+[surf]: https://docs.rs/surf/1.0.3/surf/
+[async-task]: https://github.com/stjepang/async-task
+[tracing]: https://github.com/tokio-rs/tracing
 
-Some passing thoughts:
+I know there has already been a lot
+of work in this regard -- it's fantastic that [Fuchsia is able to use
+hyper][f], for example, and
 
-There are some themes and principles.
+[f]: http://smallcultfollowing.com/babysteps/blog/2019/12/09/async-interview-2-cramertj/#fuchsia-benefits-from-interoperability
 
-There is a slogan here, "cross that bridge when we come to it", or
-perhaps "true artists ship", that we should be establishing as a
-guiding principle?
+### Related and supporting efforts
 
-The need for 
+There are a few pending features in the language team that I think may be pretty
+useful for async applications. I won't go into detail here, but briefly:
+
+* `impl Trait` everywhere -- finishing up the `impl Trait` saga will
+  enable us to encode some cases where async fn in traits might be
+  nice, such as Tower's [`Service`] trait;
+* GATs, obviously -- GATs arise around a number of advanced features.
+* procedural macros -- we've been making slow and steady progress on
+  stabilizing bits and pieces of the procedural macro story, and I
+  think it's a crucial enabler for async-related applications (and
+  many others). Things like the `#[runtime::main]` and `async-trait`
+  crate are only possible because of the procedural macro
+  support. Both Carl and Eliza brought up the importance of offering
+  procedural macros in expression position without requiring things
+  like `proc_macro_hack`.
+
+[`Service`]: https://docs.rs/tower/0.3.0/tower/trait.Service.html
+
+Stay tuned for more thoughts on *these* points.
+
+### Summing up: the list
+
+To summarize, here is my list of what I think we should be doing in
+"async land" as our next steps:
+
+* Continued polish and improvements to the core compiler implementation.
+* Lint like `#[must_use]` to help identify "not yield safe" types.
+* Extend the stdlib with mutexes, channels, `task::block_on`, and other small utilities.
+* Extend the `Drop` trait with "lifecycle" methods ("async drop").
+* Add `Stream`, `AsyncRead`, and `AsyncWrite` traits to the standard library.
+
+To be clear, this is a **proposal**, and I am very much interested in
+feedback on it, and I wouldn't surprised to add or remove a thing or
+two. However, it's not an arbitrary proposal: It's a proposal that
+I've given a fair amount of thought to, and I feel reasonably certain
+about it.
+
+There are a few things I'd be particularly interested to [get feedback][ait] on:
+
+* If you maintain a library, what are some of the challenges you've
+  encountered in making it operate generically across executors? What
+  could help there?
+* Do you have ideas for useful bits of polish? Are there small changes or stdlib
+  additions that would make everyday life that much easier?
+
+### A challenge: growing an effective working group
+
+I want to close with a few comments on organization. One of the things
+we've been trying to figure out is how best to organize ourselves and
+create a sustainable working group.
+
+Thus far, [tmandry] has been doing a great job at organizing the
+polish work that has been our focus, and I think we've been making
+good progress there, although there's always a need for more folks to
+help out. (Shameless plug: [Here are some tips for how to get
+involved][g-i]!)
+
+**If we want to go beyond polish and get back to adding things to the
+standard library, especially things like the `Stream` or `AsyncRead`
+trait, we're going to have to up our game.** The same is true for some
+of the more diverse tasks that fall under our umbrella, such as
+maintaining the [async book].
+
+[async book]: https://rust-lang.github.io/async-book/index.html
+
+To do those tasks, we're going to need [more than coders]. We need to
+take the time to draft designs, incorporate feedback, write the RFCs,
+and push things through to stabilization.
+
+[more than coders]: http://smallcultfollowing.com/babysteps/blog/2019/04/15/more-than-coders/
+
+To be honest, I'm not entirely sure where that work is going to come
+from -- but I believe we can do it! If this is something you're
+interested in, definitely drop in the `#wg-async-foundations` stream
+on Zulip and say hello, and monitor the [Inside Rust], as I expect
+we'll be posting updates there from time to time.
+
+[Inside Rust]: https://blog.rust-lang.org/inside-rust/
+
+### Comments?
+
+As always, please leave comments in the [async interviews thread][ait]
+on `users.rust-lang.org`.
+
+[ait]: https://users.rust-lang.org/t/async-interviews/35167/
+
