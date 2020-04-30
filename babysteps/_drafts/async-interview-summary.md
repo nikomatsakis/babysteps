@@ -84,12 +84,14 @@ When it comes to polish, I think we can extend that focus beyond the
 compiler, to the standard library and the language. I'd like to see
 the stdlib include building blocks like async-aware mutexes and
 channels, for example, as well as smaller utilities like
-`task::block_on`. YoshuaWuyts recently proposed adding some simple
+[`task::block_on`]. YoshuaWuyts recently proposed adding some simple
 constructors, like [`future::{pending,
 ready}`](https://github.com/rust-lang/rust/pull/70834) which I think
 could fit in this category. A key constraint here is that these should
 be libraries and APIs that are portable across all executors and
 runtimes.
+
+[`task::block_on`]: http://smallcultfollowing.com/babysteps/blog/2020/03/10/async-interview-7-withoutboats/#block_on-in-the-std-library
 
 ### Polish in the language: async main, async drop
 
@@ -187,11 +189,11 @@ we want attached streams -- and we are making progress on the
 foundational features that will enable us to have them.
 
 Once we have those features, we can design variants of `Iterator` and
-`Stream` that support attached iterator. Perhaps these variants will
-deprecate the existing traits, or perhaps they will live alongside
-them (or maybe we can even find a way to extend the existing traits in
-place). I don't know, but we'll figure it out, and we'll do it for
-both sync and async applications, well, synchronously[^resist].
+`Stream` that support attached iterators/streams. Perhaps these
+variants will deprecate the existing traits, or perhaps they will live
+alongside them (or maybe we can even find a way to extend the existing
+traits in place). I don't know, but we'll figure it out, and we'll do
+it for both sync and async applications, well, synchronously[^resist].
 
 [^resist]: I couldn't resist.
 
@@ -261,7 +263,8 @@ always be systems based on epoll that we will want to support, and we
 know exactly how to do that, because we've spend years tinkering with
 and experimenting with the [`AsyncRead`] and [`AsyncWrite`]. It's time
 to standardize them and to allow people to build I/O libraries based
-on them.
+on them. Once we know how best to handle `io_uring`, we'll integrate
+that too.
 
 ### Looking further out
 
@@ -295,37 +298,6 @@ several reasons.
   building up an effective wg-async-foundations group before we can
   take on these sorts of projects. More on this point later.
 
-### The role of the ecosystem
-
-I'm focusing in this post on what steps I think the Rust organization
-should take, but I think it's also worth thinking about what is most
-needed within the greater ecosystem. My feeling is that this is a
-fertile time for exploration. I'd like to see a big push around shared
-components and interoperability. 
-
-We've actually got a lot of great, interoperable crates already.  I'm
-thinking of crates like [async-task], that can help implementors by
-encapsulating a common task, but also things like [tracing], which
-factors out end-user functionality into a generic, reusable
-package. Another good example is [surf], a high-level interface for
-making HTTP requests that works across many backends, including hyper,
-libcurl, and WebAssembly. For that matter, [hyper] itself can be used
-with any executor via the `AsyncRead` and `AsyncWrite` traits, which
-is why [Fuchsia 
-
-which enables HTTP requests
-across many different backends, including [hyper] can be used
-
-[surf]: https://docs.rs/surf/1.0.3/surf/
-[async-task]: https://github.com/stjepang/async-task
-[tracing]: https://github.com/tokio-rs/tracing
-
-I know there has already been a lot
-of work in this regard -- it's fantastic that [Fuchsia is able to use
-hyper][f], for example, and
-
-[f]: http://smallcultfollowing.com/babysteps/blog/2019/12/09/async-interview-2-cramertj/#fuchsia-benefits-from-interoperability
-
 ### Related and supporting efforts
 
 There are a few pending features in the language team that I think may be pretty
@@ -346,7 +318,7 @@ useful for async applications. I won't go into detail here, but briefly:
 
 [`Service`]: https://docs.rs/tower/0.3.0/tower/trait.Service.html
 
-Stay tuned for more thoughts on *these* points.
+I'll write more about these points in other posts, though.
 
 ### Summing up: the list
 
@@ -354,8 +326,8 @@ To summarize, here is my list of what I think we should be doing in
 "async land" as our next steps:
 
 * Continued polish and improvements to the core compiler implementation.
-* Lint like `#[must_use]` to help identify "not yield safe" types.
-* Extend the stdlib with mutexes, channels, `task::block_on`, and other small utilities.
+* Lints for common "gotchas", like `#[must_use]` to help identify "not yield safe" types.
+* Extend the stdlib with mutexes, channels, [`task::block_on`], and other small utilities.
 * Extend the `Drop` trait with "lifecycle" methods ("async drop").
 * Add `Stream`, `AsyncRead`, and `AsyncWrite` traits to the standard library.
 
@@ -414,3 +386,4 @@ on `users.rust-lang.org`.
 
 [ait]: https://users.rust-lang.org/t/async-interviews/35167/
 
+### Footnotes
