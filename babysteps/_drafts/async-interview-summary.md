@@ -11,6 +11,8 @@ interviewing someone else, give my opinion on some of the immediate
 next steps, and a bit about the medium to longer term. I'm also going
 to talk a bit about what I see as some of the practical challenges.
 
+[async interview]: {{ site.baseurl }}/blog/2019/11/22/announcing-the-async-interviews/
+
 ### Focus for the immediate term: interoperability and polish
 
 At the highest level, I think we should be focusing on two things in
@@ -265,6 +267,10 @@ and experimenting with the [`AsyncRead`] and [`AsyncWrite`]. It's time
 to standardize them and to allow people to build I/O libraries based
 on them. Once we know how best to handle `io_uring`, we'll integrate
 that too.
+
+All of that said, I would really like to learn more about `io_uring`
+and what it might mean, since I've not dug that deeply here. Maybe a
+good topic for a future async interview!
 
 ### Looking further out
 
