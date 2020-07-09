@@ -57,7 +57,7 @@ ways to do this:
 [tokio]: https://tokio.rs/
 [async-std]: https://async.rs/
 [`Async`]: https://docs.rs/smol/0.1.18/smol/struct.Async.html
-[`AsyncRead`]: https://docs.rs/futures-io/0.3.5/futures_io/trait.AsyncRead.html
+[`impl AsyncRead`]: https://docs.rs/futures-io/0.3.5/futures_io/trait.AsyncRead.html
 
 ### Delegation to a thread pool
 
