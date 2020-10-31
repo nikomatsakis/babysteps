@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Library-ification and support Rust analysis'
+title: 'Clojurists Together'
 categories: [Rust]
 ---
 
