@@ -9,7 +9,9 @@ Since we created the Rust teams, I have been serving as lead of two teams: the [
 [language design team]: https://www.rust-lang.org/governance/teams/lang
 [core team]: https://www.rust-lang.org/governance/teams/core
 
-Last October, [I announced that pnkfelix was joining me as compiler team co-lead](https://blog.rust-lang.org/inside-rust/2019/10/24/pnkfelix-compiler-team-co-lead.html). Today, I am stepping back from my role as compiler team co-lead altogether. After taking nominations from the compiler team, pnkfelix and I are proud to announce that **[wesleywiser] will replace me as compiler team co-lead**. If you don't know Wesley, there'll be an announcement on Inside Rust where you can learn a bit more about what he has done, but let me just say I am pleased as punch that he agreed to serve as co-lead. He's going to do a great job.
+Last October, [I announced that pnkfelix was joining me as compiler team co-lead](https://blog.rust-lang.org/inside-rust/2019/10/24/pnkfelix-compiler-team-co-lead.html). Today, I am stepping back from my role as compiler team co-lead altogether. After taking nominations from the compiler team, pnkfelix and I are proud to announce that **[wesleywiser] will replace me as compiler team co-lead**. If you don't know Wesley, there'll be an announcement on [Inside Rust] where you can learn a bit more about what he has done, but let me just say I am pleased as punch that he agreed to serve as co-lead. He's going to do a great job.
+
+[Inside Rust]: https://blog.rust-lang.org/inside-rust/
 
 ### You're not getting rid of me this easily
 
