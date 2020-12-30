@@ -16,7 +16,7 @@ The goal for Rust has always been to create a language that will be used and sup
 [Facebook]: https://twitter.com/nadavrot/status/1319003839018614784?lang=en
 [Embark]: https://twitter.com/repi/status/1294987596146384897
 [Amazon]: https://aws.amazon.com/blogs/opensource/why-aws-loves-rust-and-how-wed-like-to-help/
-[R2]: https://smallcultfollowing.com/babysteps/blog/2019/12/02/rust-2020/#shifting-the-focus-from-adoption-to-investment
+[R2]: {{ site.baseurl }}/blog/2019/12/02/rust-2020/#shifting-the-focus-from-adoption-to-investment
 
 That said, I've talked to a number of people in the Rust community who feel nervous about this change. After all, we've worked hard to build an open source organization that values curiosity, broad collaboration, and uplifting others. As more companies form Rust teams, there's a chance that some of that could be lost, even if everyone has the best of intentions. While we all want to see more people paid to work on Rust, that can also result in "part time" contributors feeling edged out.
 
@@ -40,7 +40,7 @@ This kind of collaboration is exactly what we envisioned when we setup things li
 
 [^jlord]: Hat tip to Jessica Lord, whose post ["Privilege, Community and Open Source"](http://jlord.us/blog/osos-talk.html) is one I still re-read regularly.
 
-[AiC]: https://smallcultfollowing.com/babysteps/blog/2019/04/19/aic-adventures-in-consensus/
+[AiC]: {{ site.baseurl }}/blog/2019/04/19/aic-adventures-in-consensus/
 
 The trick of course is that in order to achieve "open source whenever", you need full-time people to help pull it all together. This in many ways has been the limiting factor for Rust thus far, and it is precisely what these new Rust teams -- with [support from the new Rust Foundation as well][scope] -- can and will change. We have a lot to look forward to!
 
