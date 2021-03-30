@@ -11,7 +11,7 @@ Some of them are scheduled early to cover a wider range of time zones.
 | [Tue at 14:30 ET][1] | Niko | [wrapping C++ async APIs in Rust futures](https://github.com/rust-lang/wg-async-foundations/issues/67) and other tales of interop |
 | [Wed at 10:00 ET][2] | Niko | [picking an HTTP library](https://github.com/rust-lang/wg-async-foundations/issues/95) and similar stories |
 | [Wed at 15:00 ET][3] | Niko | [structured concurrency and parallel data processing](https://github.com/rust-lang/wg-async-foundations/issues/107) |
-| [Thu at 07:00 ET][4] | Ryan | [debugging](https://github.com/rust-lang/wg-async-foundations/issues/67) and getting [insights into running services](https://github.com/rust-lang/wg-async-foundations/issues/75) |
+| [Thu at 07:00 ET][4] | Ryan | [debugging](https://github.com/rust-lang/wg-async-foundations/issues/76) and getting [insights into running services](https://github.com/rust-lang/wg-async-foundations/issues/75) |
 | [Fri at 07:00 ET][5] | Ryan | [lack of a polished common implementations of basic async helpers](https://github.com/rust-lang/wg-async-foundations/issues/105) |
 | [Fri at 14:30 ET][6] | Niko | [bridging sync and async](https://github.com/rust-lang/wg-async-foundations/issues/54) |
 
