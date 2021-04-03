@@ -32,7 +32,7 @@ My own trajectory through Rust governance has kind of mirrored the growth of the
 
 In December, I decided to [step back as lead of the compiler team](https://smallcultfollowing.com/babysteps/blog/2020/12/11/rotating-the-compiler-team-leads/). I had a number of reasons for doing so, but the most important is that I want to ensure that the Rust project continues to scale and grow. For that to happen, we need to transition from one individual doing all kinds of roles to people focusing on those places where they can have the most impact.[^latam]
 
-**Today I am announcing that I am stepping back from the Rust core team.** I plan to focus all of my energies on my roles as lead of the language design team and tech lead of the [AWS Rust Platform team][awsblog][^aws]. 
+**Today I am announcing that I am stepping back from the Rust core team.** I plan to focus all of my energies on my roles as lead of the language design team and tech lead of the [AWS Rust Platform team][awsblog]. 
 
 ## Where we go from here
 
@@ -58,6 +58,7 @@ I am so excited about all that we the Rust community have built. Rust has become
 
 [^latam]: I kind of love [these three slides](https://nikomatsakis.github.io/rust-latam-2019/#109) from my Rust LATAM 2019 talk, which expressed the same basic idea, but from a different perspective.
 
+[scale the lang team]: https://github.com/rust-lang/lang-team/blob/master/design-meeting-minutes/2021-03-24-lang-team-organization.md
 
 [impossible]: https://nikomatsakis.github.io/rust-latam-2019/#101
 
