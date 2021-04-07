@@ -46,7 +46,7 @@ I am so excited about all that we the Rust community have built. Rust has become
 
 [rotation]: https://smallcultfollowing.com/babysteps/blog/2020/12/11/rotating-the-compiler-team-leads/
 
-[^nut]: If you look back at my Rust roadmap posts, you'll see that this has been a theme in [every] [single] [one].
+[^nut]: If you look back at my Rust roadmap posts, you'll see that this has been a theme in [every][] [single][] [one][].
 
 [problems]: https://smallcultfollowing.com/babysteps/blog/2020/01/09/towards-a-rust-foundation/
 [AWS]: https://smallcultfollowing.com/babysteps/blog/2020/12/30/the-more-things-change/
