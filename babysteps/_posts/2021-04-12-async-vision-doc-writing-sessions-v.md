@@ -27,3 +27,7 @@ It's going to be fun. =) Come join!
 [Portability across runtimes]: https://github.com/rust-lang/wg-async-foundations/issues/45
 ["How to vision: Shiny future"]: https://rust-lang.github.io/wg-async-foundations/vision/how_to_vision/shiny_future.html
 [Niklaus simulates hydrodynamics]: https://rust-lang.github.io/wg-async-foundations/vision/status_quo/niklaus_simulates_hydrodynamics.html
+[Wed at 07:00 ET]: https://everytimezone.com/s/a0929910
+[Wed at 15:00 ET]: https://everytimezone.com/s/c8bf3225
+[Fri at 07:00 ET]: https://everytimezone.com/s/65876196
+[Fri at 14:00 ET]: https://everytimezone.com/s/9acf2b80
