@@ -8,7 +8,7 @@ this week -- however, [Ryan Levick] will be hosting two sessions!
 
 | When | Who |
 | --- | --- |
-| [Thu at 07:00 ET][4] | Ryan |
+| [Wed at 07:00 ET][4] | Ryan |
 | [Fri at 07:00 ET][5] | Ryan |
 
 [4]: https://everytimezone.com/s/2e8907b6
