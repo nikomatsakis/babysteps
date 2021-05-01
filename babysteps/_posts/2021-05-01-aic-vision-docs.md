@@ -3,7 +3,7 @@ layout: post
 title: "[AiC] Vision Docs!"
 ---
 
-The [Async Vision Doc][vd] effort has been going now for [about 6 weeks](https://blog.rust-lang.org/2021/03/18/async-vision-doc.html). It's been a fun ride, and I've learned a lot since then. It seems like a good time to take a step back and start talking a bit about the vision doc structure and the process. In this post, I'm going to focus on the role that I see vision docs playing in Rust's planning and decision making, particularly as compared to RFCs.
+The [Async Vision Doc][vd] effort has been going now for [about 6 weeks](https://blog.rust-lang.org/2021/03/18/async-vision-doc.html). It's been a fun ride, and I've learned a lot. It seems like a good time to take a step back and start talking a bit about the vision doc structure and the process. In this post, I'm going to focus on the role that I see vision docs playing in Rust's planning and decision making, particularly as compared to RFCs.
 
 [vd]: https://rust-lang.github.io/wg-async-foundations/vision.html
 
@@ -15,7 +15,7 @@ But the RFC process isn't really the beginning. The process really begins with i
 
 [^opp]: Not problem, opportunity!
 
-We've always done this sort of "framing" when we work on RFCs. In fact, RFCs are often just one small piece of a larger picture. Think about things like `impl Trait`, which began with an intentionally conservative step ([RFC #1522]) and has been gradually extended. Async Rust of course started the same way, only in that case even the first RFC was split into two, which together described a complete first step ([RFC #2394] and [RFC #2592]).
+We've always done this sort of "framing" when we work on RFCs. In fact, RFCs are often just one small piece of a larger picture. Think about something like `impl Trait`, which began with an intentionally conservative step ([RFC #1522]) and has been gradually extended. Async Rust started the same way; in that case, though, even the first RFC was split into two, which together described a complete first step ([RFC #2394] and [RFC #2592]).
 
 [RFC #1522]: https://github.com/rust-lang/rfcs/pull/1522
 [RFC #2394]: https://github.com/rust-lang/rfcs/pull/2394
@@ -24,7 +24,7 @@ We've always done this sort of "framing" when we work on RFCs. In fact, RFCs are
 [RFC #2250]: https://github.com/rust-lang/rfcs/pull/2250
 [RFC #2592]: https://github.com/rust-lang/rfcs/pull/2592
 
-The role of a vision doc is take that implicit framing and make it explicit. Vision docs capture both the problem and the end-state that we hope to reach, and they describe the first steps we plan to take towards that end-state.
+The role of a vision doc is to take that implicit framing and make it explicit. Vision docs capture both the problem and the end-state that we hope to reach, and they describe the first steps we plan to take towards that end-state.
 
 ### The "shiny future" of vision docs
 
@@ -44,9 +44,9 @@ I'm also excited about the potential for 'interlocking' vision docs. While worki
 
 A key part of the vision doc is that it starts by documenting the ["status quo"][sq]. It's all too easy to take the "status quo" for granted -- to assume that everybody understands how things play out today. 
 
-When we started writing "status quo" stories, it was really hard to talk about the "status quo". It's really tempting to jump straight to ideas for how to fix things. It took discipline to force ourselves to just focus on describing and understanding the current state.
+When we started writing "status quo" stories, it was really hard to focus on the "status quo". It's really tempting to jump straight to ideas for how to fix things. It took discipline to force ourselves to just focus on describing and understanding the current state.
 
-I'm really glad we did though. If you haven't done so already, take a memoment to browse through the [status quo][sq] section of the doc (you may find the [metanarrative] helpful to get an overview[^34]). Reading those stories has given me a much deeper understanding of how Async is working in practice, both at a technical level but also in terms of its impact on people. This is true even when presenting highly technical context. Consider stories like [Barbara builds an async executor][bbac] or [Barbara carefully dismisses embedded future][emb]. For me, stories like this have more resonance than just seeing a list of the technical obstacles one must overcome. They also help us to talk about the various "dead-ends" that might otherwise get forgotten.
+I'm really glad we did though. If you haven't done so already, take a moment to browse through the [status quo][sq] section of the doc (you may find the [metanarrative] helpful to get an overview[^34]). Reading those stories has given me a much deeper understanding of how Async is working in practice, both at a technical level but also in terms of its impact on people. This is true even when presenting highly technical context. Consider stories like [Barbara builds an async executor][bbac] or [Barbara carefully dismisses embedded future][emb]. For me, stories like this have more resonance than just seeing a list of the technical obstacles one must overcome. They also help us talk about the various "dead-ends" that might otherwise get forgotten.
 
 [^34]: Did I mention we have **34 stories** so far (and more in open PRs)? So cool. Keep 'em coming!
 
@@ -116,7 +116,7 @@ Another idea is to try and encourage more "end-to-end" stories that weave togeth
 
 The brainstorming period is scheduled to end mid-May. At that point comes the next phase, which is when we try to sort out all the contradictory shiny future stories into one coherent picture. I envision this process being led by the async working group leads (tmandry and I), but it's going to require a lot of consensus building as well.
 
-In addition to building up the shiny future, part of this process will be deciding a concrete roadmap. The roadmap will describe the specific steps we will take first towards this shiny future. The roadmap items will correspond to particular designs and work items. And here, with those specific work items, is where we get to RFCs: when those work items call for new stdlib APIs or extensions to the language, we will write RFCs that specify them. But those RFCs will be able to reference the vision doc to explain their motivation in more depth.
+In addition to building up the shiny future, part of this process will be deciding a concrete roadmap. The roadmap will describe the specific first steps we will take first towards this shiny future. The roadmap items will correspond to particular designs and work items. And here, with those specific work items, is where we get to RFCs: when those work items call for new stdlib APIs or extensions to the language, we will write RFCs that specify them. But those RFCs will be able to reference the vision doc to explain their motivation in more depth.
 
 ### Living document: adjusting the "shiny future" as we go
 
@@ -124,7 +124,7 @@ There is one thing I want to emphasize: **the "shiny future" stories we write to
 
 ### Conclusion
 
-Ack! It's probably pretty obvious that I'm excited about the potential for vision docs. I've got a lot of things I want to say about them, but this post is getting pretty long. There are a lot of interesting questions to poke at, most of which I don't know the answers to yet. Some of the things on my mind: what are the best roles for the characters and should we tweak how they are defined[^four]? Can we come up with good heuristics for which character to use for which story? How are the "consolidation" and "iteration / living document" phases going to work? When is the appropriate time to write a vision doc -- right away, or should you wait until you've done enough work to have a clearer picture of what the future looks like? Are there lighterweight versions of the process? We're going to figure these things out as we go, and I hope to write some follow-up posts talking about them.
+Ack! It's probably pretty obvious that I'm excited about the potential for vision docs. I've got a lot of things I want to say about them, but this post is getting pretty long. There are a lot of interesting questions to poke at, most of which I don't know the answers to yet. Some of the things on my mind: what are the best roles for the characters and should we tweak how they are defined[^four]? Can we come up with good heuristics for which character to use for which story? How are the "consolidation" and "iteration / living document" phases going to work? When is the appropriate time to write a vision doc -- right away, or should you wait until you've done enough work to have a clearer picture of what the future looks like? Are there lighterweight versions of the process? We're going to figure these things out as we go, and I will write some follow-up posts talking about them.
 
 ### Footnotes
 
