@@ -1,7 +1,6 @@
 ---
 layout: post
 title: "[AiC] Vision Docs!"
-draft: true
 ---
 
 The [Async Vision Doc][vd] effort has been going now for [about 6 weeks](https://blog.rust-lang.org/2021/03/18/async-vision-doc.html). It's been a fun ride, and I've learned a lot since then. It seems like a good time to take a step back and start talking a bit about the vision doc structure and the process. In this post, I'm going to focus on the role that I see vision docs playing in Rust's planning and decision making, particularly as compared to RFCs.
