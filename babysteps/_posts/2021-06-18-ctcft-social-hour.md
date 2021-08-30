@@ -1,6 +1,7 @@
 ---
 layout: post
 title: CTCFT Social Hour
+categories: [CTCFT]
 ---
 
 Hey everyone! At the [CTCFT meeting this Monday (2021-06-21)](https://rust-ctcft.github.io/ctcft/meetings/2021-06-21.html), we're going to try a "social hour". The idea is really simple: for the hour after the meeting, we will create breakout rooms in Zoom with different themes. You can join any breakout room you like and hangout.
