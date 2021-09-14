@@ -90,6 +90,12 @@ Another time these principles can be used is when looking for new candidates for
 
 I think at this point the principles have evolved enough that it makes sense to get more widespread feedback. I'm interested in hearing from people who are active in the Rust community about whether they reflect what you love about Rust (and, if not, what might be changed). I also plan to try and use them to guide both design discussions and questions of team membership, and I encourage others in the Rust teams to do the same. If we find that they are useful, then I'd like to see them turned into an RFC and ultimately living on forge or somewhere more central.
 
+### Questions?
+
+I've opened an [internals thread](https://internals.rust-lang.org/t/blog-post-rustacean-principles/15300) for discussion.
+
+### Footnotes
+
 [writeup]: https://github.com/rust-lang/project-rfc-2229/blob/master/design-doc-closure-capture-drop-copy-structs.md
 
 [my conclusion]: https://github.com/rust-lang/project-rfc-2229/blob/master/design-doc-closure-capture-drop-copy-structs.md#nikos-conclusion
