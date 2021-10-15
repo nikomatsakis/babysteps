@@ -10,6 +10,8 @@ A quick update to my last post: first, a better way to do what I was trying to d
 
 In the previous post I covered how you could create vtables and pair the up with a data pointer to kind of "roll your own dyn". After I published the post, though, dtolnay sent me [this Rust playground link](https://play.rust-lang.org/?version=nightly&mode=debug&edition=2018&gist=adba43d6e056337cd8a297624a296219) to show me a much better approach, one based on the [erased-serde] crate. The idea is that instead of make a "vtable struct" with a bunch of fn pointers, we create a "shadow trait" that reflects the contents of that vtable:
 
+[erased-serde]: https://crates.io/crates/erased-serde
+
 ```rust
 // erased trait:
 trait ErasedAsyncIter {
