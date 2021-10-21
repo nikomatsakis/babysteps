@@ -6,7 +6,14 @@ layout: default
 title: Baby Steps
 ---
 
-<h2><u>Posts</u></h2>
+<h2><u>Recent Posts</u></h2>
+
+<div class="pagination">
+  <a href="{{ site.baseurl }}/all_posts" class="previous">
+    View all posts
+  </a>
+</div>
+
 <!-- This loops through the paginated posts -->
 {% for post in paginator.posts %}
 <div class="post_section">
@@ -26,22 +33,3 @@ title: Baby Steps
   <hr>
 </div>
 {% endfor %}
-
-<!-- Pagination links -->
-<div class="pagination">
-  {% if paginator.previous_page %}
-  <a href="{{ site.baseurl }}/{{ paginator.previous_page_path }}" class="previous">
-    ← Previous
-  </a>
-  {% else %}
-  <span class="previous"><b>← Previous</b></span>
-  {% endif %}
-  <span class="page_number ">
-    &nbsp; Page: {{ paginator.page }} of {{ paginator.total_pages }} &nbsp;
-  </span>
-  {% if paginator.next_page %}
-  <a href="{{ site.baseurl }}/{{ paginator.next_page_path }}" class="next">Next →</a>
-  {% else %}
-  <span class="next "><b>Next →</b></span>
-  {% endif %}
-</div>
