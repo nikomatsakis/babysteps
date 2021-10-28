@@ -17,5 +17,6 @@ We may yet tweak this, but the plan is to follow a "semi-structured" reading pro
 * Identify the most important functions and their purpose.
 * Dig into how a few of those functions are actually implemented.
 
-The meetings will *not* be recorded, but they will be open to anyone. The first meeting of the Rustc Reading Club will be **November 4th, 2021 at 12:00pm US Eastern time**. Hope to see you there!
+The meetings will *not* be recorded, but they will be open to anyone. The first meeting of the Rustc Reading Club will be [November 4th, 2021 at 12:00pm US Eastern time][mtg]. Hope to see you there!
 
+[mtg]: https://rust-code-reading-club.github.io/rustc/meetings/2021-11-04.html
