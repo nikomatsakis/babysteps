@@ -21,8 +21,7 @@ struct WonkaShipmentManifest {
 }
 ```
 
-Now suppose we want to iterate over those bars and put them into their packaging. Along the way, we'll insert a golden ticket. To start, we write a 
-little function that checks whether a given bar should receive a golden ticket:
+Now suppose we want to iterate over those bars and put them into their packaging. Along the way, we'll insert a golden ticket. To start, we write a little function that checks whether a given bar should receive a golden ticket:
 
 ```rust
 impl WonkaShipmentManifest {
@@ -330,6 +329,18 @@ As an example of both why this sort of refactoring can be good and bad at the sa
 ### View types and fields in traits
 
 Some time back, I had a draft RFC for [fields in traits](https://github.com/nikomatsakis/fields-in-traits-rfc/blob/master/0000-fields-in-traits.md). That RFC was "postponed" and moved to a repo to iterate, but I have never had the time to invest in bringing it back. It has some obvious overlap with this idea of views, and (iirc) I had at some point considered using "fields in traits" as the basis for declaring views. I think I rather like this more "structural" approach, but perhaps traits with fields might be a way to give names to groups of fields that public users can reference. Have to mull on that.
+
+### View types and disjoint closure capture
+
+Rust 2021 introduced [disjoint closure capture][dcc]. The idea is that closures capture one reference per *path* that is referenced, subject to some caveats. One of the things I am very happy with is that this was implemented with virtually no changes to the borrow checker: we basically just tweaked how closures are desugared. Besides saving a bunch of effort on the implementation[^hard], this means that the risk of soundness problems is not increased. This strategy does have a downside, however: closures can sometimes get bigger (though we found experimentally that they rarely do in practice, and sometimes get smaller too).
+
+[dcc]: https://doc.rust-lang.org/nightly/edition-guide/rust-2021/disjoint-capture-in-closures.html
+
+Closures that access two paths like `a.foo` and `a.bar` can get bigger because they capture those paths independently, whereas before they have just captured `a` as a whole. Interestingly, using view types offers us a way to desugar those closures without introducing unsafe code. Closures could capture `{foo, bar} a` instead of the two fields independently. Neat!
+
+[^hard]: Shout out to the [RFC 2229 working group] folks, who put in months and months and months of work on this.
+
+[RFC 2229 working group]: https://github.com/rust-lang/team/blob/master/teams/wg-rfc-2229.toml
 
 ### How does this affect learning?
 
