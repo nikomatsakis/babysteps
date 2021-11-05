@@ -4,7 +4,7 @@ title: Rustc Reading Club
 date: 2021-10-28 10:01 -0400
 ---
 
-Ever wanted to understand how rustc works? Me too! [Doc Jones] and I have been talking and we had an idea we wanted to try. Inspired by the very cool [Code Reading Club](https://code-reading.org/), we are launching an experimental [Rustc Reading Club](https://github.com/rust-code-reading-club/rustc). Doc Jones posted an [announcement on her blog](https://mojosd.medium.com/rust-code-reading-club-8fe356287049?source=social.tw), so go take a look!
+Ever wanted to understand how rustc works? Me too! [Doc Jones] and I have been talking and we had an idea we wanted to try. Inspired by the very cool [Code Reading Club](https://code-reading.org/), we are launching an experimental [Rustc Reading Club](https://github.com/rust-lang/rustc-reading-club). Doc Jones posted an [announcement on her blog](https://mojosd.medium.com/rust-code-reading-club-8fe356287049?source=social.tw), so go take a look!
 
 [Doc Jones]: https://github.com/doc-jones
 
@@ -19,4 +19,4 @@ We may yet tweak this, but the plan is to follow a "semi-structured" reading pro
 
 The meetings will *not* be recorded, but they will be open to anyone. The first meeting of the Rustc Reading Club will be [November 4th, 2021 at 12:00pm US Eastern time][mtg]. Hope to see you there!
 
-[mtg]: https://rust-code-reading-club.github.io/rustc/meetings/2021-11-04.html
+[mtg]: https://rust-lang/rustc-reading-club/meetings/2021-11-04.html
