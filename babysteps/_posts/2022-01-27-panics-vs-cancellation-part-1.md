@@ -27,7 +27,7 @@ Consider this simple pseudocode (inspired by [tomaka's blog post][tomaka]). The 
 [tomaka]: https://tomaka.medium.com/a-look-back-at-asynchronous-rust-d54d63934a1c
 
 ```rust
-fn copy_data(from_file: &File, to_sucket: &Socket) {
+fn copy_data(from_file: &File, to_socket: &Socket) {
     let buffer = from_file.read();
     let parsed_items = parse(buffer);
     parsed_items.send(to_socket);
@@ -47,7 +47,7 @@ The initial design of Rust included the idea that panic recovery was only possib
 All of this discussion of course begs the question, how *is* one supposed to handle error recovery in Rust? The answer, of course, is [the `?` operator](https://doc.rust-lang.org/book/ch09-02-recoverable-errors-with-result.html). This operator desugars into a pattern match, but it has the effect of "propagating" the error to the caller of the function. If we look at the `copy_data` one more time, but imagine that any potential errors were propagated using results, it would look like:
 
 ```rust
-fn copy_data(from_file: &File, to_sucket: &Socket) -> eyre::Result<()> {
+fn copy_data(from_file: &File, to_socket: &Socket) -> eyre::Result<()> {
     let buffer = from_file.read()?;
     let parsed_items = parse(buffer);
     parsed_items.send(to_socket)?;
@@ -57,7 +57,7 @@ fn copy_data(from_file: &File, to_sucket: &Socket) -> eyre::Result<()> {
 The nice thing about this code is that one can easily see and audit potential errors: for example, I can see that `send` may result in an error, and a sharp-eyed reviewer might see the potential data loss.[^auditpostfacto] Even better, I can do some sort of recovery in the case of error by opting not to forward the error but matching instead. (Note that the `send` methods [typically pass back the message in the event of an error](https://doc.rust-lang.org/std/sync/mpsc/struct.Sender.html#method.send).)
 
 ```rust
-fn copy_data(from_file: &File, to_sucket: &Socket) -> eyre::Result<()> {
+fn copy_data(from_file: &File, to_socket: &Socket) -> eyre::Result<()> {
     let buffer = from_file.read()?;
     let parsed_items = parse(buffer);
     match parsed_items.send(to_socket) {
@@ -79,7 +79,7 @@ In Rust, our cancellation story is centered around dropping. The idea is that to
 
 
 ```rust
-async fn copy_data(from_file: &File, to_sucket: &Socket) {
+async fn copy_data(from_file: &File, to_socket: &Socket) {
     let buffer = from_file.read().await;
     let parsed_items = parse(buffer);
     parsed_items.send(to_socket).await;
@@ -98,6 +98,6 @@ In the next post I plan to start looking at examples of async cancellation and p
 
 ## Thanks
 
-Thanks to Aaron Turon, Yoshua Wuyts, Yehuda Katz, and others with whom I've deep dived on this topic over the years    , and to tomaka for their [blog post][tomaka].
+Thanks to Aaron Turon, Yoshua Wuyts, Yehuda Katz, and others with whom I've deep dived on this topic over the years, and to tomaka for their [blog post][tomaka].
 
 ## Footnotes
