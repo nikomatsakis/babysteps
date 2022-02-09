@@ -27,7 +27,7 @@ As Rust usage continues to grow, I have been able to talk to quite a number of R
 
 [^concurrency]: Most commonly, if Rust has an edge of a language like Java, it is because of our stronger concurrency guarantees. But it's not only that. It's also that meeting the required performance bar in other languages often requires one to write code that is "rather clever". Rust's higher performance means that one can write simpler code instead, which then has correspondingly fewer bugs.
 
-That said, it's also quite clear that using Rust has a significant [cognitive overhead]. Few Rust users feel like true experts[^survey]. There are a few topics -- "where clauses", "lifetimes" -- that people mention over and over as being confusing. Still, the more I talk to people, the more I get the sense that the problem isn't any *one* thing, it's *all* the things. It's having to juggle a lot of concerns all at once, and having to get everything lined up before one can even see your code run.
+That said, it's also quite clear that using Rust has a significant [cognitive overhead]. Few Rust users feel like true experts[^survey]. There are a few topics -- "where clauses", "lifetimes" -- that people mention over and over as being confusing. The more I talk to people, the more I get the sense that the problem isn't any *one* thing, it's *all* the things. It's having to juggle a lot of concerns all at once, and having to get everything lined up before one can even see your code run.
 
 [cognitive overhead]: https://blog.thegovlab.org/post/a-new-vocabulary-for-the-21st-century-cognitive-overhead
 
