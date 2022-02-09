@@ -23,7 +23,7 @@ As we enter 2022, I am finding my thoughts turning more and more to the next Rus
 
 As Rust usage continues to grow, I have been able to talk to quite a number of Rust users with a wide variety of backgrounds and experience. One of the themes I like to ask about is their experience of learning Rust. In many ways, the story here is much better than I had anticipated. Most people are able to learn Rust and feel productive in 3-6 months. Moreover, once they get used to it, most people seem to really enjoy it, and they talk about how learning ownership rules influences the code they write in other languages too (for the better). They also talk about experiencing far fewer bugs in Rust than in other languages -- this is true for C++[^cppbugs], but it's also true for things written in Java or other languages[^concurrency].
 
-[^cppbugs]: I've talked to a lot of teams that ported code from C++ to Rust and which report having experienced **no** crashes in 3+ years. That's just amazing.
+[^cppbugs]: I talked to a team that developed some low-level Rust code (what would've been writte in C++) and they reported experienced **one** crash in 3+ years, which originated in an FFI to a C library. That's just amazing.
 
 [^concurrency]: Most commonly, if Rust has an edge of a language like Java, it is because of our stronger concurrency guarantees. But it's not only that. It's also that meeting the required performance bar in other languages often requires one to write code that is "rather clever". Rust's higher performance means that one can write simpler code instead, which then has correspondingly fewer bugs.
 
