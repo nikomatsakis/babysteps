@@ -133,7 +133,7 @@ Many things that were hard for `dyn Trait` values are trivial for `dyn* Trait` v
 
 In short, a large number of the barriers that make traits “not dyn-safe” don’t apply to `dyn*`. Not all, of course. Traits that take parameters of type `Self` won’t work (we don’t know that two `dyn* Trait` types have the same underlying type) and we also can’t support generic methods in many cases (we wouldn’t know how to monomorphize)[^options].
 
-[^options]: I think we could lift this restriction but it’s going to take a bit more design.
+[^options]: Obviously, we would be lifting this partly to accommoate `impl Trait` arguments. I think we could lift this restriction in more cases but it’s going to take a bit more design.
 
 ### A catch: `dyn* Foo` requires `Box<impl Foo>: Foo` and friends
 
