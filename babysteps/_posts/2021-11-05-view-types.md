@@ -6,13 +6,13 @@ date: 2021-11-05 11:37 -0400
 
 I wanted to write about an idea that's been kicking around in the back of my mind for some time. I call it *view types*. The basic idea is to give a way for an `&mut` or `&` reference to identify which fields it is actually going to access. The main use case for this is having "disjoint" methods that don't interfere with one another.
 
-### This is not a propsoal (yet?)
+### This is not a proposal (yet?)
 
 To be clear, this isn't an RFC or a proposal, at least not yet. It's some early stage ideas that I wanted to document. I'd love to hear reactions and thoughts, as I discuss in the conclusion.
 
 ### Running example
 
-As a running example, consider this struct `WonkaChoclateShipment`. It combines a vector `bars` of `ChocolateBars` and a list `golden_tickets` of indices for bars that should receive a ticket.
+As a running example, consider this struct `WonkaShipmentManifest`. It combines a vector `bars` of `ChocolateBars` and a list `golden_tickets` of indices for bars that should receive a ticket.
 
 ```rust
 struct WonkaShipmentManifest {
@@ -303,7 +303,7 @@ to get a view of type `&{upper_left.x} Square`. Paths like `s.upper_left.y` and 
 
 ### View types and named groups
 
-There is another interaction with view types and privacy: view types name fields, but if you have private fields, you probably don't want people outside your module typing their names, since that would prevent you from renaming them. At the same time, you might like to be able to let users refer to "groups of data" more abstractly. For example, for a `WonkaChocolateShipment`, I might like users to know they can iterate the bars *and* check if they have a golden ticket at once:
+There is another interaction with view types and privacy: view types name fields, but if you have private fields, you probably don't want people outside your module typing their names, since that would prevent you from renaming them. At the same time, you might like to be able to let users refer to "groups of data" more abstractly. For example, for a `WonkaShipmentManifest`, I might like users to know they can iterate the bars *and* check if they have a golden ticket at once:
 
 ```rust
 impl WonkaShipmentManifest {
@@ -344,7 +344,7 @@ Closures that access two paths like `a.foo` and `a.bar` can get bigger because t
 
 ### How does this affect learning?
 
-I'm always way about extending "core Rust" because I don't want to make Rust harder to learn. However, I also tend to feel that extensions like this one can have the opposite effect: I think that what throws people the *most* when learning Rust is trying to get a feel for what they can and cannot do. When they hit "arbitrary" restrictions like "cannot say that my helper function only uses a subset of my fields"[^eg] that can often be the most confusing thing of all, because at first people think that they just don't understand the system. "Surely there must be some way to do this!"
+I'm always wary about extending "core Rust" because I don't want to make Rust harder to learn. However, I also tend to feel that extensions like this one can have the opposite effect: I think that what throws people the *most* when learning Rust is trying to get a feel for what they can and cannot do. When they hit "arbitrary" restrictions like "cannot say that my helper function only uses a subset of my fields"[^eg] that can often be the most confusing thing of all, because at first people think that they just don't understand the system. "Surely there must be some way to do this!"
 
 Going a bit further, one of the other challenges with Rust's borrow checker is that so much of its reasoning is invisible and lacks explicit syntax. There is no way to "hand annotate" the value of lifetime parameters, for example, so as to explore how they work. Similarly, the borrow checker is currently tracking fine-grained state about which paths are borrowed in your program, but you have no way to *talk* about that logic explicitly. Adding explicit types may indeed prove *helpful* for learning.
 
