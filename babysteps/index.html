@@ -18,7 +18,7 @@ title: Baby Steps
 {% for post in paginator.posts %}
 <div class="post_section">
   <p class="listing_date">{{ post.date | date_to_long_string }}</p>
-  <a href="{{ site.baseurl }}/{{ post.url }}">
+  <a href="{{ site.baseurl }}{{ post.url }}">
     <h3 class="listing_title">{{ post.title }}</h3>
   </a>
   <!--
@@ -28,7 +28,7 @@ title: Baby Steps
     {% endfor %}
   </div>
 -->
-  <p>{{post.excerpt}} (<a href="{{ site.baseurl }}/{{ post.url }}">read more...)</a></p>
+  <p>{{post.excerpt}} (<a href="{{ site.baseurl }}{{ post.url }}">read more...)</a></p>
   <br>
   <hr>
 </div>
