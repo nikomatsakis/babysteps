@@ -48,6 +48,7 @@ kramdown:
 plugins:
   - jekyll-feed
   - jekyll-paginate
+  - jekyll-spaceship
 
 exclude:
   - Gemfile
@@ -74,4 +75,9 @@ defaults:
     values:
       layout: "post"
 
+jekyll-spaceship:
+  mermaid-processor:
+    mode: default
+    syntax:
+      code: 'mermaid'
 

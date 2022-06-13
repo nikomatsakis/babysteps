@@ -24,5 +24,6 @@ group :jekyll_plugins do
    gem 'jekyll-compose'
    gem 'jekyll-graphviz'
    gem 'jekyll-paginate'
+   gem 'jekyll-spaceship'
 end
 
