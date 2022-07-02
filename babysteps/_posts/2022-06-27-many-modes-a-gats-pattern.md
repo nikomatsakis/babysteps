@@ -70,7 +70,7 @@ Here, the `T` represents the result type of "some parser parsed in this mode". G
 * [`Check`](https://github.com/zesterer/chumsky/blob/6a82f90ae4c1a4564e024eb0f63121fc7b7d3c18/src/zero_copy/mod.rs#L115-L117), defined like `struct Check; impl Mode for Check { type Output<T> = (); ... }`. In other words, no matter what parser you use, `Check` just builds a `()` result (success or failure is propagated inepdendently of the mode).
 * [`Emit`](https://github.com/zesterer/chumsky/blob/6a82f90ae4c1a4564e024eb0f63121fc7b7d3c18/src/zero_copy/mod.rs#L87-L89), defined like `struct Emit; impl Mode for Emit { type Output<T> = T; ... }`.  In `Emit` mode, the output is exactly what the parser generated.
 
-Note that you could, in theory, produce other modes. For example, a `Count` mode that not only computes success/failure but counts the number of nodes parsed, or perhaps a mode that computes hashes of the reuslting parsed value. Moreover, you could add these modes (and the defaulted methods in `Parser`) **without breaking any clients**.
+Note that you could, in theory, produce other modes. For example, a `Count` mode that not only computes success/failure but counts the number of nodes parsed, or perhaps a mode that computes hashes of the resulting parsed value. Moreover, you could add these modes (and the defaulted methods in `Parser`) **without breaking any clients**.
 
 ### How could you model this today?
 
