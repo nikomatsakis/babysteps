@@ -27,3 +27,8 @@ group :jekyll_plugins do
    gem 'jekyll-spaceship'
 end
 
+# Fix `bundle exec jekyll serve` fails 
+gem "webrick"
+
+# Fix: minima theme not used after overriding `main.scss`
+gem "minima", "~> 2.5"
