@@ -118,7 +118,7 @@ where
 
 But even if Rust *did* support it, you can see that the `Mode<T>` trait doesn't capture the user's intent as closely as the [`Mode`] trait from Chumsky did. The [`Mode`] trait was defined independently from all parsers, which is what we wanted. The `Mode<T>` trait is defined relative to some specific parser, and then it falls to the `go` function to say "oh, I want this to be a mode for *all* parsers" using a HRTB.
 
-Using just HRTB (which, against, Rust doesn't have), you could define *another* trait...
+Using just HRTB (which, again, Rust doesn't have), you could define *another* trait...
 
 ```rust
 trait Mode: for<O> ModeFor<O> {}
