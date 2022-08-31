@@ -126,7 +126,7 @@ Many things that were hard for `dyn Trait` values are trivial for `dyn* Trait` v
 
 * By-value `self` methods work fine: a `dyn* Trait` value is sized, so you can move ownership of it just by copying its bytes.
 * Returning `Self`, as in the `Clone` trait, works fine.
-	* Similarly, the fact that `trait Clone: Sized` doesn’t mean that `dyn* Clone` can’t implement `Clonr`, although it does imply that `dyn Clone: Clone` cannot hold.
+	* Similarly, the fact that `trait Clone: Sized` doesn’t mean that `dyn* Clone` can’t implement `Clone`, although it does imply that `dyn Clone: Clone` cannot hold.
 * Function arguments of type `impl ArgTrait` can be converted to `dyn* ArgTrait`, so long as `ArgTrait` is dyn*-safe
 * Returning an `impl ArgTrait` can return a `dyn* ArgTrait`.
 
