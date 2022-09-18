@@ -230,8 +230,10 @@ OK, so let’s put it all together into a coherent design proposal:
 	* When invoked via dynamic dispatch, async functions return a `dyn* Future`. The caller can invoke `poll` via virtual dispatch and invoke the (virtual) drop function when it’s ready to dispose of the future.
 	* The vtable created for `Boxing<AI>` will allocate a box to store the future `AI::next()` and use that to create the `dyn* Future`.
 	* The vtable for other adapters can use whatever strategy they want. `InlineAsyncIterator<AI>`, for example, stores the `AI::next()` future into a field in the wrapper, takes a raw pointer to that field, and creates a `dyn* Future` from this raw pointer.
-* As a backwards compatible improvement for better performance:
+* As a backwards compatible improvement for better performance:[^tmandry]
 	* We modify the ABI for async trait functions (or any trait function using return-position impl trait) to allow the caller to optionally provide stack space. The `Boxing` adapter, if such stack space is available, will use it to avoid boxing when it can. This would have to be coupled with some compiler analysis to figure out how much to stack space to pre-allocate.
+
+[^tmandry]: I should clarify that, while Tyler and I have discussed this, I don't know how he feels about it. I wouldn't call it 'part of the proposal' exactly, more like an extension I am interested in.
 
 This lets us express virtually any pattern. Its even *possible* to express side-stacks, if the runtime provides a suitable adapter (e.g., `TokioSideStackAdapter::new(ai)`), though if side-stacks become popular I would rather consider a more standard means to expose them.
 
