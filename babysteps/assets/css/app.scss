@@ -37,3 +37,9 @@ $on-laptop:        800px;
 
 // Import partials from the `minima` theme.
 @import "minima";
+
+// fix <code> nodes cause horizontal scroll on mobile
+.highlight {
+    overflow-y: auto;
+    width: 100%;
+}
