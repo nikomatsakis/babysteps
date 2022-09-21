@@ -112,7 +112,7 @@ fn print_me(x: dyn* Debug + ‘_) {
 }
 
 fn print_me_later(x: dyn* Debug + ‘_) -> impl FnOnce() + ‘_ {
-    move || println!(“{x:?}”);
+    move || println!(“{x:?}”)
 }
 ```
 
