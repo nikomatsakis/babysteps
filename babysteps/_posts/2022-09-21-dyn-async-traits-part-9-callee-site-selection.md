@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 'Dyn async traits, part 9: callee-site selection'
+title: 'Dyn async traits, part 9: call-site selection'
 date: 2022-09-21 17:35 -0400
 ---
 
@@ -52,25 +52,33 @@ If we add [postfix macros], then we might even support something like `return_dy
 
 ## What are unsized return values?
 
-This idea of returning `dyn Future` is sometimes called "unsized return values", as functions can now return values of "unsized" type (i.e., types who size is not statically known). They've been proposed in [RFC 2884] by [Olivier Faure](https://github.com/PoignardAzur), and I believe there were some earlier RFCs as well. The `.box` operator, meanwhile, has been a part of Rust since approximately forever, though the current (unstable) support uses prefix form (`box foo`)[^prefix-box].
+This idea of returning `dyn Future` is sometimes called "unsized return values", as functions can now return values of "unsized" type (i.e., types who size is not statically known). They've been proposed in [RFC 2884] by [Olivier Faure], and I believe there were some earlier RFCs as well. The `.box` operator, meanwhile, has been a part of "nightly Rust" since approximately forever, though its currently written in prefix form, i.e., `box foo`[^prefix-box].
 
-The primary motivation for both unsized-return-values and `.box` has historically been efficiency: they permit in-place initialization in cases where it is not possible today. For example, if I write `Box::new([0; 1024])` today, I am technically allocating a `[0; 1024]` buffer on the stack and then copying it into the box. The optimizer may be able to fix that, but it's not trivial, because if you look at the order of operations, it requires pulling the allocation up earlier:
+[Olivier Faure]: https://github.com/PoignardAzur
+
+The primary motivation for both unsized-return-values and `.box` has historically been efficiency: they permit in-place initialization in cases where it is not possible today. For example, if I write `Box::new([0; 1024])` today, I am technically allocating a `[0; 1024]` buffer on the stack and then copying it into the box: 
+
+```rust
+// First evaluate the argument, creating the temporary:
+let temp: [u8; 1024] = ...;
+
+// Then invoke `Box::new`, which allocates a Box...
+let box: *const T = allocate_memory();
+
+// ...and copies the memory in.
+std::ptr::write(box, temp);
+```
+
+The optimizer may be able to fix that, but it's not trivial. If you look at the order of operations, it requires making the allocation happen *before* the arguments are allocated. LLVM considers calls to known allocators to be "side-effect free", but promoting them is still risky, since it means that more memory is allocated earlier, which can lead to memory exhaustion. The point isn't so much to look at exactly what optimizations LLVM will do in practice, so much as to say that it is not trivial to optimize away the temporary: it requires some thoughtful heuristics.
 
 [RFC 2884]: https://github.com/rust-lang/rfcs/pull/2884
 
 [^prefix-box]: The `box foo` operator supported by the compiler has no current path to stabilization. There were earlier plans (see [RFC 809](https://github.com/rust-lang/rfcs/pull/809) and [RFC 1228](https://rust-lang.github.io/rfcs/1228-placement-left-arrow.html)), but we ultimately abandoned those efforts. Part of the problem, in fact, was that the precedence of `box foo` made for bad ergonomics: `foo.box` works much better.
 
-```rust
-let temp = [0; 1024]; 
-let box: *const T = allocate_memory();
-std::ptr::write(box, temp); // copy memory in
-```
-
-LLVM considers calls to known allocators to be "side-effect free", but promoting them is still risky, since it means that more memory is allocated earlier, which can lead to memory exhaustion. The point isn't so much to look at exactly what optimizations LLVM will do in practice, so much as to say that it is not trivial to optimize away the temporary: it requires some thoughtful heuristics.
 
 ## How would unsized return values work?
 
-This merits a blog post of its own, and I won't dive into details. For our purposes here, the key point is that somehow when the callee goes to return its final value, it can use whatever strategy the caller prefers to get a return point, and write the return value directly in there. [RFC 2884] proposes one solution based on generators, but I think we'd want to do a deep dive into all the alternatives.
+This merits a blog post of its own, and I won't dive into details. For our purposes here, the key point is that somehow when the callee goes to return its final value, it can use whatever strategy the caller prefers to get a return point, and write the return value directly in there. [RFC 2884] proposes one solution based on generators, but I would want to spend time thinking through all the alternatives before we settled on something.
 
 ## Using dynamic return types for async fn in traits
 
@@ -95,7 +103,7 @@ fn use_dyn(di: &mut dyn AsyncIterator) {
 
 The expression `di.next()` by itself yields a `dyn Future`. This type is not sized and so it won't compile on its own. Adding `.box` produces a `Box<dyn AsyncIterator>`, which you can then await.[^pin]
 
-[^pin]: If you try to `await` ` Box<dyn Future>` today, you get an error that it needs to be pinned ([try it yourself](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=b981b7eafee70cc39f70176f6b135023)). I think we can solve that by implementing `IntoFuture` for `Box<dyn Future>` and having that convert it to `Pin<Box<dyn Future>>`.
+[^pin]: If you try to await a `Box<dyn Future>` today, you [get an error that it needs to be pinned](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=b981b7eafee70cc39f70176f6b135023). I think we can solve that by implementing `IntoFuture` for `Box<dyn Future>` and having that convert it to `Pin<Box<dyn Future>>`.
 
 Compared to the `Boxing` adapter I discussed before, this is relatively straightforward to explain. I'm not entirely sure which is more convenient to use in practice: it depends how many `dyn` values you create and how many methods you call on them. Certainly you can work around the problem of having to write `.box` at each call-site via wrapper types or helper methods that do it for you.
 
@@ -105,9 +113,11 @@ There is one complication. Today in Rust, every `dyn Trait` type also implements
 
 ## But...does `dyn AsyncIterator` have to implement `AsyncIterator`?
 
-In fact, there is no "hard and fixed" reason that `dyn Trait` types have to implement `Trait`, and in fact there are a few good reasons NOT to do it. The alternative to dyn safety is a design like this: you can *always* create a `dyn Trait` value for any `Trait`, but you may not be able to use all of its members. For example, given a `dyn Iterator`, you could call `next`, but you couldn't call generic methods like `map`. In fact, we've kind of got this design in practice, thanks to the [`where Self: Sized` hack](https://rust-lang.github.io/rfcs/0255-object-safety.html#adding-a-where-clause) that lets us exclude methods from being used on `dyn` values.
+There is no "hard and fixed" reason that `dyn Trait` types have to implement `Trait`, and there are a few good reasons *not* to do it. The alternative to dyn safety is a design like this: you can *always* create a `dyn Trait` value for any `Trait`, but you may not be able to use all of its members. For example, given a `dyn Iterator`, you could call `next`, but you couldn't call generic methods like `map`. In fact, we've kind of got this design in practice, thanks to the [`where Self: Sized` hack](https://rust-lang.github.io/rfcs/0255-object-safety.html#adding-a-where-clause) that lets us exclude methods from being used on `dyn` values.
 
 Why did we adopt object safety in the first place? If you look back at [RFC 255], the primary motivation for this rule was ergonomics: clearer rules and better error messages. Although I argued for [RFC 255] at the time, I don't think these motivations have aged so well. Right now, for example, if you have a trait with a generic method, you get an error when you try to create a `dyn Trait` value, telling you that you cannot create a `dyn Trait` from a trait with a generic method. But it may well be clearer to get an error at the point where you to call that generic method telling you that you cannot call generic methods through `dyn Trait`.
+
+Another motivation for having `dyn Trait` implement `Trait` was that one could write a generic function with `T: Trait` and have it work equally well for object types. That capability *is* useful, but because you have to write `T: ?Sized` to take advantage of it, it only really works if you plan carefully. In practice what I've found works much better is to implement `Trait` to `&dyn Trait`.
 
 [RFC 255]: https://rust-lang.github.io/rfcs/0255-object-safety.html
 
@@ -144,16 +154,17 @@ where
 What you *can* do is implement a wrapper type that encapsulates the boxing:
 
 ```rust
-struct BoxingAsyncIterator<'d, I> {
-    iter: &'de mut dyn AsyncIterator<Item = I>
+struct BoxingAsyncIterator<'i, I> {
+    iter: &'i mut dyn AsyncIterator<Item = I>
 }
 
-impl AsyncIterator for BoxingAsyncIterator<'d> {
-    tpye Item = I;
+impl<I> AsyncIterator for BoxingAsyncIterator<'i, I> {
+    type Item = I;
     
     async fn next(&mut self) -> Option<Self::Item> {
         self.iter.next().box.await
     }
+}
 ```
 
 ...and then you can call `use_any(BoxingAsyncIterator::new(ai))`.[^boxing]
@@ -162,9 +173,13 @@ impl AsyncIterator for BoxingAsyncIterator<'d> {
 
 ## Limitation: what if you wanted to do stack allocation?
 
-One of the goals with the original proposal was to allow you to write code that used `dyn AsyncIterator` which worked equally well in std and no-std environments. I would say that goal was partially achieved. The core idea was that the caller would choose the strategy by which the future got allocated, and so it could opt to use inline allocation (and thus be no-std compatible) or use boxing (and thus be simple). 
+One of the goals with the [previous proposal] was to allow you to write code that used `dyn AsyncIterator` which worked equally well in std and no-std environments. I would say that goal was partially achieved. The core idea was that the caller would choose the strategy by which the future got allocated, and so it could opt to use inline allocation (and thus be no-std compatible) or use boxing (and thus be simple). 
 
-In the new proposal, the call-site has to choose. You might think then that you could just choose to use stack allocation at the call-site and thus be no-std compatible. But how does one choose stack allocation? It's actually quite tricky! Part of the problem is that async stack frames are stored in structs, and thus we cannot support something like `alloca` (at least not for values that will be live across an await, which includes any future that is awaited). In fact, even outside of async, using alloca is quite hard! The problem is that a stack is, well, a stack. Ideally, you would do the allocation just before your callee returns, but that's when you know how much memory you need. But at that time, your callee is still using the stack, so your allocation is on the wrong spot.[^ada] I personally think we should just rule out the idea of using alloca to do stack allocation.
+[previous proposal]: {{ site.baseurl }}/blog/2022/09/18/dyn-async-traits-part-8-the-soul-of-rust/
+
+In this proposal, the call-site has to choose. You might think then that you could just choose to use stack allocation at the call-site and thus be no-std compatible. But how does one choose stack allocation? It's actually quite tricky! Part of the problem is that async stack frames are stored in structs, and thus we cannot support something like `alloca` (at least not for values that will be live across an await, which includes any future that is awaited[^expl]). In fact, even outside of async, using alloca is quite hard! The problem is that a stack is, well, a stack. Ideally, you would do the allocation just before your callee returns, but that's when you know how much memory you need. But at that time, your callee is still using the stack, so your allocation is on the wrong spot.[^ada] I personally think we should just rule out the idea of using alloca to do stack allocation.
+
+[^expl]: [Brief explanation of why async and alloca don't mix here.](https://internals.rust-lang.org/t/blog-series-dyn-async-in-traits-continues/17403/52?u=nikomatsakis)
 
 [^ada]: I was told Ada compiles will allocate the memory at the top of the stack, copy it over to the start of the function's area, and then pop what's left. Theoretically possible!
 
@@ -174,7 +189,9 @@ If we can't use alloca, what can we do? We have a few choices. In the very begin
 
 [^size]: Conceivably you could set the size to `size_of(SomeOtherType)` to automatically determine how much space is needed.
 
-You can also achieve inlining by writing wrapper types ([something we prototyped some time back][proto]), but the challenge then is that your callee doesn't accept a `&mut dyn AsyncIterator`, it accepts something like `&mut DynAsyncIter`, where `DynAsyncIter` is a struct that you defined to do the wrapping (tmandry and I actually [prototyped this idea](https://github.com/nikomatsakis/dyner/blob/8086d4a16f68a2216ddff5c03c8c5b3d94ed93a2/src/dyn_async_iter.rs#L4-L6) some time back, when doing some exploration).
+You can also achieve inlining by writing wrapper types ([something tmandry and I prototyped some time back][proto]), but the challenge then is that your callee doesn't accept a `&mut dyn AsyncIterator`, it accepts something like `&mut DynAsyncIter`, where `DynAsyncIter` is a struct that you defined to do the wrapping.
+
+[proto]: https://github.com/nikomatsakis/dyner/blob/8086d4a16f68a2216ddff5c03c8c5b3d94ed93a2/src/dyn_async_iter.rs#L4-L6
 
 **All told, I think the answer in reality would be: If you want to be used in a no-std environment, you don't use `dyn` in your public interfaces. Just use `impl AsyncIterator`. You can use hacks like the wrapper types internally if you really want dynamic dispatch.**
 
@@ -193,7 +210,7 @@ To sum up, I think for most users this design would work like so...
 * If you want to write code that is sometimes using dyn and sometimes using static dispatch, you'll have to write some awkward wrapper types.[^fornow]
 * If you are writing no-std code, use `impl Trait`, not `dyn Trait`; if you must use `dyn`, it'll require wrapper types.
 
-Initially, I dismissed call-site allocation because it violated `dyn Trait: Trait` and it didn't allow code to be written with `dyn` that could work in both std and no-std. But I think that violating `dyn Trait: Trait` may actually be good, and I'm not sure how important that latter constraint truly is. Furthermore, I think that `Boxing::new` and the various "dyn adapters" are probably going to be pretty confusing for users, but writing `.box` on a call-site is relatively easy to explain ("we don't know what future you need, so you have to box it"). So now it seems a lot more appealing to me, and I'm grateful to Olivier Faure for bringing it up again.
+Initially, I dismissed call-site allocation because it violated `dyn Trait: Trait` and it didn't allow code to be written with `dyn` that could work in both std and no-std. But I think that violating `dyn Trait: Trait` may actually be good, and I'm not sure how important that latter constraint truly is. Furthermore, I think that `Boxing::new` and the various "dyn adapters" are probably going to be pretty confusing for users, but writing `.box` on a call-site is relatively easy to explain ("we don't know what future you need, so you have to box it"). So now it seems a lot more appealing to me, and I'm grateful to [Olivier Faure] for bringing it up again.
 
 [^limit]: I say *at least some* because I suspect many details of the more general case would remain unstable until we gain more experience.
 
@@ -226,3 +243,5 @@ where
 ...when you write `F::Output`, that is actually normalized to `R`, and the type `R` has its own (implicit) `Sized` bound. 
 
 (There's was actually a recent unsoundness related to this bound, [closed by this PR](https://github.com/rust-lang/rust/pull/100096), and we [discussed exactly this forwards compatibility question on Zulip.](https://rust-lang.zulipchat.com/#narrow/stream/326866-t-types.2Fnominated/topic/.23100096.3A.20a.20fn.20pointer.20doesn't.20implement.20.60Fn.60.2F.60FnMut.60.2F.60FnOnc.E2.80.A6/near/297797248))
+
+## Footnotes
