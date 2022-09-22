@@ -226,7 +226,7 @@ Please leave comments in [this internals thread](https://internals.rust-lang.org
 
 Here is an interesting thing! The `FnOnce` trait, implemented by all callable things, defines its associated type [`Output`](https://doc.rust-lang.org/std/ops/trait.FnOnce.html#associatedtype.Output) as `Sized`! We have to change this if we want to allow unsized return values. 
 
-In theory, this could be a big backwards compatibility hazard. Code that writes `F::Output` can assume, based on the trait, that the return value is sized -- so if we remove that bound, the code will no longer builder!
+In theory, this could be a big backwards compatibility hazard. Code that writes `F::Output` can assume, based on the trait, that the return value is sized -- so if we remove that bound, the code will no longer build!
 
 Fortunately, I think this is ok. We've deliberately restricted the fn types so you can only use them with the `()` notation, e.g., `where F: FnOnce()` or `where F: FnOnce() -> ()`. Both of these forms expand to something which explicitly specifies `Output`, like `F: FnOnce<(), Output = ()>`. What this means is that even if you really generic code...
 
