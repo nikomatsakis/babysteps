@@ -8,7 +8,7 @@ After my last post on dyn async traits, some folks pointed out that I was overlo
 
 ## If we added support for unsized return values...
 
-Imagine that we could have a function that returned a `dyn Future`:
+The idea is to build on the mechanisms proposed in [RFC 2884]. With that RFC, you would be able to have functions that returned a `dyn Future`:
 
 ```rust
 fn return_dyn() -> dyn Future<Output = ()> {
