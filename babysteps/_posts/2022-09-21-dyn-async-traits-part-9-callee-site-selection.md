@@ -6,7 +6,7 @@ date: 2022-09-21 17:35 -0400
 
 After my last post on dyn async traits, some folks pointed out that I was overlooking a seemingly obvious possibility. Why not have the choice of how to manage the future be made at the call site? It's true, I had largely dismissed that alternative, but it's worth consideration. This post is going to explore what it would take to get call-site-based dispatch working, and what the ergonomics might look like. I think it's actually fairly appealing, though it has some limitations.
 
-## Background: Unsized return types, box operator
+## If we added support for unsized return values...
 
 Imagine that we could have a function that returned a `dyn Future`:
 
@@ -16,28 +16,28 @@ fn return_dyn() -> dyn Future<Output = ()> {
 }
 ```
 
-Normally, when you call a function, we can allocate space on the stack to store the return value. But when you call `return_dyn`, we don't know how much space we need at compile time, so we can't do that[^alloca]. This means you can't just write `let x = return_dyn()`. Instead, you have to choose how to allocate that memory. The most common option would be to store it on the heap, perhaps using `Box::new_with`, which takes a closure returning a value of any type and allocates a suitable box:
+Normally, when you call a function, we can allocate space on the stack to store the return value. But when you call `return_dyn`, we don't know how much space we need at compile time, so we can't do that[^alloca]. This means you can't just write `let x = return_dyn()`. Instead, you have to choose how to allocate that memory. Using the APIs proposed in [RFC 2884], the most common option would be to store it on the heap. A new method, `Box::new_with`, would be added to `Box`; it acts like `new`, but it takes a closure, and the closure can return values of any type, including `dyn` values:
 
 ```rust
 let result = Box::new_with(|| return_dyn());
 // result has type `Box<dyn Future<Output = ()>>`
 ```
 
-Invoking `new_with` is ergonomically unpleasant, so we could also add a `.box` operator. Rust has had an unstable `box` operator since forever, this might finally provide enough motivation to make it worth adding:
+Invoking `new_with` would be ergonomically unpleasant, so we could also add a `.box` operator. Rust has had an unstable `box` operator since forever, this might finally provide enough motivation to make it worth adding:
 
 ```rust
 let result = return_dyn().box;
 // result has type `Box<dyn Future<Output = ()>>`
 ```
 
-Of course, you don't *have* to use `Box`. For example, perhaps you use your favorite arena library, which has been extended with a `new_with` function:
+Of course, you wouldn't *have* to use `Box`. Assuming we have sufficient APIs available, people can write their own methods, such as something to do arena allocation...
 
 ```rust
 let arena = Arena::new();
 let result = arena.new_with(|| return_dyn());
 ```
 
-Or perhaps a hypothetical `maybe_box`, which would use a buffer if that's big enough, and use box otherwise:
+...or perhaps a hypothetical `maybe_box`, which would use a buffer if that's big enough, and use box otherwise:
 
 ```rust
 let mut big_buf = [0; 1024];
