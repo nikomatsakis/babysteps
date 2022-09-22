@@ -8,7 +8,7 @@ I’ve been thinking about what “Rust 2024” will look like lately. I don’t
 
 ## Async *everywhere*
 
-Let’s start with async. Right now, you can write async functions, but not in traits[^async-trait]. You can’t write async closures. You can’t use async drop. This creates a real hurdle. You have to learn the workarounds (e.g., the [`async-trait`] crate), and in some cases, there are no proper workarounds (e.g., for async-drop).
+Let’s start with async. Right now, you can write async functions, but not in traits. You can’t write async closures. You can’t use async drop. This creates a real hurdle. You have to learn the workarounds (e.g., the [`async-trait`] crate), and in some cases, there are no proper workarounds (e.g., for async-drop).
 
 [`async-trait`]: https://crates.io/crates/async-trait
 
