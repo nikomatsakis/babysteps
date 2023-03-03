@@ -4,7 +4,7 @@ title: Trait transformers (send bounds, part 3)
 date: 2023-03-03 09:39 -0500
 ---
 
-I previously introduced [the "send bound" problem][sb], which refers to the need to add a `Send` bound to the future returned by an async function. This post continues my tour over the various solutions that are available. This post covers "Trait Transformers". This proposal arose from a joint conversation with myself, Eric Holk, Yoshua Wuyts, Oli Scherer, and Tyler Mandry. It's a variant of Eric Holk's [inferred async send bounds][iab] proposal as well as the work that Yosh/Oli have been doing in the [keyword generics][kg] group. Those posts are worth reading as well, lots of good ideas there.[^plan]
+I previously introduced [the "send bound" problem][sb], which refers to the need to add a `Send` bound to the future returned by an async function. This post continues my tour over the various solutions that are available. This post covers "Trait Transformers". This proposal arose from a joint conversation with myself, Eric Holk, Yoshua Wuyts, Oli Scherer, and Tyler Mandry. It's a variant of Eric Holk's [inferred async send bounds][iasb] proposal as well as the work that Yosh/Oli have been doing in the [keyword generics][kg] group. Those posts are worth reading as well, lots of good ideas there.[^plan]
 
 [^plan]: I originally planned to have part 3 of this series simply summarize those posts, in fact, but I consider Trait Transformers an evolution of those ideas, and close enough that I'm not sure separate posts are needed.
 
@@ -238,6 +238,22 @@ Trait := async? const? Path* Path
 ```
 
 where `x?` means optional `x`, `x*` means zero or more `x`, and the traits named in `Path*` must be auto-traits. The transformers (if present) are applied in order, so first things are made async, then const, then sendable. (I'm not sure if both async and const make any sense?)
+
+### Can auto-trait transformers let us genearlize over rc/arc?
+
+Yosh at some point suggested that we could think of "send" or "not send" as another application of [keyword generics][kg], and that got me very excited. It's a known problem that people have to define two versions of their structs (see e.g. the [im] and [im-rc] crates). Maybe we could permit something like
+
+```rust
+#[maybe(Send)]
+struct Shared<T> {
+    /* either Rc<T> or Arc<T>, depending */
+}
+```
+
+and then permit variables of type `Shared<u32>` or `Send Shared<u32>`. The [keywosrd generics][kg] proposals already are exploring the idea of structs whose types vary depending on whether they are async or not, so this fits in.
+
+[im]: https://crates.io/crates/im
+[im-rc]: https://crates.io/crates/im-rc
 
 ## Conclusion
 
