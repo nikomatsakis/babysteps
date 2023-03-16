@@ -375,7 +375,7 @@ let x = Foo {
 };)
 ```
 
-* Con: the following example would build again, which leads to a (perhaps surprising) [panic]https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=2e9e4077c3558c3da5d9df9ba717c8af) -- that said, I've never seen a case like this in the wild, the confusion *always* occurs with match
+* Con: the following example would build again, which leads to a (perhaps surprising) [panic](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=2e9e4077c3558c3da5d9df9ba717c8af) -- that said, I've never seen a case like this in the wild, the confusion *always* occurs with match
 
 ```rust!
 use std::cell::RefCell;
