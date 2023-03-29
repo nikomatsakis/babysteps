@@ -243,6 +243,8 @@ First, async drop: right now, you cannot have destructors in async code that per
 
 Second, parallel structured concurrency. As Tyler Mandry [elegant documented][tm], if we want to mix parallel scopes and async, we need some way to have futures that cannot be forgotten. The way I think of it is like this: in *sync* code, when you create a local variable `x` on your stack, you have a guarantee from the language that it’s destructor will eventually run, unless you move it. In async code, you have no such guarantee, as your entire future could just be forgotten by a caller. “Must move” types solve this problem (with some kind of callback for panic) give us a tool to solve this problem, by having the future type be `?Drop` — this is effectively a principled way to integrate completion-style futures that must be fully polled.
 
+[tm]: https://tmandry.gitlab.io/blog/posts/2023-03-01-scoped-tasks/
+
 Finally, “liveness conditions writ large”. As I noted in the beginning, Rust’s type system today is pretty good at letting you guarantee “safety” properties (“nothing bad happens”), but it’s much less useful for *liveness* properties (“something good eventually happens”). Destructors let you get close, but they can be circumvented. And yet I see liveness properties cropping up all over the place, often in the form of guards or cleanup that really ought to happen. Any time you’ve ever wanted to have a destructor that takes an argument, that applies. This comes up a lot in unsafe code, in particular. Being able to “log” those obligations via “must move” types feels like a really powerful tool that will be used in many different ways.
 
 ## Parting thoughts
