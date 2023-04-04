@@ -96,6 +96,8 @@ Dynamic verification is great, but it is limited by the scope of your tests. To 
 
 Finally, the best unsafe code is the unsafe code you don’t have to write. Unsafe code provides infinite power, but people often have simpler needs that could be made safe with enough effort. Projects like [cxx][] demonstrate the power of this approach. For Rust the language, [safe transmute][] is the most promising such effort, and I’d like to see more of that.
 
+[cxx]: https://cxx.rs/
+
 [safe transmute]: https://rust-lang.github.io/rfcs/2835-project-safe-transmute.html
 
 [fmtools]: https://rust-formal-methods.github.io/tools.html
