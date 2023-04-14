@@ -85,7 +85,7 @@ directly mutated.
 
 #### Locals can't be modeled using references
 
-This phenomena arises from the fact that references are just not as
+This phenomenon arises from the fact that references are just not as
 expressive as local variables. In general, this hinders abstraction.
 Let me give you a few examples to explain what I mean. Imagine I have
 an environment struct that stores a pointer to an error counter:
