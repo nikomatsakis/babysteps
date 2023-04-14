@@ -215,7 +215,7 @@ reference its data, kinds of loans it requires, etc). Ultimately, we
 are trying to boil this down into a relatively small set of types that
 covers all important use cases.
 
-A similar phenomena occurs with `&` and `&mut`: there are really two
+A similar phenomenon occurs with `&` and `&mut`: there are really two
 characteristics, aliasability and mutability, and we have joined them
 together, such that `&` references are immutable and aliasable and
 `&mut` are mutable and unaliasable. This is typically what you want,
