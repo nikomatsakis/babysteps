@@ -51,7 +51,7 @@ fn take_two_v1<T: Iterator>(t: &mut T) -> Option<(T::Item, T::Item)> {
 }
 ```
 
-[^coll]: There is a subtle point here. If you are iterating over, say, a `&[T]` value, then the `Item` you get back is an `&T` and hence borrowed. It may seem strange for me to say that you get ownership of the `&T`. The key point here is that the `&T` is borrowed *from the collection you are iterating over* and not *from the collection itself*. In other words, from the point of view of the *Iterator*, it is copying out a `&T` reference and handing ownership of the reference to you. Owning the reference does not give you ownership of the data it refers to.
+[^coll]: There is a subtle point here. If you are iterating over, say, a `&[T]` value, then the `Item` you get back is an `&T` and hence borrowed. It may seem strange for me to say that you get ownership of the `&T`. The key point here is that the `&T` is borrowed *from the collection you are iterating over* and not *from the iterator itself*. In other words, from the point of view of the *Iterator*, it is copying out a `&T` reference and handing ownership of the reference to you. Owning the reference does not give you ownership of the data it refers to.
 
 ## Lending traits
 
