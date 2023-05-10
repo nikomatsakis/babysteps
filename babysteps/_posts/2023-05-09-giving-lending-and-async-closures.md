@@ -20,7 +20,7 @@ fn take_closure(x: impl FnMut() -> impl Future<Output = bool>) { }
 
 It requires some changes to the `FnMut` trait which, somewhat surprisingly, are backwards compatible I believe. It also requires us to change how we interpret `-> impl Trait` when in a trait bound (and likely in the value of an associated type); this could be done (over an Edition if necessary) but it introduces some further questions without clear answers.
 
-This blog post itself isn't a real proposal, but it's a useful ingredient to use when discussing the right shape for async clsoures.
+This blog post itself isn't a real proposal, but it's a useful ingredient to use when discussing the right shape for async closures.
 
 ## Giving traits
 
