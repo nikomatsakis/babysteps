@@ -173,7 +173,7 @@ iterator and sum it up sequentially. We can convert to an iterator by
 using the `into_iter` method from the `IntoIterator` trait, which
 `Producer` extends. Here is a parallel version of `sum` that works for
 any producer (as with the sequential `sum` we saw, we simplify things
-by making it only word for `i32` values):
+by making it only work for `i32` values):
 
 ```rust
 fn sum_producer<P>(mut producer: P, len: usize) -> i32
