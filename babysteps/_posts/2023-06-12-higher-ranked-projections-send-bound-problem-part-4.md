@@ -293,7 +293,7 @@ I’m torn on this point. Lately I’ve been into the idea of “stabilize the b
 
 ### but…
 
-On the other hand, the `()` syntax is itself a building block. But it’s a building block that’s actually nice enough to use in simple cases. We’ve often been reluctant to add new bits of syntax to Rust, and I think that’s generally good, but sometimes I look with envy at other languages that are willing to take bold steps to build designs that are *aggressively awesome*. I’d like us as a language community to [dare to ask for more][]. It’s hard to argue that the `::Output` syntax is aggressively awesome. To be honest though, the only design that feels “aggressively awesome” to me right now is [trait transformers], and those don’t feel flexible enough to be the only primitive we have (plus there are enough open questions that I’m not comfortable considering stabilization this year).
+On the other hand, the `()` syntax is itself a building block. But it’s a building block that’s actually nice enough to use in simple cases. We’ve often been reluctant to add new bits of syntax to Rust, and I think that’s generally good, but sometimes I look with envy at other languages that are willing to take bold steps to build designs that are *aggressively awesome*. I’d like us as a language community to [dare to ask for more][]. It’s hard to argue that the `::Output` syntax is aggressively awesome. The `()` syntax may not be *aggressively* awesome (that's probably [trait transformers][]), but it's at least mildly awesome.
 
 [dare to ask for more]: http://smallcultfollowing.com/babysteps/blog/2022/02/09/dare-to-ask-for-more-rust2024/
 
