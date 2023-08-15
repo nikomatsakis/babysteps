@@ -1,0 +1,169 @@
+---
+categories:
+- Rust
+- FnTypes
+comments: true
+date: "2012-05-07T00:00:00Z"
+slug: fn-types
+title: Fn types
+---
+As you loyal readers know, I am on a quest to make the Rust type
+system more *orthogonal* with respect to the kind of pointer in use,
+by which I mean that I want to have the three pointer sigils (`@`,
+`&`, and `~`) indicate where memory is located and the other types
+indicate what value is to be found at that memory.  Right now there
+are a few cases where we conflate the two things into one type.  The
+first, vectors and slices, I discused in a recent post.  This post
+discusses the second case: function and interface types.
+
+I'll sketch out the idea; there are however some details I have yet to
+work out.  Actually the plan imposes some downsides and I'm not 100%
+sure if I'm in favor yet.  Though I think the simplicity of the type
+system is a win (simplicity for people using it, that is).
+
+## Background
+
+We currently have five function types:
+
+- `fn@(S) -> T`, or "boxed closure";
+- `fn~(S) -> T`, or "unique closure";
+- `fn&(S) -> T`, or "stack closure";
+- `fn(S) -> T`, or "any closure";
+- `native fn(S) -> T`, or "bare function".
+
+What distinguishes these closures is both the kind of pointer in which
+their environment is stored as well as the kind of data which can be
+stored in the closure itself:
+
+- The boxed closure (`fn@`) uses a normal GC'd pointer (oft called a
+  boxed pointer, but I am trying to move to more descriptive
+  terminology) to store its environment. The environment may contain
+  arbitrary values but it does not contain any references to the
+  stack.  Copying a boxed closure is cheap because the environment can
+  be aliased (currently, this means that the environment is ref
+  counted).
+- The unique closure (`fn~`) uses a unique pointer to store its
+  environment.  All data must be *sendable*, which basically means
+  tree-shaped.  Copying a unique closure is expensive, because the
+  environment cannot be aliased, and so copying the closure results in
+  a deep copy of all the closed-over data.  This has the upside that
+  unique closures can be sent between tasks.
+- The stack closure (`fn&`) uses a reference to store its environment.
+  Unlike the other closures, no data is stored in the environment
+  itself.  Rather, the environment consists of pointers to an outer
+  stack frame.  Copying a stack closure is *very* cheap.  Because
+  `fn&` contains by-ref pointers into its parent stack frame, it is
+  restricted in where it can appear (though these restrictions can
+  probably be loosened some the work on lifetimes is complete).
+- The any closure (`fn`) is just the supertype of the other three.  It
+  commonly appears in function signatures where any sort of closure
+  would be acceptable (`vec::each()`, for example).
+- A bare function (`native fn`) is just a function pointer with no
+  environment at all (it is therefore not a closure at all).  It is
+  never used in practice, as it is in fact a subtype of the various
+  closure types.
+  
+One important detail is that closures are represented as the pair of a
+function pointer along with a pointer to the environment.  In the case
+of a bare function, the pointer to the environment is always `NULL`.
+
+## The proposal
+
+I want to have just one function type.  In practice, as today, this
+would most commonly be written as `fn(S) -> T`, but the type in its
+fully explicit glory would be:
+
+    fn:kind(S) -> T
+
+Like my proposed vector type `vec<T>`, this function type has an
+unknown static size.  At runtime, it would be represented by a
+structure like:
+
+    struct fn {
+        void *code_ptr;
+        ... // environment data is stored inline
+    };
+
+As with `vec<T>`, the type `fn(S) -> T` has an unknown size and
+therefore must basically always be referenced by pointer (`@fn(S) ->
+T`, `~fn(S) -> T`, `&fn(S) -> T`).
+
+The `kind` portion of the function type indicates a bound on the
+closed over data.  It can by `copy` or `send`.  If it is omitted, then
+there is no bound.  In practice, I imagine that `send` is the only
+kind that would ever be useful.
+
+The mapping between the current function types and my proposal would be:
+
+    fn@(S) -> T         becomes        @fn(S) -> T
+    fn~(S) -> T         becomes        ~fn:send(S) -> T
+    fn&(S) -> T         becomes        &fn(S) -> T
+    fn(S) -> T          becomes        &fn(S) -> T
+    native fn(S) -> T   just goes away
+    
+## Details
+    
+### Literal syntax
+
+I can imagine a couple of alternatives here.  The basic issue is
+distinguish between "closures that reference things on the stack
+frame" and "closures that copy things out of the stack frame".
+
+I think my preferred solution is to say that the explicit `fn` form
+*always* copies out of the stack frame.  So something like:
+
+    let foo = fn@(x: int, y: int) -> int { x + y };
+
+would become
+    
+    let foo = @fn(x: int, y: int) -> int { x + y };
+
+Note that there is no bound specified (indicating no bound on the
+closed-over data).  Of course, any data that gets copied into the
+closure must be copyable; but if data is *moved* into the closure (for
+example, if it is the last use of the data, or an explicit capture
+clause is used), then the data can have any kind.  This is the same as
+today.
+
+If we wanted a unique closure, which today is written:
+
+    let foo = fn~(x: int, y: int) -> int { x + y };
+    
+you would write    
+
+    let foo = ~fn:send(x: int, y: int) -> int { x + y };
+    
+This is somewhat wordier than today, but the truth is that we rarely
+(if ever) write unique closures by hand.  Instead, you employ the
+sugared closure form.
+
+### Sugared closures
+
+Sugared closures are written using a Ruby-like notation:
+
+    for vec.each { |item| ... }    // inferred to stack closure
+    
+    task::spawn {|| ... }          // inferred to unique closure
+
+They would continue to operate as today.  This means that we'll infer
+the kind of closure pointer and other facts based on the expected
+type.  I am still not crazy about this inference (although I put it
+in) but the last time I proposed taking it out this was unpopular.
+    
+### Bare functions
+
+One advantage of the current approach is that a bare function (which
+is just a function pointer) can be converted into a closure by pairing
+it with a null pointer.  This no longer works under this system except
+for region pointers, so when bare functions are converted to `@` or
+`~` functions we'd have to allocate a little stub to convert the call.
+Maybe the sigil should be written explicitly, so that function items
+have a type of `fn(S) -> T`.  You would then write `vec::iter(v,
+&foo)` to apply the top-level function `foo` to each item in the
+vector, for example.  Hmm.
+
+## Summary
+
+So yeah, that's the rough idea.  I feel like the current system does
+work more smoothly in some regards, so I'm not yet sure if the idea is
+overall a win, but I wanted to note it down.

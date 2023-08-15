@@ -1,0 +1,97 @@
+---
+categories:
+- Rust
+comments: true
+date: "2012-02-13T00:00:00Z"
+slug: task-api
+title: Task API
+---
+
+One of the thorny API problems I've been thinking about lately is the
+task API for Rust.  I originally had in mind this fancy and very
+flexible aproach based on bind.  When I spelled it out I found it was
+very powerful and flexible but also completely unworkable in practice.
+
+So here is a more limited proposal.  There is a core task API that 
+looks something like this:
+
+    enum task = uint; // wrap the task ID or whatever
+    type opts = { ... };
+
+    fn default_opts() -> opts;
+
+    fn spawn(opts: opts, body: fn~()) -> task;
+
+The options struct will let you control simple things like stack size
+and so forth.  
+
+On top of this there will be several patterns.  These probably live in
+separate modules.  For example, an `actor` pattern which starts up a
+task with its own mailbox:
+        
+    enum actor<A> = {
+        task: task::task,
+        chan: comm::chan<A>
+    }
+        
+    impl actor<A> for actor<A> {
+        fn send(msg: A) { comm::send(self.chan, msg) }
+    }
+    
+    fn spawn<A,R>(
+        opts: options,
+        body: fn~(p: comm::port<A>) -> R) -> task<A,R> {
+        
+        let pp_tmp = comm::port();
+        let ch_tmp = comm::chan(p);
+        let t = task::spawn(opts) {||
+            let p = comm::port();
+            comm::send(ch_tmp, comm::chan(p));
+            body(p);
+        };
+        let ch = comm::recv(pp_tmp);
+        actor(t, ch)
+    }
+    
+Or a futures-like pattern that spawns off a task and allows you to
+invoke a `get()` method to read its result:
+
+    enum future<R> = {
+        task: task::task,
+        mutable rslt: either<R, comm::port<R>>
+    }
+            
+    impl future<A> for future<A> {
+        fn get() -> R {
+            alt self.rslt {
+                either::left(r) { r }
+                either::right(p) {
+                    let r = comm::recv(self.port);
+                    self.rslt = either::left(r);
+                    ret r;
+                }
+            }
+        }
+    }
+
+    fn spawn<R>(
+        opts: options,
+        body: fn~() -> R) -> future<R> {
+        
+        let pp = comm::port();
+        let ch = comm::chan(p);
+        let t = task::spawn(opts) {||
+            comm::send(ch, body())
+        };
+        future(t, either::left(pp))
+    }
+
+The downside of this approach is that it is not particularly
+composable (you can't, for example, combine a future and actor
+together in one task without writing your own code). However, it's
+easy enough to understand and it's probably good enough.
+
+Hmm, that last sentence makes me wonder if classes and traits could help
+here.  Oh well, a thought for another day.
+
+
