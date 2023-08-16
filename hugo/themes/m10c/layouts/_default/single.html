@@ -1,0 +1,45 @@
+{{ define "main" }}
+  <article class="post">
+    <header class="post-header">
+      <h1 class ="post-title">{{ .Title }}</h1>
+      {{- if ne .Type "page" }}
+      <div class="post-meta">
+        <div>
+          {{ partial "icon.html" (dict "ctx" $ "name" "calendar") }}
+          {{ .PublishDate.Format "Jan 2, 2006" }}
+        </div>
+        <div>
+          {{ partial "icon.html" (dict "ctx" $ "name" "clock") }}
+          {{ .ReadingTime }} min read
+        </div>
+        {{- with .Params.tags }}
+        <div>
+          {{ partial "icon.html" (dict "ctx" $ "name" "tag") }}
+          {{- range . -}}
+            {{ with $.Site.GetPage (printf "/%s/%s" "tags" . ) }}
+              <a class="tag" href="{{ .Permalink }}">{{ .Title }}</a>
+            {{- end }}
+          {{- end }}
+        </div>
+        {{- end }}
+      </div>
+      {{- end }}
+    </header>
+    <div class="post-content">
+      {{ .Content }}
+    </div>
+    <div class="post-footer">
+      {{- if .Params.comments }}
+      <script src="https://utteranc.es/client.js"
+        repo="NeoVance/babysteps"
+        issue-term="og:title"
+        label="utterance"
+        theme="photon-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+      {{ template "_internal/disqus.html" . }}
+      {{- end}}
+    </div>
+  </article>
+{{ end }}

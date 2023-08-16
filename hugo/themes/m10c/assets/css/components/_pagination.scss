@@ -1,0 +1,27 @@
+.pagination {
+  display: block;
+  list-style: none;
+  padding: 0;
+  font-size: 0.8em;
+  text-align: center;
+  margin: 3em 0;
+}
+
+.page-item {
+  display: inline-block;
+  .page-link {
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    width: 1.8rem;
+    height: 1.8rem;
+  }
+
+  &.active {
+    .page-link {
+      color: $lightest-color;
+      border-radius: 2em;
+      background: $primary-color;
+    }
+  }
+}
