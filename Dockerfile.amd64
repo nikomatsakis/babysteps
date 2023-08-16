@@ -1,0 +1,12 @@
+FROM alpine:latest
+
+COPY ./hugo /bin/hugo
+
+RUN apk add --no-cache gcc gcompat && \
+    chmod +x /bin/hugo
+
+VOLUME /data
+WORKDIR /data
+
+ENTRYPOINT [ "/bin/hugo" ]
+CMD [ "version" ]

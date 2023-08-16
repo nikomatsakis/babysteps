@@ -1,2 +1,5 @@
 _site
 *~
+
+.tmp/
+bin/
