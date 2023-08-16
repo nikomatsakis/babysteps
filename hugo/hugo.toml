@@ -21,15 +21,19 @@ languageCode = 'en-us'
 title = 'Baby Steps' # TBD?
 theme = 'm10c'
 
+[author]
+  name = 'Niko Matsakis'
+  email = 'niko@alum.mit.edu'
+
 [taxonomies]
   category = 'categories'
   tag = 'tags'
 
 [permalinks]
-  [[page]]
-    posts = "/blog/:year/:month/:day/:slug/"
-  [[section]]
-    posts = "/blog/"
+[permalinks.page]
+  'blog' = "/blog/:year/:month/:day/:slug/"
+[permalinks.section]
+  'blog' = "/blog/"
 
 [menu]
   [[menu.main]]
@@ -37,10 +41,6 @@ theme = 'm10c'
     name = "Home"
     url = "/"
     weight = 1
-  [[menu.main]]
-    identifier = "posts"
-    name = "Blog"
-    url = "/blog/"
   [[menu.main]]
     identifier = "about"
     name = "About"
@@ -52,7 +52,7 @@ theme = 'm10c'
   [[menu.main]]
     identifier = "categories"
     name = "Categories"
-    url = "/catagories/"
+    url = "/categories/"
 
 [params]
   author = 'Niko Matsakis'
@@ -67,6 +67,10 @@ theme = 'm10c'
   icon = "twitter"
   name = "Twitter"
   url = "https://twitter.com/nikomatsakis"
+[[params.social]]
+  icon = "rss"
+  name = "RSS"
+  url = "/index.xml"
 
   # Default theme
   #[params.style]
