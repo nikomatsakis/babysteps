@@ -1,0 +1,63 @@
+---
+layout: post
+title: "For loops"
+date: 2012-04-06 09:51
+comments: true
+categories: [Rust]
+---
+
+First off, I want to welcome [Brian Anderson][brson] to the Rust blog-o-sphere
+(which so far consists primarily of myself).  His [first post][post1]
+does a great job of explaining how to use the new `for` syntax that
+was recently added to Rust: this syntax allows for `break`, `ret`, and
+`cont` from within user-defined loops, which is very nice.
+
+Reading some of the [Hacker News comments][hn]
+([this one in particular][hnc]), I wanted to clarify one thing.  There
+is some concern that this new syntax changes the semantics of `ret`
+when, in fact, it aims to do precisely the opposite.
+
+The goal is that `ret` always returns from the innermost enclosing
+`fn()` declaration.  Sugared closures (e.g., `{|x| ...}`) do not count
+as an fn-declaration, but a closure written out with `fn()` does.  If
+you use `ret` from a context where the compiler cannot generate a
+return from the innermost enclosing `fn()` declaration, a static error
+results.
+
+Here are some examples of what I mean.  First, the basic `for` loop:
+
+    fn foo() {
+        for each(v) {|e|
+            ret e; // returns from foo()
+        }
+    }
+
+Here I am using an `fn@()` closure:
+
+    fn foo() {
+        let bar = fn@() -> T {
+            for each(v) {|e|
+                ret ...; // returns from bar()
+            }
+            ret ...; // returns from bar()
+        };
+        
+        ret ...; // returns from foo()
+    }
+
+and here is an example where an error results:
+
+    fn foo() {
+        iter(v) {|e|
+            ret e; // should return from foo(), but cannot
+        }
+    }
+
+Note that returning out of sugared closures like `{||...}` is only
+allowed in the context of a `for` loop, since it requires additional
+code generation to support.
+
+[brson]: http://brson.github.com/
+[post1]: http://brson.github.com/rust/2012/04/05/new-for-loops/
+[hn]: http://news.ycombinator.com/item?id=3806152
+[hnc]: http://news.ycombinator.com/item?id=3807365
