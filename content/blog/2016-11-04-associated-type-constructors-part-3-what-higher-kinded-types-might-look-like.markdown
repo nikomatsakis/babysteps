@@ -684,8 +684,8 @@ Please leave comments on
 
 #### Footnotes  
 
-[post-a]: {{ site.baseurl }}/blog/2016/11/02/associated-type-constructors-part-1-basic-concepts-and-introduction/
-[post-b]: {{ site.baseurl }}/blog/2016/11/03/associated-type-constructors-part-2-family-traits/
+[post-a]: {{< baseurl >}}/blog/2016/11/02/associated-type-constructors-part-1-basic-concepts-and-introduction/
+[post-b]: {{< baseurl >}}/blog/2016/11/03/associated-type-constructors-part-2-family-traits/
 [RFC 1598]: https://github.com/rust-lang/rfcs/pull/1598
 [rayon]: http://smallcultfollowing.com/babysteps/blog/2016/02/25/parallel-iterators-part-2-producers/
 [uq]: https://en.wikipedia.org/wiki/Universal_quantification

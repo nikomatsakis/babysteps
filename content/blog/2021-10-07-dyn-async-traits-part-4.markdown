@@ -10,7 +10,7 @@ In the previous post, I talked about how we could write our own `impl Iterator f
 
 In the [first post of this series][post1], we talked about how invoking an async fn through a dyn trait should to have the return type of that async fn be a `Box<dyn Future>` — but only when calling it through a dyn type, not all the time.
 
-[post1]: {{ site.baseurl }}/blog/2021/09/30/dyn-async-traits-part-1/#conclusion-ideally-we-want-box-when-using-dyn-but-not-otherwise
+[post1]: {{< baseurl >}}/blog/2021/09/30/dyn-async-traits-part-1/#conclusion-ideally-we-want-box-when-using-dyn-but-not-otherwise
 
 Actually, that’s a slight simplification: `Box<dyn Future>` is certainly one type we could use, but there are other types you might want:
 

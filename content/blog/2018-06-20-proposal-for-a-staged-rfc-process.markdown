@@ -139,7 +139,7 @@ oh-so-important emojis work better):
 [diagram]: https://docs.google.com/drawings/d/11KtHLYsqJzi2_Y3mOBz2FbXeG3verSHz-PFBuiwYIQw/edit?usp=sharing
 
 <div>
-<img src="{{ site.baseurl }}/assets/2018-06-20-rfc-stages.svg" width="893" height="760"/>
+<img src="{{< baseurl >}}/assets/2018-06-20-rfc-stages.svg" width="893" height="760"/>
 </div>
 
 You'll notice that the stages are divided into two groups. **The

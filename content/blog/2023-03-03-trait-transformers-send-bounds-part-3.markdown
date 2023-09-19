@@ -10,7 +10,7 @@ I previously introduced [the "send bound" problem][sb], which refers to the need
 
 [kg]: https://blog.rust-lang.org/inside-rust/2023/02/23/keyword-generics-progress-report-feb-2023.html
 [iasb]: https://blog.theincredibleholk.org/blog/2023/02/13/inferred-async-send-bounds/
-[sb]: {{ site.baseurl }}/blog/2023/02/01/async-trait-send-bounds-part-1-intro/
+[sb]: {{< baseurl >}}/blog/2023/02/01/async-trait-send-bounds-part-1-intro/
 
 ## Core idea: the trait transformer
 

@@ -10,7 +10,7 @@ higher-ranked subregions. This post digs a bit more into what the
 *problem* is in the first place and sketches out the general solution
 I have in mind, but doesn't give any concrete algorithms for it.
 
-[pp]: {{ site.baseurl }}/blog/2019/01/17/polonius-and-region-errors/
+[pp]: {{< baseurl >}}/blog/2019/01/17/polonius-and-region-errors/
 
 ### The subset relation in Polonius is not enough
 
@@ -167,8 +167,8 @@ wanted, we might say that the region constraints we are creating can
 be extended to the full hereditary harrop form, which would look like
 so:
 
-[chalk1]: {{ site.baseurl }}/blog/2017/01/26/lowering-rust-traits-to-logic/#type-checking-generic-functions-beyond-horn-clauses
-[hh]: {{ site.baseurl }}/blog/2017/01/26/lowering-rust-traits-to-logic/#type-checking-generic-functions-beyond-horn-clauses
+[chalk1]: {{< baseurl >}}/blog/2017/01/26/lowering-rust-traits-to-logic/#type-checking-generic-functions-beyond-horn-clauses
+[hh]: {{< baseurl >}}/blog/2017/01/26/lowering-rust-traits-to-logic/#type-checking-generic-functions-beyond-horn-clauses
 
 ```
 Constraint = Subset

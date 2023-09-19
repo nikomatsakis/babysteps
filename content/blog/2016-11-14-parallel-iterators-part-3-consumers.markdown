@@ -40,8 +40,8 @@ elements. However, in writing this post, it became clear that it would
 be better to first introduce consumers, and then cover how to extend
 them to support `filter()` and `flat_map()`.)
 
-[part-a]: {{ site.baseurl }}/blog/2016/02/19/parallel-iterators-part-1-foundations/
-[part-b]: {{ site.baseurl }}/blog/2016/02/25/parallel-iterators-part-2-producers/
+[part-a]: {{< baseurl >}}/blog/2016/02/19/parallel-iterators-part-1-foundations/
+[part-b]: {{< baseurl >}}/blog/2016/02/25/parallel-iterators-part-2-producers/
 
 ### Motivating example
 
@@ -95,7 +95,7 @@ see how consumers abstract out the *sum* part of this code, leaving us
 with a generic function that can be used to execute all sorts of
 parallel iterator chains.
 
-[sum_producer]: {{ site.baseurl }}/blog/2016/02/25/parallel-iterators-part-2-producers/#implementing-sum-with-producers
+[sum_producer]: {{< baseurl >}}/blog/2016/02/25/parallel-iterators-part-2-producers/#implementing-sum-with-producers
 
 ```rust
 fn sum_producer<P>(mut producer: P, len: usize) -> i32

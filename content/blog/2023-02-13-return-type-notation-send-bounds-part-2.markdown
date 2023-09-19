@@ -5,7 +5,7 @@ date: 2023-02-13 11:14 -0500
 ---
 In the [previous post][pp], I introduced the “send bound” problem, which refers to the need to add a `Send` bound to the future returned by an async function. I want to start talking about some of the ideas that have been floating around for how to solve this problem. I consider this a bit of an open problem, in that I think we know a lot of the ingredients, but there is a bit of a “delicate balance” to finding the right syntax and so forth. To start with, though, I want to introduce Return Type Notation, which is an idea that Tyler Mandry and I came up with for referring to the type returned by a trait method.  
 
-[pp]: {{ site.baseurl }}/blog/2023/02/01/async-trait-send-bounds-part-1-intro/
+[pp]: {{< baseurl >}}/blog/2023/02/01/async-trait-send-bounds-part-1-intro/
 
 ### Recap of the problem
 

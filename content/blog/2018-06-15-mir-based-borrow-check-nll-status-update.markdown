@@ -29,7 +29,7 @@ effort to get it fully ready to ship. The plan is to defer that work
 and ultimately ship Polonius as a second step: it will basically be a
 "MIR-based borrow check 2.0", offering even fewer errors.
 
-[pp]: {{ site.baseurl }}/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
+[pp]: {{< baseurl >}}/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
 
 [Polonius]: https://github.com/rust-lang-nursery/polonius/
 

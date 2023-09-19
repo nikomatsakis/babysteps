@@ -16,7 +16,7 @@ where a closure conflicts with its creator function -- in my post on
 [Precise Closure Capture Clauses][cc]. But the problem is more
 general.
 
-[cc]: {{ site.baseurl }}/blog/2018/04/24/rust-pattern-precise-closure-capture-clauses/
+[cc]: {{< baseurl >}}/blog/2018/04/24/rust-pattern-precise-closure-capture-clauses/
 
 ## The problem
 

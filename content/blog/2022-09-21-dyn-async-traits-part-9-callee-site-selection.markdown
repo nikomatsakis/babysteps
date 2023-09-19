@@ -175,7 +175,7 @@ impl<I> AsyncIterator for BoxingAsyncIterator<'i, I> {
 
 One of the goals with the [previous proposal] was to allow you to write code that used `dyn AsyncIterator` which worked equally well in std and no-std environments. I would say that goal was partially achieved. The core idea was that the caller would choose the strategy by which the future got allocated, and so it could opt to use inline allocation (and thus be no-std compatible) or use boxing (and thus be simple). 
 
-[previous proposal]: {{ site.baseurl }}/blog/2022/09/18/dyn-async-traits-part-8-the-soul-of-rust/
+[previous proposal]: {{< baseurl >}}/blog/2022/09/18/dyn-async-traits-part-8-the-soul-of-rust/
 
 In this proposal, the call-site has to choose. You might think then that you could just choose to use stack allocation at the call-site and thus be no-std compatible. But how does one choose stack allocation? It's actually quite tricky! Part of the problem is that async stack frames are stored in structs, and thus we cannot support something like `alloca` (at least not for values that will be live across an await, which includes any future that is awaited[^expl]). In fact, even outside of async, using alloca is quite hard! The problem is that a stack is, well, a stack. Ideally, you would do the allocation just before your callee returns, but that's when you know how much memory you need. But at that time, your callee is still using the stack, so your allocation is on the wrong spot.[^ada] I personally think we should just rule out the idea of using alloca to do stack allocation.
 

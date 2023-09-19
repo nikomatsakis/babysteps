@@ -299,7 +299,7 @@ start to think about self-references and how to model them in
 Rust. I'd like to transition to [a Polonius-based system][alias]
 first, though.
 
-[alias]: {{ site.baseurl }}/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
+[alias]: {{< baseurl >}}/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
 
 #### Auxiliary values
 

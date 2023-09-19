@@ -247,7 +247,7 @@ instructive in this regard.
 
 Please leave comments on [this internals thread][internals].
 
-[post-a]: {{ site.baseurl }}/blog/2016/11/02/associated-type-constructors-part-1-basic-concepts-and-introduction/
-[post-b]: {{ site.baseurl }}/blog/2016/11/03/associated-type-constructors-part-2-family-traits/
-[post-c]: {{ site.baseurl }}/blog/2016/11/04/associated-type-constructors-part-3-what-higher-kinded-types-might-look-like/
+[post-a]: {{< baseurl >}}/blog/2016/11/02/associated-type-constructors-part-1-basic-concepts-and-introduction/
+[post-b]: {{< baseurl >}}/blog/2016/11/03/associated-type-constructors-part-2-family-traits/
+[post-c]: {{< baseurl >}}/blog/2016/11/04/associated-type-constructors-part-3-what-higher-kinded-types-might-look-like/
 [internals]: https://internals.rust-lang.org/t/blog-post-series-alternative-type-constructors-and-hkt/4300/

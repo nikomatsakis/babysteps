@@ -12,7 +12,7 @@ implemented for handling cyclic relations and show how that enables us
 to implement implied bounds and other long-desired features in an
 elegant way. (Nice work, scalexm!)
 
-[pp]: {{ site.baseurl }}/blog/2017/05/25/query-structure-in-chalk/
+[pp]: {{< baseurl >}}/blog/2017/05/25/query-structure-in-chalk/
 
 ### What is a chalk query?
 
@@ -81,7 +81,7 @@ Vec<u32>: Clone`, internally, this would also wind up evaluating `u32:
 Clone`, because the impl for `Vec<T>` has a where-clause that `T` must
 be clone:
 
-[lrtl]: {{ site.baseurl }}/blog/2017/01/26/lowering-rust-traits-to-logic/
+[lrtl]: {{< baseurl >}}/blog/2017/01/26/lowering-rust-traits-to-logic/
 
 
 ```rust

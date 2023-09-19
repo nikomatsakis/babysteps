@@ -208,7 +208,7 @@ that clone cheap (i.e., O(1)). (Another way to make that clone cheap
 is to use a [persistent collection type] -- such as those provided by
 the [im] crate.)
 
-[persistent collection type]: {{ site.baseurl }}/blog/2018/02/01/in-rust-ordinary-vectors-are-values/
+[persistent collection type]: {{< baseurl >}}/blog/2018/02/01/in-rust-ordinary-vectors-are-values/
 [im]: https://crates.io/crates/im
 
 If the data *is* mutable, there are various other patterns that you

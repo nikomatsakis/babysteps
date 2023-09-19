@@ -14,7 +14,7 @@ matter of the proper use of shared references `&T` -- I'll completely
 ignore `&mut T` for now, since those are much more complicated
 (because they require a notion of uniqueness).
 
-[blame]: {{ site.baseurl }}/blog/2017/01/22/assigning-blame-to-unsafe-code/
+[blame]: {{< baseurl >}}/blog/2017/01/22/assigning-blame-to-unsafe-code/
 
 For the time being, I'm going to continue to talk about this
 executable specification as a kind of "enhanced miri". I think
@@ -264,13 +264,13 @@ some way to designate "safe" functions from "unsafe" functions, and
 just talk about how we can reflect that designation using assertions,
 and in turn use those assertions to drive optimization.
 
-[TPM]: {{ site.baseurl }}/blog/2016/05/27/the-tootsie-pop-model-for-unsafe-code/
+[TPM]: {{< baseurl >}}/blog/2016/05/27/the-tootsie-pop-model-for-unsafe-code/
 
 Consider this variant of the example from
 [my previous post about trusting types][tt]. Let's assume that the
 function `patsy()` here is "safe code":
 
-[tt]: {{ site.baseurl }}/blog/2016/09/12/thoughts-on-trusting-types-and-unsafe-code/
+[tt]: {{< baseurl >}}/blog/2016/09/12/thoughts-on-trusting-types-and-unsafe-code/
 
 ```rust
 fn patsy() {
@@ -337,7 +337,7 @@ clearly false, as we saw in the previous section: if the caller simply
 moves the `let v = *i` line down to *after* `increment()`, an
 assertion failure occurs.
 
-[oe]: {{ site.baseurl }}/blog/2016/10/02/observational-equivalence-and-unsafe-code/
+[oe]: {{< baseurl >}}/blog/2016/10/02/observational-equivalence-and-unsafe-code/
 
 We can capture some of this intution by saying that, in safe code, we
 add **additional assertions** at function boundaries. The idea is that
@@ -351,7 +351,7 @@ has not expired (in particular, even in a [NLL world][NLL], its lifetime
 would include the call to `increment()`), that means that the memory it
 refers to must not have changed:
 
-[NLL]: {{ site.baseurl }}/blog/2016/04/27/non-lexical-lifetimes-introduction/
+[NLL]: {{< baseurl >}}/blog/2016/04/27/non-lexical-lifetimes-introduction/
 s
 ```rust
 fn patsy() { // instrumented

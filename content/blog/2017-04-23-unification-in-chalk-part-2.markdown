@@ -11,7 +11,7 @@ up being expressed in chalk. I want to go a bit further now and extend
 that base system to cover [associated types]. These turn out to be a
 pretty non-trival extension.
 
-[pp]: {{ site.baseurl }}/blog/2017/03/25/unification-in-chalk-part-1/
+[pp]: {{< baseurl >}}/blog/2017/03/25/unification-in-chalk-part-1/
 [associated types]: https://doc.rust-lang.org/nightly/book/second-edition/ch19-03-advanced-traits.html#associated-types
 
 ### What is an associated type?
@@ -136,7 +136,7 @@ being implemented along with the values of its associated types. In
 this case, if we look at the impl of `Iterator` for [the `IntoIter` type][IntoIter]:
 
 [IntoIter]: https://doc.rust-lang.org/std/vec/struct.IntoIter.html
-[first]: {{ site.baseurl }}/blog/2017/01/26/lowering-rust-traits-to-logic/
+[first]: {{< baseurl >}}/blog/2017/01/26/lowering-rust-traits-to-logic/
 
 ```rust
 impl<T> Iterator for IntoIter<T> {
@@ -148,7 +148,7 @@ impl<T> Iterator for IntoIter<T> {
 We can translate this impl into a series of clauses sort of like this
 (here, I'll use [the notation I was using in my first post][firstat]):
 
-[firstat]: {{ site.baseurl }}/blog/2017/01/26/lowering-rust-traits-to-logic/#associated-types-and-type-equality
+[firstat]: {{< baseurl >}}/blog/2017/01/26/lowering-rust-traits-to-logic/#associated-types-and-type-equality
 
 
 ```

@@ -13,7 +13,7 @@ of its logical underpinnings; see
 [this post for an introduction to the big idea][logic].)
 
 [chalk]: https://github.com/nikomatsakis/chalk/
-[logic]: {{ site.baseurl }}/blog/2017/01/26/lowering-rust-traits-to-logic/
+[logic]: {{< baseurl >}}/blog/2017/01/26/lowering-rust-traits-to-logic/
 
 ### The traditional, interactive Prolog query
 

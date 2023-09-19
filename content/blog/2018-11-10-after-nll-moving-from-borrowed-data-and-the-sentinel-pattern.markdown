@@ -179,7 +179,7 @@ chain:
 [^gun]: I bet you were wondering what that `counter` field was for – gotta admire that [Chekhov’s Gun] action.
 
 [Chekhov's Gun]: https://en.wikipedia.org/wiki/Chekhov%27s_gun
-[interprocedural construct]: {{ site.baseurl }}/blog/2018/11/01/after-nll-interprocedural-conflicts/
+[interprocedural construct]: {{< baseurl >}}/blog/2018/11/01/after-nll-interprocedural-conflicts/
 
 ```rust
 impl MyStruct {
@@ -278,7 +278,7 @@ about [“unsafe composability”][uc] that worry me a bit, which I’ll
 discuss at the end.
 
 [`take_mut`]: https://crates.io/crates/take_mut
-[uc]: {{ site.baseurl }}/blog/2016/10/02/observational-equivalence-and-unsafe-code/
+[uc]: {{< baseurl >}}/blog/2016/10/02/observational-equivalence-and-unsafe-code/
 
 To use `take_mut` to solve this problem, we would rewrite our `add_link`
 function as follows:
@@ -325,7 +325,7 @@ crates to be a bit more declarative about the conditions they require
 from other crates, as I talk a bit about in this older blog post on
 [observational equivalence][oe].
 
-[oe]: {{ site.baseurl }}/blog/2016/10/02/observational-equivalence-and-unsafe-code/
+[oe]: {{< baseurl >}}/blog/2016/10/02/observational-equivalence-and-unsafe-code/
 
 ### My recommenation
 

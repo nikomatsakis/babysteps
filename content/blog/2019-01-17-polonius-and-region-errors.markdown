@@ -11,7 +11,7 @@ blogpost][pp]. Polonius has come a long way since that post; it's now
 quite fast and also experimentally integrated into rustc, where it
 passes the full test suite.
 
-[pp]: {{ site.baseurl }}/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
+[pp]: {{< baseurl >}}/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
 
 [gh]: https://github.com/rust-lang-nursery/polonius/
 

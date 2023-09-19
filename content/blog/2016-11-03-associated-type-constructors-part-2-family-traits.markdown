@@ -15,7 +15,7 @@ associated type constructors (ATC) and higher-kinded types (HKT):
    introduce the term **higher-kinded type** for the first time, and
    show (informally) that family traits are equally general.
    
-[post-a]: {{ site.baseurl }}/blog/2016/11/02/associated-type-constructors-part-1-basic-concepts-and-introduction/
+[post-a]: {{< baseurl >}}/blog/2016/11/02/associated-type-constructors-part-1-basic-concepts-and-introduction/
 
 <!-- more -->
 

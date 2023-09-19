@@ -28,4 +28,4 @@ Never heard of the async vision doc? It's a new thing we're trying as part of th
 [vd]: https://rust-lang.github.io/wg-async-foundations/vision.html#-the-vision
 [Async Vision Doc]: https://blog.rust-lang.org/2021/03/18/async-vision-doc.html
 [sqi]: https://github.com/rust-lang/wg-async-foundations/issues?q=is%3Aopen+is%3Aissue+label%3Astatus-quo-story-ideas
-[tue]: {{ site.baseurl }}/https://smallcultfollowing.com/babysteps/blog/2021/03/22/async-vision-doc-writing-sessions/
+[tue]: {{< baseurl >}}/https://smallcultfollowing.com/babysteps/blog/2021/03/22/async-vision-doc-writing-sessions/

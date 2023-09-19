@@ -11,7 +11,7 @@ update][] was in June, when we were still hard at work on getting
 things to work.
 
 [rust-blog]: https://blog.rust-lang.org/2018/10/30/help-test-rust-2018.html
-[last update]: {{ site.baseurl }}/blog/2018/06/15/mir-based-borrow-check-nll-status-update/
+[last update]: {{< baseurl >}}/blog/2018/06/15/mir-based-borrow-check-nll-status-update/
 
 ## Rust 2018 will use NLL now
 
@@ -31,7 +31,7 @@ out quite smoothly. These are all instances of the [problem cases #1
 and #2][pc12] I highlighted way back when[^pc3], but they interact in
 interesting ways I did not fully anticipate.
 
-[pc12]: {{ site.baseurl }}/blog/2016/04/27/non-lexical-lifetimes-introduction/
+[pc12]: {{< baseurl >}}/blog/2016/04/27/non-lexical-lifetimes-introduction/
 [salsa]: https://github.com/salsa-rs/salsa
 [^plug]: Did you see how smoothly I worked in that plug for [salsa][]? I'll write a post about it soon, I promise.
 [^pc3]: Note that the current NLL implementation does not solve Problem Case #3. See [the "What Next?" section][wn] for more.
@@ -161,5 +161,5 @@ prioritize future improvements to Rust.
 ### Footnotes
 
 [Polonius]: https://github.com/rust-lang-nursery/polonius/
-[alias-based]: {{ site.baseurl }}/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
-[pc3-link]: {{ site.baseurl }}/blog/2016/04/27/non-lexical-lifetimes-introduction/#problem-case-3-conditional-control-flow-across-functions
+[alias-based]: {{< baseurl >}}/blog/2018/04/27/an-alias-based-formulation-of-the-borrow-checker/
+[pc3-link]: {{< baseurl >}}/blog/2016/04/27/non-lexical-lifetimes-introduction/#problem-case-3-conditional-control-flow-across-functions

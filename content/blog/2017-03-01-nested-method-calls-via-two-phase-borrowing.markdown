@@ -15,7 +15,7 @@ it's worth reading at least the top post in the thread, where I laid
 out a lot of the history here. I'll try to summarize the key bits as I
 go.
 
-[NLL]: {{ site.baseurl }}/blog/2017/02/21/non-lexical-lifetimes-using-liveness-and-location/
+[NLL]: {{< baseurl >}}/blog/2017/02/21/non-lexical-lifetimes-using-liveness-and-location/
 [internals]: https://internals.rust-lang.org/t/accepting-nested-method-calls-with-an-mut-self-receiver/4588
 
 ### The problem we'd like to solve
@@ -519,4 +519,4 @@ second out of a series of three posts that lay out a complete proposal[^overlook
 
 [^overlook]: Presuming I'm not overlooking something. =)
 [ref2]: https://internals.rust-lang.org/t/accepting-nested-method-calls-with-an-mut-self-receiver/4588/24?u=nikomatsakis
-[wil]: {{ site.baseurl }}/blog/2017/02/21/non-lexical-lifetimes-using-liveness-and-location/#step-0-what-is-a-lifetime
+[wil]: {{< baseurl >}}/blog/2017/02/21/non-lexical-lifetimes-using-liveness-and-location/#step-0-what-is-a-lifetime

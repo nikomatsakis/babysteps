@@ -11,7 +11,7 @@ interviewing someone else, give my opinion on some of the immediate
 next steps, and a bit about the medium to longer term. I'm also going
 to talk a bit about what I see as some of the practical challenges.
 
-[async interview]: {{ site.baseurl }}/blog/2019/11/22/announcing-the-async-interviews/
+[async interview]: {{< baseurl >}}/blog/2019/11/22/announcing-the-async-interviews/
 
 ### Focus for the immediate term: interoperability and polish
 

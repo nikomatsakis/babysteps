@@ -11,7 +11,7 @@ begins with an overview of how ordinary type unification works during
 compilation. The next post will add in associated types and we can see
 what kinds of mischief they bring with them.
 
-[pp]: {{ site.baseurl }}/blog/2017/01/26/lowering-rust-traits-to-logic/
+[pp]: {{< baseurl >}}/blog/2017/01/26/lowering-rust-traits-to-logic/
 [chalk]: https://github.com/nikomatsakis/chalk/
 
 ### What is unification?

@@ -45,7 +45,7 @@ themselves, it now includes an improved definition of the Rust borrow
 checker -- that is, how to decide **which loans are in scope** at any
 particular point and **which actions are illegal as a result**.
 
-[intro]: {{ site.baseurl }}/blog/2016/04/27/non-lexical-lifetimes-introduction/
+[intro]: {{< baseurl >}}/blog/2016/04/27/non-lexical-lifetimes-introduction/
 
 When combined with [RFC 2025][2025], this means that we will accept
 two more classes of programs. First, what I call "nested method calls":

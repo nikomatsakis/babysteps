@@ -31,7 +31,7 @@ I see these changes to compiler team co-leads as fitting into a larger trend, on
 
 Another core value of Rust is [recognizing the inevitability of tradeoffs][aic][^not]. Rotating leadership is no exception: there is a lot of value in having the same people lead for a long time, as they accumulate all kinds of context and skills. But it also means that you are missing out on the fresh energy and ideas that other people can bring to the problem. I feel confident that Felix and Wesley will help to shape the compiler team in ways that I never would've thought to do.
 
-[aic]: {{ site.baseurl }}/blog/2019/04/19/aic-adventures-in-consensus/
+[aic]: {{< baseurl >}}/blog/2019/04/19/aic-adventures-in-consensus/
 [^not]: Though not always the tradeoffs you expect. [Read the post.][aic]
 
 ### Rotation with intention
@@ -49,7 +49,7 @@ Beyond rotation, another reason I would like to step back from being co-lead of 
 
 I'm actually very curious to work with pnkfelix and Wesley to talk about how the teams ought to coordinate, since I've always felt we could do a better job. I would like us to be actively coordinating how we are going to manage the implementation work at the same time as we do the design, to help avoid [unbounded queues][uq]. I would also like us to be doing a better job getting feedback from the implementation and experimentation stage into the lang team. 
 
-[uq]: {{ site.baseurl }}/blog/2019/07/10/aic-unbounded-queues-and-lang-design/
+[uq]: {{< baseurl >}}/blog/2019/07/10/aic-unbounded-queues-and-lang-design/
 
 You might think having me be the lead of both teams would enable coordination, but I think it can have the opposite effect. Having separate leads for compiler and lang means that those leads must actively communicate and avoids the problem of one person just holding things in their head without realizing other people don't share that context.
 
@@ -64,5 +64,5 @@ In terms of the compiler team structure, I think there is room for us to introdu
 This proposal is trying to address the fact that a successful open source organization needs [more than coders], but all too often we fail to recognize and honor that work. Having fixed terms is important because when someone *is* willing to do that work, they can easily wind up getting stuck being the only one doing it, and they do that until they burn out. The proposal also aims to enable more "part-time" leadership within the compiler team, by making "finer grained" duties that don't require as much time to complete. 
 
 [officers]: https://zulip-archive.rust-lang.org/185694tcompilerwgmeta/79956compilerteamofficers.html
-[More than coders]: {{ site.baseurl }}/blog/2019/04/15/more-than-coders/
+[More than coders]: {{< baseurl >}}/blog/2019/04/15/more-than-coders/
 [^whichword]: I am not sure that 'officer' is the right word here, but I'm not sure what the best replacement is. I want something that conveys respect and responsibility.

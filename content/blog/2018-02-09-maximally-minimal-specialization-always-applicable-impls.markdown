@@ -118,7 +118,7 @@ conditions:
 - it doesn't repeat generic type parameters.
 
 [ibrfc]: https://github.com/rust-lang/rfcs/blob/master/text/2089-implied-bounds.md
-[ibpost]: {{ site.baseurl }}/blog/2014/07/06/implied-bounds/
+[ibpost]: {{< baseurl >}}/blog/2014/07/06/implied-bounds/
 [ibpr]: https://github.com/rust-lang-nursery/chalk/pull/82
 [^scalexm]: Let me give a shout out here to scalexm, who recently [emerged with an elegant solution for how to model implied bounds in Chalk][ibpr].
 

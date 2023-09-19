@@ -19,7 +19,7 @@ Other posts in this series:
 
 - [Rooting an rc handle][post0]
 
-[post0]: {{ site.baseurl }}/blog/2018/04/16/rust-pattern-rooting-an-rc-handle/
+[post0]: {{< baseurl >}}/blog/2018/04/16/rust-pattern-rooting-an-rc-handle/
 
 ### The error: closures capture too much
 
