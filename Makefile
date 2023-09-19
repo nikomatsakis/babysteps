@@ -4,14 +4,20 @@ help:
 	@echo "  make serve-drafts"
 	@echo "  make generate deploy"
 
-serve:
-	hugo server --minify
+HUGOURL=https://github.com/gohugoio/hugo/releases/download/v0.118.2/hugo_extended_0.118.2_linux-amd64.tar.gz
 
-serve-drafts:
-	hugo server --minify --buildFuture
+hugo:
+	curl -L ${HUGOURL} | tar zxf - hugo
 
-generate:
-	hugo --minify --buildFuture
+serve: hugo
+	./hugo server --minify
+
+serve-drafts: hugo
+	./hugo server --minify --buildFuture
+
+generate: hugo
+	./hugo --minify --buildFuture
 
 deploy:
 	rsync -avr --rsh='ssh' --delete-after --delete-excluded public/ scf:web/babysteps/
+
