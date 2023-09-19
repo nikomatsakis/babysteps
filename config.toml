@@ -16,3 +16,11 @@ blog = '/blog/:year/:month/:day/:slug/'
 
 [markup.highlight]
 noClasses = false
+
+[outputs]
+  # <domain>/atom.xml
+  home = ["HTML", "RSS", "ATOM"]     # default = ["HTML", "RSS"]
+
+[module]
+  [[module.imports]]
+    path = "github.com/kaushalmodi/hugo-atom-feed"
