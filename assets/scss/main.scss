@@ -1,0 +1,239 @@
+@import "fonts";
+$sans-fonts: source-sans-web, Seravek, Segoe UI, Cantarell, sans-serif;
+$mono-fonts: inconsolata-web, Consolas, Noto Sans Mono, Noto Mono, Monaco,
+  monospace;
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: inherit;
+  vertical-align: initial;
+}
+
+html {
+  font-size: 22px;
+  @media (max-width: 500px) {
+    font-size: 18px;
+  }
+}
+
+body {
+  font-family: $sans-fonts;
+  font-variant-numeric: proportional-nums;
+  line-height: 1.3;
+}
+
+$link-color: #3783ff;
+
+.markdown {
+  @import "markdown";
+}
+
+$fancy-breakpoint: 1100px;
+
+html {
+  @media (min-width: $fancy-breakpoint) {
+    background-color: #cccccc;
+    padding: 4rem;
+  }
+}
+
+body {
+  $regular-textblock-width: 28rem;
+  $regular-textblock-padding: 1rem;
+
+  $fancy-sidebar-width: 20rem;
+  $fancy-textblock-width: 34rem;
+
+  @media (min-width: $fancy-breakpoint) {
+    display: flex;
+    max-width: $fancy-textblock-width + $fancy-sidebar-width;
+    margin: {
+      left: auto;
+      right: auto;
+    }
+    border: 1px solid #888888;
+  }
+
+  > nav {
+    $border-color: #cccccc;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid $border-color;
+
+    padding: 0.75rem $regular-textblock-padding;
+    position: sticky;
+    top: 0;
+
+    > .content {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+
+      max-width: $regular-textblock-width;
+      margin: {
+        left: auto;
+        right: auto;
+      }
+
+      > .img-container > .title {
+        font-weight: 900;
+      }
+      > .description {
+        display: none;
+      }
+
+      > .links {
+        display: flex;
+        font-size: 0.8rem;
+        column-gap: 1em;
+        list-style-type: none;
+        flex-wrap: wrap;
+        justify-content: end;
+      }
+    }
+
+    @media (min-width: $fancy-breakpoint) {
+      $p: 2rem;
+      padding: $p;
+
+      min-width: 13rem;
+      max-width: $fancy-sidebar-width;
+      border: none;
+      border-right: 1px solid $border-color;
+      flex-shrink: 2;
+
+      > .content {
+        position: sticky;
+        top: $p;
+        display: block;
+        max-width: initial;
+
+        > .img-container {
+          background-image: url("https://smallcultfollowing.com/babysteps/assets/daphne.png");
+          background-size: cover;
+          aspect-ratio: 1.25;
+          padding: 1rem;
+
+          > .title {
+            color: #ffffff;
+            text-shadow: 0.25rem 0.25rem rgba(0, 0, 0, 0.5);
+            width: 3rem;
+            font-size: 2.5rem;
+            line-height: 1;
+          }
+        }
+
+        > .description {
+          display: block;
+          font-size: 1.2rem;
+          font-weight: 380;
+          margin-top: 2rem;
+        }
+
+        > .links {
+          flex-direction: column;
+          font-size: 1rem;
+          gap: 0.5rem;
+          margin-top: 2rem;
+
+          > li::before {
+            content: "»";
+            padding-right: 0.5em;
+          }
+        }
+      }
+    }
+  }
+
+  > main {
+    background-color: #fafafa;
+
+    > .content {
+      max-width: $regular-textblock-width;
+      margin: {
+        left: auto;
+        right: auto;
+      }
+    }
+
+    padding: 2rem $regular-textblock-padding;
+    @media (min-width: $fancy-breakpoint) {
+      flex-grow: 1;
+      min-width: 28rem;
+      max-width: $fancy-textblock-width;
+      padding: 2rem;
+
+      > .content {
+        max-width: initial;
+      }
+    }
+  }
+}
+
+header {
+  > h1 {
+    font-size: 2rem;
+    font-weight: 340;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  > .date {
+    color: #888888;
+  }
+
+  margin-bottom: 2rem;
+}
+
+.page {
+  > .date {
+    color: #888888;
+  }
+
+  > .title {
+    font-size: 1.3rem;
+    font-weight: 370;
+    margin-top: 0.1rem;
+  }
+
+  > .summary {
+    margin-top: 1rem;
+  }
+
+  > .read-more {
+    text-align: right;
+    color: $link-color;
+    margin-top: 0.5rem;
+  }
+
+  & + & {
+    margin-top: 2rem;
+  }
+}
+
+.see-all-posts {
+  color: $link-color;
+}
+
+.categories {
+  list-style-type: none;
+
+  > .category {
+    > .title {
+      font-size: 1.5rem;
+      font-weight: 350;
+      > a {
+        color: $link-color;
+      }
+    }
+  }
+
+  > .category + .category {
+    margin-top: 1rem;
+  }
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {{ if eq .Title .Site.Title }}
+      <title>{{ .Site.Title }}</title>
+    {{ else }}
+      <title>{{ .Title }} · {{ .Site.Title }}</title>
+    {{ end }}
+
+    {{ $mainStyles := resources.Get "scss/main.scss" | toCSS | fingerprint }}
+    <link
+      rel="stylesheet"
+      href="{{ $mainStyles.Permalink }}"
+      integrity="{{ $mainStyles.Data.Integrity }}"
+    />
+  </head>
+
+  <body>
+    <nav>
+      <div class="content">
+        <div class="img-container">
+          <h1 class="title">
+            <a href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>
+          </h1>
+        </div>
+
+        <p class="description">{{ .Site.Params.description }}</p>
+
+        <ul class="links">
+          {{ range where .Site.Pages "Type" "main" }}
+            <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+          {{ end }}
+          <li><a href="{{ .Site.BaseURL }}/categories">Categories</a></li>
+          <li><a href="https://github.com/nikomatsakis">GitHub</a></li>
+          <li><a href="https://twitter.com/nikomatsakis">Twitter</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <main>
+      <div class="content">
+        {{ block "body" . }}
+        {{ end }}
+      </div>
+    </main>
+  </body>
+</html>

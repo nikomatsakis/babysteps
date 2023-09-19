@@ -1,0 +1,133 @@
+* + * {
+  margin-top: 1rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 650;
+  margin-top: 4rem;
+  margin-bottom: 1.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 380;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+h4 {
+  font-size: 0.95rem;
+  font-style: italic;
+  margin-top: 2rem;
+}
+
+em {
+  font-style: italic;
+}
+
+strong {
+  font-weight: 700;
+}
+
+a {
+  color: $link-color;
+}
+
+ul,
+ol {
+  margin-left: 1.5rem;
+
+  > li {
+    margin-top: 0.5rem;
+  }
+}
+
+.footnotes {
+  li {
+    margin-top: 1rem;
+  }
+}
+
+sup {
+  font-variant-position: super;
+}
+
+code {
+  font-family: $mono-fonts;
+}
+
+pre {
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+
+  > code {
+    font-size: 0.8rem;
+    line-height: 1.2;
+    overflow-x: auto;
+    display: block;
+    padding: 0.5rem;
+  }
+
+  // keywords
+  .k,
+  .kd,
+  .bp {
+    color: #ad3da4;
+    font-weight: 700;
+  }
+
+  // type definitions
+  .nc {
+    color: #02638c;
+  }
+
+  // function definitions
+  .nf {
+    color: #057cb0;
+  }
+
+  // builtin types
+  .nb,
+  .kt {
+    color: #4b21b0;
+  }
+
+  // numbers
+  .mi {
+    color: #272ad8;
+  }
+
+  // strings
+  .s {
+    color: #d12f1b;
+  }
+
+  // lifetimes
+  .na {
+    color: #78492a;
+  }
+
+  // macros
+  .fm {
+    color: #78492a;
+  }
+
+  // attributes
+  .cp {
+    color: #707f8c;
+  }
+
+  // comments
+  .c1,
+  .sd {
+    color: #2d8504;
+  }
+
+  // punctuation
+  .p,
+  .o,
+  .kp {
+    color: #707f8c;
+  }
+}

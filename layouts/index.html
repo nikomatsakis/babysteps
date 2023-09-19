@@ -1,0 +1,13 @@
+{{ define "body" }}
+  <header>
+    <h1>Recent Posts</h1>
+
+    <p class="see-all-posts">
+      <a href="{{ .Site.BaseURL }}/blog">see all posts &rarr;</a>
+    </p>
+  </header>
+
+  {{ range (.Site.GetPage "blog").Pages | first 6 }}
+    {{ partial "page-preview.html" . }}
+  {{ end }}
+{{ end }}

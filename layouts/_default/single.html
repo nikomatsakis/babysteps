@@ -1,0 +1,10 @@
+{{ define "body" }}
+  <header>
+    <h1>{{ .Title }}</h1>
+    <p class="date">{{ .Date.Format "2 January 2006" }}</p>
+  </header>
+
+  <div class="markdown">
+    {{ .Page.Content }}
+  </div>
+{{ end }}

@@ -1,0 +1,31 @@
+@font-face {
+  font-family: source-sans-web;
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+  src: url("/babysteps/fonts/source-sans.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: source-sans-web;
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+  src: url("/babysteps/fonts/source-sans-italic.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: inconsolata-web;
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  src: url("/babysteps/fonts/inconsolata.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: inconsolata-web;
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("/babysteps/fonts/inconsolata-semibold.woff2") format("woff2");
+}

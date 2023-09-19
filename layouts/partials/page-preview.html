@@ -1,0 +1,6 @@
+<article class="page">
+  <p class="date">{{ .Date.Format "2 January 2006" }}</p>
+  <h1 class="title"><a href="{{ .Permalink }}">{{ .Title }}</a></h1>
+  <div class="summary markdown">{{ .Summary }}</div>
+  <p class="read-more"><a href="{{ .Permalink }}">read more &rarr;</a></p>
+</article>

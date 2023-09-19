@@ -1,0 +1,18 @@
+baseURL = "https://smallcultfollowing.com/babysteps/"
+languageCode = "en-us"
+title = "baby steps"
+
+[params]
+description = "This blog is where I post up various half-baked ideas that I have."
+
+[minify.tdewolff.html]
+keepWhitespace = false
+
+[frontmatter]
+date = [':filename']
+
+[permalinks]
+blog = '/blog/:year/:month/:day/:slug/'
+
+[markup.highlight]
+noClasses = false

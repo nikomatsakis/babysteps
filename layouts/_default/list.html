@@ -1,0 +1,9 @@
+{{ define "body" }}
+  <header>
+    <h1>{{ .Title }}</h1>
+  </header>
+
+  {{ range .Pages }}
+    {{ partial "page-preview.html" . }}
+  {{ end }}
+{{ end }}

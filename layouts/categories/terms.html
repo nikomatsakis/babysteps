@@ -1,0 +1,19 @@
+{{ define "body" }}
+  <header>
+    <h1>{{ .Title }}</h1>
+  </header>
+
+  <ul class="categories">
+    {{ range sort .Pages "Pages.Len" "desc" }}
+      <li class="category">
+        <p class="title">
+          <a href="{{ .Permalink }}">{{ .Title }}</a>
+        </p>
+        <p>
+          {{ .Pages.Len }}
+          pages
+        </p>
+      </li>
+    {{ end }}
+  </ul>
+{{ end }}
