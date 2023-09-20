@@ -13,6 +13,11 @@
 
   {{ $mainStyles := resources.Get "scss/main.scss" | toCSS | fingerprint }}
   <link rel="stylesheet" href="{{ $mainStyles.Permalink }}" integrity="{{ $mainStyles.Data.Integrity }}" />
+
+  {{ range .AlternativeOutputFormats -}}
+    {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+  {{ end -}}
+
 </head>
 
 <body>
