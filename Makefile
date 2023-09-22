@@ -1,5 +1,6 @@
 help:
 	@echo "try:"
+	@echo "  make post NAME=foo-bar"
 	@echo "  make serve"
 	@echo "  make serve-drafts"
 	@echo "  make generate deploy"
@@ -8,6 +9,9 @@ HUGOURL=https://github.com/gohugoio/hugo/releases/download/v0.118.2/hugo_extende
 
 hugo:
 	curl -L ${HUGOURL} | tar zxf - hugo
+
+post: hugo
+	@if [ -z "${NAME}" ]; then echo "Set NAME to something!"; else ./hugo new content content/blog/`date '+%Y-%m-%d'`-${NAME}.markdown; fi
 
 serve: hugo
 	./hugo server --minify
