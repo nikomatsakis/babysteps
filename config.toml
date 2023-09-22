@@ -1,6 +1,7 @@
 baseURL = "https://smallcultfollowing.com/babysteps/"
 languageCode = "en-us"
-title = "baby steps"
+title = "babysteps"
+enableEmoji = true
 
 [params]
 description = "This blog is where I post up various half-baked ideas that I have."
