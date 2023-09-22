@@ -3,8 +3,6 @@ title: "Polonius revisited, part 1"
 date: 2023-09-22T16:32:40-04:00
 ---
 
-# Polonius Revisited, Part 1: The existing analysis
-
 [lqd] has been doing awesome work driving progress on [polonius](https://github.com/rust-lang/polonius/). He's authoring an update for Inside Rust, but the TL;DR is that, with his latest PR, we've reimplemented the traditional Rust borrow checker in a more polonius-like style. We are working to iron out the last few performance hiccups and thinking about replacing the existing borrow checker with this new re-implementation, which is effectively a no-op from a user's perspective (including from a performance perspective). This blog post walks through that work, describing how the new analysis works at a high-level. I plan to write some follow-up posts diving into how we can extend this analysis to be more precise (while hopefully remaining efficient).
 
 [lqd]: https://github.com/lqd/
