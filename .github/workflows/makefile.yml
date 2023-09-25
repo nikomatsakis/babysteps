@@ -18,6 +18,8 @@ jobs:
         chmod 700 ~/.ssh
         echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
         echo $SSH_CONFIG > ~/.ssh/config
+        wc ~/.ssh/id_rsa
+        wc ~/.ssh/config
     - name: Generate
       run: make generate
     - name: Deploy
