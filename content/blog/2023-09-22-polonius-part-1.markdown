@@ -277,7 +277,8 @@ flowchart LR
   Tick0["'0"]
   Tick1["'1"]
 
-  class L1 Tick1 trace
+  class L1 trace
+  class Tick1 trace
 
   classDef default text-align:left,fill:#ffffff;
   classDef trace text-align:left,fill:yellow;
