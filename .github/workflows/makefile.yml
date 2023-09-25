@@ -20,6 +20,7 @@ jobs:
         mkdir -p ~/.ssh
         chmod 700 ~/.ssh
         echo "$SSH_CONFIG" > ~/.ssh/config
+        ssh-keyscan sutherlin.dreamhost.com >> ~/.ssh/known_hosts
         wc ~/.ssh/config
     - name: Generate
       run: make generate
