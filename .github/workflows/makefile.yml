@@ -6,14 +6,19 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
-
+    - name: Store ssh info
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_CONFIG: ${{ secrets.SSH_CONFIG }}
+      run: |
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        echo $SSH_PRIVATE_KEY > ~/.ssh/id_rsa
+        echo $SSH_CONFIG > ~/.ssh/config
     - name: Generate
       run: make generate
-
     - name: Deploy
-      run: make deployci
+      run: make deploy

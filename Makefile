@@ -26,6 +26,5 @@ deploy:
 	rsync -avr --rsh='ssh' --delete-after --delete-excluded public/ scf:web/babysteps/
 
 deployci:
-	ssh-add - <<<"${SSH_PRIVATE_KEY}"
 	rsync -avr --rsh='ssh' --delete-after --delete-excluded public/ ${DEPLOY_TARGET}
 
