@@ -3,8 +3,9 @@ title: "Polonius revisited, part 1"
 date: 2023-09-22T16:32:40-04:00
 ---
 
-[lqd] has been doing awesome work driving progress on [polonius](https://github.com/rust-lang/polonius/). He's authoring an update for Inside Rust, but the TL;DR is that, with his latest PR, we've reimplemented the traditional Rust borrow checker in a more polonius-like style. We are working to iron out the last few performance hiccups and thinking about replacing the existing borrow checker with this new re-implementation, which is effectively a no-op from a user's perspective (including from a performance perspective). This blog post walks through that work, describing how the new analysis works at a high-level. I plan to write some follow-up posts diving into how we can extend this analysis to be more precise (while hopefully remaining efficient).
+[lqd] has been doing awesome work driving progress on [polonius](https://github.com/rust-lang/polonius/). He's authoring an [update for Inside Rust][update], but the TL;DR is that, with his latest PR, we've reimplemented the traditional Rust borrow checker in a more polonius-like style. We are working to iron out the last few performance hiccups and thinking about replacing the existing borrow checker with this new re-implementation, which is effectively a no-op from a user's perspective (including from a performance perspective). This blog post walks through that work, describing how the new analysis works at a high-level. I plan to write some follow-up posts diving into how we can extend this analysis to be more precise (while hopefully remaining efficient).
 
+[update]: https://github.com/rust-lang/blog.rust-lang.org/pull/1147
 [lqd]: https://github.com/lqd/
 
 ## What is Polonius?
@@ -77,7 +78,7 @@ The borrow checker these days operates on [MIR][][^why]. MIR is basically a very
 ```mermaid
 flowchart TD
   Intro --> BB1
-  Intro["let mut x: i32\nlet mut y: i32\nlet mut p: &'0 i32\nlet mut q: &0 i32"]
+  Intro["let mut x: i32\nlet mut y: i32\nlet mut p: &'0 i32\nlet mut q: &'1 i32"]
   BB1["p = &x;\ny = y + 1;\nq = &y;\nif something goto BB2 else BB3"]
   BB1 --> BB2
   BB1 --> BB3
@@ -239,7 +240,7 @@ The next interesting point is the "true" branch of the if:
 flowchart TD
   Start["
     ...
-    let mut q: &1 i32;
+    let mut q: &'1 i32;
     ...
   "]
   BB1["..."]
@@ -263,7 +264,26 @@ flowchart TD
   class BB2 highlight
 ```
 
-The interesting thing here is that, on entering the block, there is a **kill** of L0. This is because the only live reference on entry to the block is `q`, as `p` is about to be overwritten. As the type of `q`  is `&'1 i32`, this means that the live origins on entry to the block are `{'1}`. Looking at the subset graph we saw earlier, we can trace the transitive predecessors of `'1` to see that it contains only `{L0}`. This means that there is no live variable whose origins contains L1, so we add a kill for L1. We call this kind of point the *active loan frontier* for L1 -- that is, it's a point where L1 is no longer active, and yet it was active on the predecessor (i.e., at the end of the previous block).
+The interesting thing here is that, on entering the block, there is a **kill** of L0. This is because the only live reference on entry to the block is `q`, as `p` is about to be overwritten. As the type of `q`  is `&'1 i32`, this means that the live origins on entry to the block are `{'1}`. Looking at the subset graph we saw earlier...
+
+```mermaid
+flowchart LR
+  L0 --"⊆"--> Tick0
+  L1 --"⊆"--> Tick1
+  Tick1 --"⊆"--> Tick0
+  
+  L0["{L0}"]
+  L1["{L1}"]
+  Tick0["'0"]
+  Tick1["'1"]
+
+  class L1 Tick1 trace
+
+  classDef default text-align:left,fill:#ffffff;
+  classDef trace text-align:left,fill:yellow;
+```
+
+...we can trace the transitive predecessors of `'1` to see that it contains only `{L0}` (I've highlighted those predecessors in yellow in the graph). This means that there is no live variable whose origins contains L0, so we add a kill for L0.
 
 #### No error on `true` branch
 
