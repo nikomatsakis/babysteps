@@ -284,7 +284,7 @@ flowchart LR
   classDef trace text-align:left,fill:yellow;
 ```
 
-...we can trace the transitive predecessors of `'1` to see that it contains only `{L0}` (I've highlighted those predecessors in yellow in the graph). This means that there is no live variable whose origins contains L0, so we add a kill for L0.
+...we can trace the transitive predecessors of `'1` to see that it contains only `{L1}` (I've highlighted those predecessors in yellow in the graph). This means that there is no live variable whose origins contains `L0`, so we add a kill for `L0`.
 
 #### No error on `true` branch
 
