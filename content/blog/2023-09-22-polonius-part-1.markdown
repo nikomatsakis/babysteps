@@ -46,7 +46,7 @@ read_value(p);           // use `p` again here
 | A | :heavy_check_mark: | :heavy_check_mark: | OK |
 | B | :heavy_check_mark: | :heavy_check_mark: | OK |
 | C | :x: | :heavy_check_mark: | OK |
-| D | :x: | :x: | Can cause UB, it `true` branc is taken |
+| D | :x: | :x: | Can cause UB, if `true` branch is taken |
 
 ## Reformulating the existing borrow check à la polonius
 
@@ -141,7 +141,7 @@ read_value(p);
 
 The next step in borrow checking is to run a type check across the MIR. MIR is effectively a very simplified form of Rust where statements are heavily desugared and there is a lot less type inference. There is, however, a lot of *lifetime* inference -- basically when NLL starts **every** lifetime is an inference variable. 
 
-For example, consider the `p = q` assigment in our running example:
+For example, consider the `p = q` assignment in our running example:
 
 ```rust
 ...
@@ -157,7 +157,7 @@ if something() {
 ...
 ```
 
-To type check this, we take the type of `q` (`&'1 u32`) and require that it is a sutype of the type of `p` (`&'0 u32`):
+To type check this, we take the type of `q` (`&'1 u32`) and require that it is a subtype of the type of `p` (`&'0 u32`):
 
 ```
 &'1 u32 <: &'0 u32
@@ -306,7 +306,7 @@ flowchart TD
 
 #### False error on the `false` branch
 
-This path is also interesting: there is only one live variable, `p`. If you trace the code by hand, you can see that `p` could only refer to L0 (`x`) here. And yet the analysis concludes that we hvae two active loans: L0 and L1. This is because it is looking at the subset graph to determine what `p` may reference, and that graph is *flow insensitive*. So, since `p` may reference L1 at *some* point in the program, and we haven't yet seen references to L1 go completely dead, we assume that `p` may reference L1 here. This leads to a false error being reported when the user does `y = y + 1`.
+This path is also interesting: there is only one live variable, `p`. If you trace the code by hand, you can see that `p` could only refer to L0 (`x`) here. And yet the analysis concludes that we have two active loans: L0 and L1. This is because it is looking at the subset graph to determine what `p` may reference, and that graph is *flow insensitive*. So, since `p` may reference L1 at *some* point in the program, and we haven't yet seen references to L1 go completely dead, we assume that `p` may reference L1 here. This leads to a false error being reported when the user does `y = y + 1`.
 
 #### Active loans on the final block
 
