@@ -25,11 +25,12 @@ Usually we feel multiple, seemingly contradictory things, which can leave everyt
 
 Some time back, Aaron Turon introduced me to [Internal Family Systems][IFS] through the book [Self Therapy](https://www.amazon.com/Self-Therapy-Step-Step-Cutting-Edge-Psychotherapy/dp/0984392777)[^je]. It’s really had a big influence on how I think about things. The super short version of IFS is “[Inside Out][] is real”. We are each composites of a number of independent *parts* which capture pieces of our personality. When we are feeling balanced and whole, we are switching between these parts all the time in reaction to what is going on around us.
 
-[^je]: By none other than [Jay Earley][], inventer of the early parser! This guy is my hero.
+[^je]: By none other than [Jay Earley][], inventer of the [Earley parser][]! This guy is my hero.
 
 [Jay Earley]: https://en.wikipedia.org/wiki/Jay_Earley
 [IFS]: https://en.wikipedia.org/wiki/Internal_Family_Systems_Model
 [Inside Out]: https://en.wikipedia.org/wiki/Inside_Out_(2015_film)
+[Earley parser]: https://en.wikipedia.org/wiki/Earley_parser
 
 But *sometimes* things go awry. Sometimes, one part will get very alarmed about what it perceives to be happening, and it will take complete control of you. This is called **blending**. While you are blended, the part is doing its best to help you in the ways that it knows: that might mean making you super anxious, so that you identify risks, or it might mean making you yell at people, so that they will go away and you don’t have to risk them letting you down. No matter which part you are blended with in the moment, though, you lose access to your whole self and your full range of capabilities. Even though the part will help you solve the immediate problem, it often does so in ways that create other problems down the line.
 
