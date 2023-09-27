@@ -27,6 +27,7 @@ Some time back, Aaron Turon introduced me to [Internal Family Systems][IFS] thro
 
 [^je]: By none other than [Jay Earley][], inventer of the early parser! This guy is my hero.
 
+[Jay Earley]: https://en.wikipedia.org/wiki/Jay_Earley
 [IFS]: https://en.wikipedia.org/wiki/Internal_Family_Systems_Model
 [Inside Out]: https://en.wikipedia.org/wiki/Inside_Out_(2015_film)
 
