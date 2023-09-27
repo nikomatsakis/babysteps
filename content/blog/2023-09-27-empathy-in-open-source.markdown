@@ -25,6 +25,8 @@ Usually we feel multiple, seemingly contradictory things, which can leave everyt
 
 Some time back, Aaron Turon introduced me to [Internal Family Systems][IFS] through the book [Self Therapy](https://www.amazon.com/Self-Therapy-Step-Step-Cutting-Edge-Psychotherapy/dp/0984392777)[^je]. It’s really had a big influence on how I think about things. The super short version of IFS is “[Inside Out][] is real”. We are each composites of a number of independent *parts* which capture pieces of our personality. When we are feeling balanced and whole, we are switching between these parts all the time in reaction to what is going on around us.
 
+[^je]: By none other than [Jay Earley][], inventer of the early parser! This guy is my hero.
+
 [IFS]: https://en.wikipedia.org/wiki/Internal_Family_Systems_Model
 [Inside Out]: https://en.wikipedia.org/wiki/Inside_Out_(2015_film)
 
