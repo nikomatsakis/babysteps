@@ -144,7 +144,9 @@ Rust has a pretty uneven track record here. There are projects that do better. I
 
 If could I have just one wish, it would be this bastardized quote from the great Bill and Ted:
 
-<a href="https://imgflip.com/i/80knqn"><img src="https://i.imgflip.com/80knqn.jpg" title="Be gentle with each other"/></a>
+![Be gentle with each other][billandted]
+
+[billandted]: {{< baseurl >}}/assets/2023-09-27-bill-and-ted.jpg
 
 We’ve talked a lot about empathy and how it comes into play, but really, in my mind, it all boils down to being *gentle* when somebody slips up. Note that being gentle doesn't mean you can't also be real and authentic about how you felt. We talked earlier about [I-messages][im] -- by speaking plainly about how somebody made you feel, you can deliver a message that is both gentle and yet incredibly powerful. To me, the key is not to make assumptions about what's going on for other people. You can never know their motivations. You can make guesses, but they're always based on incomplete information. 
 
