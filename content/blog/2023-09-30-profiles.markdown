@@ -1,0 +1,82 @@
+---
+title: "Easing tradeoffs with profiles"
+date: 2023-09-30T10:56:35-04:00
+---
+
+Rust helps you to build reliable programs. One of the ways it does that is by surfacing things to your attention that you really ought to care about. A classic example is the way we handle errors with `Result`: if some operation can fail, you can't, ahem, fail to recognize that, because you have to account for the error case. And yet often the kinds of things you care about depend on the kind of application you are building. A classic example is memory allocation, which for many Rust apps is No Big Deal, but for others is something to be done carefully, and for still others is completely verboten. But this pattern crops up a lot. I've heard and like the framing of designing for "what do you have to pay attention to" -- Rust currently aims for a balance that errs on the side of paying attention to more things, but tries to make them easy to manage. But this post is about a speculative idea of how we could do better than that by allowing programs to declare a **profile**.
+
+<!--more-->
+
+## Profiles declare what you want to pay attention to
+
+The core idea is pretty simple. A **profile** would be declared, I think, in the `Cargo.toml`. Profiles would **never** change the semantics of your Rust code. You could always copy and paste code between Rust projects with different profiles and things would work the same. But it **would** adjust lint settings and errors. So if you copy code from a more lenient profile into your more stringent project, you might find that it gets warnings or errors it didn't get before. 
+
+## Primarily, this means lints
+
+In effect, a profile would be a lot like a lint group. So if we have a profile for kernel development, this would turn on various lints that help to detect things that kernel developers really care about -- unexpected memory allocation, potential panics -- but other projects don't. Much like Rust-for-linux's existing [klint][] project.
+
+[klint]: https://github.com/Rust-for-Linux/klint
+
+So why not just make it a lint group? Well, actually, maybe we should -- but I thought `Cargo.toml` would be better because it would allow us to apply more stringent checks to what dependencies you use, which features they use, etc. For example, maybe dependencies could declare that some of their features are not well suited to certain profiles, and you would get a warning if your application winds up depending on them. I imagine would select a profile when running `cargo new`.
+
+## Example: autoclone for `Rc` and `Arc`
+
+Let's give an example of how this might work. In Rust today, if you want to have many handles to the same value, you can use a reference counted type like `Rc` or `Arc`. But whenever you want to get a new handle to that value, you have to explicit `clone` it:
+
+```rust
+let map: Rc<HashMap> = create_map();
+let map2 = map.clone(); // 👈 Clone!
+```
+
+The idea of this `clone` is to call attention to the fact that custom code is executing here. This is not just a `memcpy`[^debatable]. I've been grateful for this some of the time. For example, when optimizing a concurrent data structure, I really like knowing exactly when one of my reference counts is going to change. But a lot of the time, these calls to clone are just noise, and I wish I could just write `let map2 = map` and be done with it.
+
+[^debatable]: Back in the early days of Rust, we debated a lot about what ought to be the rule for when clone was required. I think the current rule of "memcpy is quiet, everything else is not" is pretty decent, but it's not ideal in a few ways. For example, an O(1) clone operation like incrementing a refcount is *not* the same as an O(n) operation like cloning a vector, and yet they look the same. Moreover, memcpy'ing a giant array (or `Future`) can be a real performance footgun (not to mention blowing up your stack), and yet we let you do that quite quietly. This is a good example of where profiles could help, I believe.
+
+So what if we modify the compiler as follows. Today, when you move out from a variable, you effectively get an error if that is not the "last use" of the variable:
+
+```rust=
+let a = v; // move out from `v` here...
+...
+read(&v); // 💥 ...so we get an error when we use `v`.
+```
+
+What if, instead, when you move out from a value and it is not the last use, we introduce an *auto-clone* operation. This may fail if the type is not auto-cloneable (e.g., a `Vec`), but for `Rc`, `Arc`, and other O(1) clone operations, it would be equivalent to `x.clone()`. We could designate which types can be auto-cloneable by extra marker traits, for example. This means that `let a = v` above would be equivalent to `let a = v.clone()`.
+
+Now, here comes the interesing part. When we introduce an auto-clone, we would also introduce a lint: implicit clone operation. In the higher-level profile, this lint would be `allow`-by-default, but in the profile for lower-level code, if would be `deny`-by-default, with an auto-fix to insert `clone`. Now when I'm editing my concurrent data structure, I still get to see the `clone` operations explicitly, but when I'm writing my application code, I don't have to think about it.
+
+## Example: dynamic dispatch with async trait
+
+Here's another example. Last year we spent a while exploring the ways that we can enable dynamic dispatch for traits that use async functions. We landed on a design that seemed like it hit a sweet spot. Most users could just use traits with async functions like normal, but they might get some implicit allocations. Users who cared could use other allocation strategies by being more explicit about things. ([You can read about the design here.](https://hackmd.io/@nikomatsakis/SJ2-az7sc)) But, as I described in my blog post [The Soul of Rust](https://smallcultfollowing.com/babysteps/blog/2022/09/18/dyn-async-traits-part-8-the-soul-of-rust/), this design had a crucial flaw: although it was still *possible* to avoid allocation, it was no longer *easy*.  This seemed to push Rust over the line from its current position as a systems language that can claim to be a true C alternative into a "just another higher-level language that can be made low-level if you program with care".
+
+But profiles seem to offer another alternative. We could go with our original design, but whenever the compiler inserted an adapter that might cause boxing to occur, it would issue a lint warning. In the higher-level profile, the warning would be `allow`-by-default, but in the lower-level profile, it would by `deny`-by-default.
+
+## Example: panic effects or other capabilities
+
+If you really want to go crazy, we can use annotations to signal various kinds of effects. For example, one way to achieve panic safety, we might allow functions to be annotated with `#[panics]`, signaling a function that *might* panic. Depending on the profile, this might require you to declare that the caller may panic (similar to how `unsafe` works now).
+
+Depending how far we want to go here, we would ultimately have to integrate these kind of checks more deeply into the type system. For example, if you have a `fn`-pointer, or a `dyn Trait` call, we would have to introduce "may panic" effects into the type system to be able to track that information (but we could be conservative and just assume calls by pointer may panic, for example). But we could likely still use profiles to control how much you as the caller choose to care.
+
+## Changing the profile for a module or a function
+
+Because profiles primarily address lints, we can also allow you to change the profile in a more narrow way. This could be done with lint groups (maybe each profile is a lint group), or perhaps with a `#![profile]` annotation. 
+
+## Why I care: profiles could open up design space
+
+So why am I writing about profiles? In short, I'm looking for opportunities to do the classic Rust thing of trying to have our cake and eat it too. I want Rust to be versatile, suitable for projects up and down the stack. I know that many projects contain hot spots or core bits of the code where the details matter quite a bit, and then large swaths of code where they don't matter a jot. I'd like to have a Rust that feels closer to Swift that I can use most of the time, and then the ability to "dial up" the detail level for the code where I do care. 
+
+## Conclusion: the core principles
+
+I do want to emphasize that this idea is **speculation**. As far as I know, nobody else on the lang team is into this idea -- most of them haven't even heard about it! 
+
+I also am not hung up on the details. Maybe we can implement profiles with some well-named lint groups. Or maybe, as I proposed, it should go in `Cargo.toml`. 
+
+What I do care about are the core principles of what I am proposing:
+
+* Defining some small set of **profiles** for Rust applications that define the **kinds of things you want to care about** in that code.
+    * I think these should be global and not user-defined. This will allow profiles to work more smoothly across dependencies. Plus we can always allow user-defined profiles or something later if want.
+* Profiles **never change** what code will do when it runs, but they can make code **get more warnings or errors**.
+    * You can always copy-and-paste code between applications without fear that it will behave differently (though it may not compile).
+    * You can always understand what Rust code will do without knowing the profile or context it is running in.
+* Profiles let us do more implicit things to **ease ergonomics** without making Rust inapplicable for other use cases.
+    * Looking at Aaron Turon's classic post introducing the lang team's [Rust 2018 ergonomics initiative](https://blog.rust-lang.org/2017/03/02/lang-ergonomics.html), profiles let users dial down the **context dependence** and **applicability** of any particular change.
+
