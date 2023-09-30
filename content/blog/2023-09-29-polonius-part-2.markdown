@@ -192,7 +192,7 @@ Env_BB3_0 = {
 }
 ```
 
-Following a similar process to before, we conclude that `'0_BB1_3 : '1_BB3_0`.
+Following a similar process to before, we conclude that `'0_BB1_3 : '0_BB3_0`.
 
 
 ## Building the flow-sensitive subset graph
@@ -356,7 +356,7 @@ let x: u32;
 /* P5 */ drop(v);
 ```
 
-What makes this interesting? We create a reference `p` at point `P1` that points at `v`. We then insert a borrow of `x` into the reference `p`. **After that point, the reference `p` is dead, but the loan `L1` is still active** -- this is because it is also stored in `x`. This connection between `p` and `v` is what is key about this example.
+What makes this interesting? We create a reference `p` at point `P1` that points at `v`. We then insert a borrow of `x` into the reference `p`. **After that point, the reference `p` is dead, but the loan `L1` is still active** -- this is because it is also stored in `v`. This connection between `p` and `v` is what is key about this example.
 
 The way that this connection is reflected in the type system is through *[variance]*. In particular, a type `&mut T` is **invariant** with respect to `T`. This means that when you assign one reference to another, the type that they reference must be exactly the same.
 
