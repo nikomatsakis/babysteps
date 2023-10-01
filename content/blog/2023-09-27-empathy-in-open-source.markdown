@@ -111,7 +111,7 @@ I bet some of you, when you read that last comment, were like "oh, heck no". It'
 
 ## Empathy for ourselves and our own parts
 
-This brings me to my final topic. No matter what role we play in an open-source project, or in life, the most important person to have empathy for is **yourself**. Ironically, this is often the hardest. We usually have very high expectations for ourselves, and we don’t cut ourselves much slack. As a maintainer, this might manifest as feeling you have to respond to every comment or task, and feeling bad when you don’t keep up. As a contributor, it might be feeling . No matter who we are, it might be kicking ourselves and feeling shame when we overreact in a comment. 
+This brings me to my final topic. No matter what role we play in an open-source project, or in life, the most important person to have empathy for is **yourself**. Ironically, this is often the hardest. We usually have very high expectations for ourselves, and we don’t cut ourselves much slack. As a maintainer, this might manifest as feeling you have to respond to every comment or task, and feeling bad when you don’t keep up. As a contributor, it might be feeling crappy when people point out bugs in your PR. No matter who we are, it might be kicking ourselves and feeling shame when we overreact in a comment.
 
 In my view, shame is basically never good. Of course I make mistakes, and I regret them. But when I feel *shame* about them, I am actually focusing inward, focusing on my own mistakes instead of focusing on how I can make it up to the other person or resolve my predicament. It doesn’t actually do anyone any good. 
 
