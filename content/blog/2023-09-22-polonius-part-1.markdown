@@ -230,7 +230,7 @@ flowchart TD
   class BB1 highlight
 ```
 
-This block is the start of the function, so the set of action loans starts out as empty. But then we encounter two `&x` statements, and each of them is the **gen** site for a loan (`L0` and `L1` respectively). By the end of the block, the active loan set is `{L0, L1}`.
+This block is the start of the function, so the set of active loans starts out as empty. But then we encounter two `&x` statements, and each of them is the **gen** site for a loan (`L0` and `L1` respectively). By the end of the block, the active loan set is `{L0, L1}`.
 
 #### Active loans on the "true" branch
 
@@ -388,4 +388,4 @@ I'm not going to walk through how this is borrow checked in detail here, but let
 
 ## Conclusion
 
-That brings us to the end of part 1! In this post, we covered how you can describe the existing borrow check in a more polonius-like style. We also uncovered an interesting quirk in how the borrow checker is formulated. It uses a *location insensitive* alias analysis (the subset graph) but completely that with a dataflow propagation to track active loans. Together, this makes it more expressive. This wasn't, however, the original plan with NLL. Originally, the subset graph was meant to be flow sensitive. Extending the subset graph to be flow sensitive is basically the heart of polonius. I've got some thoughts on how we might do that and I'll be getting to that in later posts. I do want to say in passing though that doing all of this framing is also making me wonder -- is it really necessary to combine a type check *and* the dataflow check? Can we frame the borrow checker (probably the more precise variants we'll be getting to in future posts) in a more unified way? Not sure yet!
+That brings us to the end of part 1! In this post, we covered how you can describe the existing borrow check in a more polonius-like style. We also uncovered an interesting quirk in how the borrow checker is formulated. It uses a *location insensitive* alias analysis (the subset graph) but completes that with a dataflow propagation to track active loans. Together, this makes it more expressive. This wasn't, however, the original plan with NLL. Originally, the subset graph was meant to be flow sensitive. Extending the subset graph to be flow sensitive is basically the heart of polonius. I've got some thoughts on how we might do that and I'll be getting to that in later posts. I do want to say in passing though that doing all of this framing is also making me wonder -- is it really necessary to combine a type check *and* the dataflow check? Can we frame the borrow checker (probably the more precise variants we'll be getting to in future posts) in a more unified way? Not sure yet!
