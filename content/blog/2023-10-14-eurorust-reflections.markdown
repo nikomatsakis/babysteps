@@ -1,5 +1,5 @@
 ---
-title: "2023 10 14 Eurorust Reflections"
+title: "Eurorust reflections"
 date: 2023-10-14T12:47:05-04:00
 ---
 
