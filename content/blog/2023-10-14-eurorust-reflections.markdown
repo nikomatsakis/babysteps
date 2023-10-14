@@ -37,7 +37,7 @@ Speaking of [Shuttle][] and [Tauri][], both of them are interesting in a particu
 
 At some point, RustFest morphed from a particular conference into a kind of ‘meta conference’ organization, helping others to organize and run their own events. Looking over the calendar of Rust events in Europe, I have to say, that looks like it’s worked out pretty dang well. Hats off to y’all on that. Between [EuroRust](https://eurorust.eu), [RustLab in Italy](https://rustlab.it/), [Rust Nation](https://www.rustnationuk.com/) in the UK, and probably a bunch more that I’m not aware of.
 
-I should also say that meeting the conference *organizers* at this conference was very nice. Both the EuroRust organizers (Marcus and Sarah, from MainMatter) were great to talk to, and I finally got to meet [Ernest](https://github.com/ernestkissiedu) (now organizing Rust Nation in the UK), whom I’ve talked to on and off over the years but never met in person. 
+I should also say that meeting the conference *organizers* at this conference was very nice. Both the EuroRust organizers (Marco and Sarah, from [Mainmatter](https://mainmatter.com/)) were great to talk to, and I finally got to meet [Ernest](https://github.com/ernestkissiedu) (now organizing Rust Nation in the UK), whom I’ve talked to on and off over the years but never met in person. 
 
 I do still miss the cozy chats at [Rust Belt Rust](https://www.rust-belt-rust.com/) (RIP), but this new generation of Rust conferences (and their organizers) is pretty rad too. Plus I get to eat good cheese and drink beer outdoors, two things that for reasons unbeknownst to me are all too rare in the United States.
 
