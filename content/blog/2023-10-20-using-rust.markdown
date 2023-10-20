@@ -17,7 +17,7 @@ A few years back, the Async Wg tried something new. We collaboratively authored 
 
 ## TL;DR
 
-I think authoring a living document (working title: "Using Rust") that collects ["status quo" stories][sq] could be a tremendous resource for the Rust community. I'm curious to [hear from](mailto:rust@nikomatsakis.com) folks who might like to be part of a group authoring such a document, especially (but not only) people with experience as product managers or developer advocates.
+I think authoring a living document (working title: "Using Rust") that collects ["status quo" stories][sq] could be a tremendous resource for the Rust community. I'm curious to [hear from](mailto:rust@nikomatsakis.com) folks who might like to be part of a group authoring such a document, especially (but not only) people with experience as product managers, developer advocates, or UX researchers.
 
 ## Open source is full of ideas, but which to do?
 
@@ -50,13 +50,13 @@ So here is my idea: what if we created a living document, working title "Using R
 
 Just as with the Async Vision Doc, I imagine "Using Rust" would cover the whole gamut of experiences, including not just the language itself but tooling, libraries, etc. Unlike the vision doc, I wouldn't narrow it to async (though we might start by focusing on a particular domain to prove out the idea).
 
-Like the vision doc, I imagine "Using Rust" would be composed of a series of vignettes, expressed in narrative form, using a similar [cast of characters][coc][^chars] to the Async Vision Doc (perhaps with variations, like Spanish-speaking Alano instead of Alan).
+Like the vision doc, I imagine "Using Rust" would be composed of a series of vignettes, expressed in narrative form, using a similar [set of personas][coc][^chars] to the Async Vision Doc (perhaps with variations, like Spanish-speaking Alano instead of Alan).
 
 I personally found the narratives really helpful to get the emotional "heft" of some of the stories. For example, ["Alan started trusting the Rust compiler, but then... async"](https://rust-lang.github.io/wg-async/vision/submitted_stories/status_quo/alan_started_trusting_the_rust_compiler_but_then_async.html) helped drive home the importance of that "if it compiles, it works" feeling for Rust users, as well as the way that panics can undermine it. Even though these are narratives, they can still dive deep into technical details. Researching and writing ["Barbara battles buffered streams"](https://rust-lang.github.io/wg-async/vision/submitted_stories/status_quo/barbara_battles_buffered_streams.html), for example, really helped me to appreciate the trickiness of async cancellation's semantics.[^moro]
 
 [coc]: https://rust-lang.github.io/wg-async/vision/characters.html
 
-[^chars]: The cast of characters may look simple, but developing that cast of characters took a lot of work. Finding a set that is small enough to be memorable but which captures the essentials is hard work. One key insight was separating out the [projects people are building](https://rust-lang.github.io/wg-async/vision/projects.html) from the characters building them, since otherwise you get a combinatorial explosion. 
+[^chars]: The personas/characters may look simple, but developing that cast of characters took a lot of work. Finding a set that is small enough to be memorable but which captures the essentials is hard work. One key insight was separating out the [projects people are building](https://rust-lang.github.io/wg-async/vision/projects.html) from the characters building them, since otherwise you get a combinatorial explosion. 
 
 [^moro]: Async cancellation is an area I deseparately want to return to! I still think we want some kind of structured concurrency like solution. My current thinking is roughly that we want something like [moro](https://github.com/nikomatsakis/moro/) for task-based concurrency and something like Yosh's [merged streams](https://blog.yoshuawuyts.com/futures-concurrency-3/#concurrent-stream-processing-with-stream-merge) for handling "expect one of many possible message"-like scenarios.
 
@@ -112,7 +112,7 @@ From time to time there are proposals to create a "project management" team. The
 
 ## Call to action: get in touch!
 
-I'm feeling pretty excited about this project. I'm contemplating how to go about organizing it. I'm really interested to hear from people who would like to take part as authors and collators of user stories. If you think you'd be interested to participate, please [send me an email](mailto:rust@nikomatsakis.com). I'm particularly interested to hear from product managers or developer advocates.
+I'm feeling pretty excited about this project. I'm contemplating how to go about organizing it. I'm really interested to hear from people who would like to take part as authors and collators of user stories. If you think you'd be interested to participate, please [send me an email](mailto:rust@nikomatsakis.com). I'm particularly interested to hear from people with experience doing this sort of work (e.g., product managers, developer advocates, UX researchers).
 
 [plan]: https://blog.rust-lang.org/2021/03/18/async-vision-doc.html
 
