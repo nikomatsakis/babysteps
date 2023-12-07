@@ -9,7 +9,7 @@ To your average Joe, being "rusty" is not seen as a good thing.[^news] But reade
 
 [^news]: I have a Google alert for "Rust" and I cannot tell you how often it seems that some sports teams or another shakes off Rust. I'd never heard that expression before signing up for this Google alert. 
 
-[rp]: http://localhost:1313/babysteps/blog/2021/09/08/rustacean-principles/
+[rp]: https://github.com/nikomatsakis/rustacean-principles
 
 <!--more-->
 
