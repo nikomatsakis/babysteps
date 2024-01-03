@@ -1,0 +1,93 @@
+---
+title: "What I'd like to see for Async Rust in 2024 🎄"
+date: 2024-01-03T18:01:33-05:00
+---
+
+Well, it's that time of year, when thoughts turn to...well, Rust of course. I guess that's every time of year. This year was a pretty big year for Rust, though I think a lot of what happened was more in the vein of "setting things up for success in 2024". So let's talk about 2024! I'm going to publish a series of blog posts about different aspects of Rust I'm excited about, and what I think we should be doing. To help make things concrete, I'm going to frame the 2024 by using proposed [project goals] -- basically a specific piece of work I think we can get done this year. In this first post, I'll focus on **async Rust**.
+
+[project goals]: https://smallcultfollowing.com/babysteps/blog/2023/11/28/project-goals/
+
+<!--more-->
+
+## What we did in 2023
+
+On Dec 28, with the [release of Rust 1.75.0][175], we [stabilized async fn and impl trait in traits][afit]. This is a **really big deal**. Async fn in traits has been ["considered hard"][afithard] since 2019 and they're at the foundation of basically *everything* that we need to do to make async better. 
+
+[175]: https://blog.rust-lang.org/2023/12/28/Rust-1.75.0.html#async-fn-and-return-position-impl-trait-in-traits
+[afit]: https://blog.rust-lang.org/2023/12/21/async-fn-rpit-in-traits.html
+[afithard]: https://smallcultfollowing.com/babysteps/blog/2019/10/26/async-fn-in-traits-are-hard/
+
+Async Rust to me showcases the best and worst of Rust. It delivers on that Rust promise of "high-level code, low-level performance". Building on the highly tuned [Tokio runtime](https://tokio.rs/), network services in Rust consistently have tighter tail latency and lower memory usage, which means you can service a lot more clients with a lot less resources. Alternatively, because Rust doesn't hardcode the runtime, you can write async Rust code that targets [embedded environments that don't even have an underlying operating system](https://github.com/embassy-rs/embassy), or anywhere in between.
+
+And yet it continues to be true that, in the words of an Amazon engineer I talked to, "Async Rust is Rust on hard mode". Truly closing this gap requires work in the language, standard library, and the ecosystem. We won't get all the way there in 2024, but I think we can make some big strides.
+
+## *Proposed goal:* Solve the [send bound problem][sb] in Q2
+
+We made a lot of progress on async functions in traits last year, but we still can't [cover the use case of generic traits that can be used either with a work-stealing executor or without one](https://blog.rust-lang.org/2023/12/21/async-fn-rpit-in-traits.html#async-fn-in-public-traits). One very specific example of this is the [`Service` trait from `tower`](https://docs.rs/tower/latest/tower/trait.Service.html). To handle this use case, we need a solution to the [send bound problem][sb]. We have a bunch of idea for what this might be, and we've even got a prototype implementation for (a subset of) [return type notation][rtn], so we are well positioned for success. I think we should aim to finish this by the end of Q2 (summer, basically). This in turn would unblock a 1.0 release of the [tower][] crate, letting us having a stable trait for middleware. 
+
+[sb]: https://smallcultfollowing.com/babysteps/blog/2023/02/01/async-trait-send-bounds-part-1-intro/
+[ge]: https://estebank.github.io/rust-iterator-item-syntax.html
+[rtn]: https://smallcultfollowing.com/babysteps/blog/2023/02/13/return-type-notation-send-bounds-part-2/
+[tower]: https://crates.io/crates/tower
+
+## *Proposed goal:* Stabilize an MVP for async closures in Q3
+
+The holy grail for async is that you should be able to easily make any synchronous function into an asynchronous one. The 2019 MVP supported only top-level functions and inherent methods. We've now extended that to include trait methods. In 2024, we should take the next step and support async closures. This will allow people to define combinator methods like iterator map and so forth and avoid the convoluted workarounds currently required.
+
+For this first goal, I think we should be working to establish an **MVP**. Recently, [Errs] and I outlined an MVP we thought seemed quite doable. It began with creating `AsyncFn` traits that look that mirror the `Fn` trait hierarchy...
+
+[Errs]: https://github.com/compiler-errors
+
+```rust
+trait AsyncFnOnce<A> {
+    type Output;
+    
+    async fn call_once(self, args: A) -> Self::Output;
+}
+
+trait AsyncFnMut<A>: AsyncFnOnce<A> {
+    async fn call_mut(&mut self, args: A) -> Self::Output;
+}
+
+trait AsyncFn<A>: AsyncFnMut<A> {
+    async fn call(self, args: A) -> Self::Output;
+}
+```
+
+...and the ability to write async closures like `async || <expr>`, as well as a bridge such that any function that returns a future also implements the appropiate `AsyncFn` traits. Async clsoures would unblock us from creating combinator traits, like a truly nice version of async iterators.
+
+This MVP is not intended as the final state, but it is intended to be compatible with whatever final state we wind up with. There remains a really interesing question about how to integrate the `AsyncFn` traits with the regular `Fn` traits. Nonetheless, I think we can stabilize the above MVP in parallel with exploring that question.
+
+## *Proposed goal:* Author an RFC for "maybe async" in Q4 (or decide not to!)
+
+One of the big questions around async is whether we should be supporting some way to write "maybe async" code. This idea has gone through a lot of names. Yosh and Oli originally kicked off something they called [keyword generics][kg] and later rebranded as *effect generics*. I prefer the framing of [trait transformers][tt], and I wrote a blog post about how [trait transformers can make async closures fit nicely][ttc].
+
+There is significant skepticism about whether this is a good direction. There are [other ways to think about async closures][glac] (though [Errs][] pointed out an issue with this that I hope to write about in a future post). Boats has written a number of blog posts with concerns, and members of the types team have expressed fear about what will be required to write code that is generic over effects. These concerns make a lot of sense to me!
+
+Overall, I still believe that something like trait transformers could make Rust feel simpler *and* help us scale to future needs. But I think we have to prove our case! My goal for 2024 then is to do exactly that. The idea would be to author an RFC laying out a "maybe async" scheme and to get that RFC accepted. To address the concerns of the types team, I think that will require modeling "maybe async" formally as part of [a-mir-formality](https://github.com/rust-lang/a-mir-formality), so that everybody can understand how it will work.
+
+Another possible outcome here is that we opt to abandon the idea. Maybe the complexity really is infeasible. Or maybe the lang design doesn't feel right. I'm good with that too, but either way, I think we need to settle on a plan this year.
+
+[kg]: https://blog.rust-lang.org/inside-rust/2022/07/27/keyword-generics.html
+[tt]: https://smallcultfollowing.com/babysteps/blog/2023/03/03/trait-transformers-send-bounds-part-3/
+[ttc]: https://smallcultfollowing.com/babysteps/blog/2023/03/29/thoughts-on-async-closures/
+[glac]: https://smallcultfollowing.com/babysteps/blog/2023/05/09/giving-lending-and-async-closures/
+
+## *Stretch goal:* stabilize generator syntax
+
+As a stretch goal, it would be really cool to land support for generator expressions -- basically a way to write async iterators. [Errs][] recently [opened a PR][genpr] adding nightly support for async and [RFC #3513][] proposed reserving the `gen` keyword for Rust 2024. Really *stabilizing* generators however requires us to answer some interesting questions about the best design for the async iteration trait. Thanks to the stabilization of async fn in trait, we can now have this conversation -- and we have certainly been having it! Over the last month or so there has also been a [lot](https://without.boats/blog/poll-next/) of [interesting](https://blog.yoshuawuyts.com/async-iterator-trait/) [back](https://tmandry.gitlab.io/blog/posts/for-await-buffered-streams/) and [forth](https://without.boats/blog/poll-progress/) about the best setup. I'm still digesting all the posts, I hope to put up some thoughts this month (no promises). Regardless, I think it's plausible that we could see async genreators land in 2024, which would be great, as it would eliminate the major reason that people have to interact directly with `Pin`.
+
+[RFC #3513]: https://github.com/rust-lang/rfcs/pull/3513
+[genpr]: https://github.com/rust-lang/rust/pull/118420
+
+## Conclusion: looking past 2024
+
+If we accomplish the goals I outlined above, async Rust by the end of 2024 will be much improved. But there will still be a few big items before we can really say that we've laid out the pieces we need. Sadly, we can't do it all, so these items would have to wait until after 2024, though I think we will continue to experiment and discuss their design:
+
+* **Async drop**: Once we have async closures, there remains one place where you cannot write an async function -- the `Drop` trait. Async drop has a bunch of interesting complications ([Sabrina wrote a great blog post on this!](https://sabrinajewson.org/blog/async-drop)), but it is also a [major pain point for users](https://rust-lang.github.io/wg-async/vision/submitted_stories/status_quo/alan_finds_database_drops_hard.html). We'll get to it!
+* **Dyn async trait**: Besides [send bounds][sb], the [other major limitation for async fn in trait](https://blog.rust-lang.org/2023/12/21/async-fn-rpit-in-traits.html#dynamic-dispatch) is that traits using them do not yet support dynamic dispatch. We should absolutely lift this, but to me it's lower in priority because there is an existing workaround of using a proc-macro to create a `DynAsyncTrait` type. It's not ideal, but it's not as fundamental a limitation as send bounds or the lack of async closures and async drop. (That said, the design work for this is largely done, so it is entirely possible that we land it this year as a drive-by piece of work.)
+* **Traits for being generic over runtimes**: Async Rust's ability to support runtimes as varied as [Tokio][] and [Embassy][] is one of its superpowers. But the fact that [switching runtimes](https://rust-lang.github.io/wg-async/vision/submitted_stories/status_quo/barbara_wishes_for_easy_runtime_switch.html) or [writing code that is generic over what runtime it uses](https://rust-lang.github.io/wg-async/vision/submitted_stories/status_quo/barbara_writes_a_runtime_agnostic_lib.html) is very hard to impossible is a key pain point, made even worse by the fact that [runtimes often don't play nice together](https://rust-lang.github.io/wg-async/vision/submitted_stories/status_quo/alan_started_trusting_the_rust_compiler_but_then_async.html). We need to build out traits for interop, starting with [async read + write] but eventually covering [task spawning and timers].
+* **Better APIs**: Many of the nastiest async Rust bugs come about when users are trying to manage nested tasks. Existing APIs like [FutureUnordered](https://rust-lang.github.io/wg-async/vision/submitted_stories/status_quo/barbara_battles_buffered_streams.html) and [select](https://rust-lang.github.io/wg-async/vision/submitted_stories/status_quo/barbara_gets_burned_by_select.html) have a lot of rough edges and can [easily lead to deadlock](https://rust-lang.github.io/wg-async/vision/submitted_stories/status_quo/aws_engineer/solving_a_deadlock.html) -- [Tyler had a good post on this](https://tmandry.gitlab.io/blog/posts/for-await-buffered-streams/). I would like to see us take a fresh look at the async APIs we offer Rust programmers and build up a powerful, easy to use library that helps steer people away from potential sources of deadlock. Ideally this API would not be specific to the underlying runtime, but instead let users switch between different runtimes, and hopefully cleanly support embedded systems (perhaps with limited functionality). I don't think we know how to do this yet, and I think that doing it will require us to have a lot more tools (things like send bounds, async closure, and quite possibly trait transformers or async drop).
+
+[Tokio]: https://tokio.rs/
+[Embassy]: https://github.com/embassy-rs/embassy
