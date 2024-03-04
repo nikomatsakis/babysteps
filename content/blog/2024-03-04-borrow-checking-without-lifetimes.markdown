@@ -3,7 +3,7 @@ title: "Borrow checking without lifetimes"
 date: 2024-03-04T13:29:34-05:00
 ---
 
-This blog post explores an alternative formulation of Rust's type system that esches *lifetimes* in favor of *places*. The TL;DR is that instead of having `'a` represent a *lifetime* in the code, it can represent a set of *loans*, like `shared(a.b.c)` or `mut(x)`. If this sounds familiar, it should, it's the basis for [polonius](https://smallcultfollowing.com/babysteps/blog/2023/09/22/polonius-part-1/), but reformulated as a type system instead of a static analysis. This blog post is just going to give the high-level ideas. In follow-up posts I'll dig into how we can use this to support interior references and other advanced borrowing patterns. In terms of implementation, I've mocked this up a bit, but I intend to start extending [a-mir-formality][] to include this analysis.
+This blog post explores an alternative formulation of Rust's type system that eschews *lifetimes* in favor of *places*. The TL;DR is that instead of having `'a` represent a *lifetime* in the code, it can represent a set of *loans*, like `shared(a.b.c)` or `mut(x)`. If this sounds familiar, it should, it's the basis for [polonius](https://smallcultfollowing.com/babysteps/blog/2023/09/22/polonius-part-1/), but reformulated as a type system instead of a static analysis. This blog post is just going to give the high-level ideas. In follow-up posts I'll dig into how we can use this to support interior references and other advanced borrowing patterns. In terms of implementation, I've mocked this up a bit, but I intend to start extending [a-mir-formality][] to include this analysis.
 
 [a-mir-formality]: https://github.com/rust-lang/a-mir-formality
 
