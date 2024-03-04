@@ -105,7 +105,7 @@ The rule for `Place = Expr` assignments is based on subtyping:
 Env |- Expr : Type1
 Env |- Place : Type2
 Env |- Type1 <: Type2
------------------------------------------ shared references
+----------------------------------------- assignment
 Env |- Place = Expr : ()
 ```
 
