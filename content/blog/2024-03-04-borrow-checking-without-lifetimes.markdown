@@ -60,7 +60,9 @@ Having a fully explicit type system also means we can easily write out example p
 
 ```rust
 let mut counter: u32 = 22_u32;
-let p: &{shared(counter)} u32 = &counter;
+let p: & /*{shared(counter)}*/ u32 = &counter;
+//       ---------------------
+//       no syntax for this today!
 counter += 1; // Error: cannot mutate `counter` while `p` is live
 println!("{p}");
 ```
@@ -178,7 +180,7 @@ We start out with `LiveAfter2`, i.e., the places that are live after the entire 
 
 ```
 let tmp0 = <Expr1>
-    // <-- the set LiveAfter1 is live here (ignoring tmp90, tmp1)
+    // <-- the set LiveAfter1 is live here (ignoring tmp0, tmp1)
 let tmp1 = <Expr2>
     // <-- the set LiveAfter2 is live here (ignoring tmp0, tmp1)
 tmp0 + tmp1
