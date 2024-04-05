@@ -12,7 +12,9 @@ Under my proposal, the project will identify its top priority goals, and every g
 
 [^jh]: Hat tip to Jack Huey for this turn of phrase. Clever guy.
 
-Just because owners own the design does not mean they work alone. Like any good Rustacean, they should [treasure dissent][], making sure that when a concern is raised, the owner fully understands it and does what they can to mitigate or address it. But there always comes a point where the tradeoffs have been laid on the table, the space has been mapped, and somebody just has to make a call about what to do. This is where the owner comes in. Under project goals, the owner is the one we’ve chosen to do that job, and they should feel free to make decisions in order to keep things moving.
+Just because owners own the design does not mean they work alone. Like any good Rustacean, they should [treasure dissent][], making sure that when a concern is raised, the owner fully understands it and does what they can to mitigate or address it. But there always comes a point where the tradeoffs have been laid on the table, [the space has been mapped][aic], and somebody just has to make a call about what to do. This is where the owner comes in. Under project goals, the owner is the one we’ve chosen to do that job, and they should feel free to make decisions in order to keep things moving.
+
+[aic]: https://smallcultfollowing.com/babysteps/blog/2019/04/19/aic-adventures-in-consensus/
 
 [treasure dissent]: https://lang-team.rust-lang.org/decision_process.html?highlight=treasure%20dissent#prioritized-principles-of-rust-team-consensus-decision-making
 
@@ -34,7 +36,7 @@ There is an interesting tension around ownership. Giving someone ownership of a 
 
 The design of project goal proposals includes steps designed to increase trust. Each goal includes a set of **design axioms** identifying the key tradeoffs that are expected and how they will be weighed against one another. The goal also identifies **milestones**, which shows that the author has thought about how to breakup and approach the work incrementally.
 
-It’s also worth highlighting that while the project has to trust the owner, the reverse is also true: the project hasn’t always done a good job of making good on its commitments. Sometimes we’ve asked for a proposal on a given feature and then not responded when it arrives.[^delegation] Or we set up an [unbounded queues][uq] that winds up getting overfull, resulting in long delays.
+It’s also worth highlighting that while the project has to trust the owner, the reverse is also true: the project hasn’t always done a good job of making good on its commitments. Sometimes we’ve asked for a proposal on a given feature and then not responded when it arrives.[^delegation] Or we set up [unbounded queues][uq] that wind up getting overfull, resulting in long delays.
 
 [^delegation]: [I still feel bad about delegation.](https://github.com/rust-lang/rfcs/pull/2393#issuecomment-810421388)
 
