@@ -46,9 +46,9 @@ The project goal system has steps to build that kind of trust too: the owner ide
 
 ## Trust requires accountability
 
-Trust is something that has to be maintained over time. The primary mechanism for that in the project goal system is **regular reporting**. The idea is that, once we’ve identified a goal, we will create a tracking issue. Bots will prompt owners to give regrular status updates on the issue. Then, periodically, we will post a blog post that aggregates these status updates. This gives us a chance to identify goals that haven’t been moving — or at least where no status update has been provided — and take a look as to see why.
+Trust is something that has to be maintained over time. The primary mechanism for that in the project goal system is **regular reporting**. The idea is that, once we’ve identified a goal, we will create a tracking issue. Bots will prompt owners to give regular status updates on the issue. Then, periodically, we will post a blog post that aggregates these status updates. This gives us a chance to identify goals that haven’t been moving — or at least where no status update has been provided — and take a look as to see why.
 
-In my view, it’s **expected and normal that we will not make all our goals**. Things happen. Sometimes owners get busy with other things. Other times, priorities change and what was once a goal no longer seems relevant. That’s fine, but we do want to be explicit abouty noticing it has happened. The problem is when we let things live in the dark, so that if you want to really know what’s going on, you have to conduct an exhaustive archaeological expedition through github comments, zulip threads, emails, and sometimes random chats and minutes.
+In my view, it’s **expected and normal that we will not make all our goals**. Things happen. Sometimes owners get busy with other things. Other times, priorities change and what was once a goal no longer seems relevant. That’s fine, but we do want to be explicit about noticing it has happened. The problem is when we let things live in the dark, so that if you want to really know what’s going on, you have to conduct an exhaustive archaeological expedition through github comments, zulip threads, emails, and sometimes random chats and minutes.
 
 ## Conclusion
 
