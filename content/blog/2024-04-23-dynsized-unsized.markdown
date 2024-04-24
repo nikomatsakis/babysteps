@@ -91,7 +91,7 @@ That said, most uses of `?Sized` today do not need to compute the size of the va
 
 ```rust
 impl<T: Unsized> Debug for &T {
-    fn fmt(&self, f: &mut std::fmt::Formatter<‘_>) { .. }
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) { .. }
 }
 ```
 
@@ -171,7 +171,7 @@ and
 
 ```rust
 impl<T> Debug for &T {
-    fn fmt(&self, f: &mut std::fmt::Formatter<‘_>) { .. }
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) { .. }
 }
 ```
 
