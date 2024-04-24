@@ -51,7 +51,7 @@ The `?` is meant to signal that a bound like `?Sized` actually works in **revers
 
 The `?` notation also scales to other default traits. Although we’ve been reluctant to exercise this ability, we wanted to leave room to add a new default bound. This power will be needed if we ever adopt [“must move” types][][^mm] or add a bound like `?Leak` to signal a value that cannot be leaked.
 
-[“must move” types]: XXX
+[“must move” types]: {{< ref "2023-03-16-must-move-types.markdown" >}}
 
 [^mm]: I still think [“must move” types][] are a good idea — but that’s a topic for another post.
 
