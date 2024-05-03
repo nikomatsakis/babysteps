@@ -78,7 +78,7 @@ I don’t really think Rust should remove support for unwinding, of course. For 
 
 ## Conclusion
 
-I think the argument for deprecating unwinding boils down to this: unwinding purports to make cheap recovery tenable, but it’s not really reliable in the face of shared state. Meanwhile, it puts limits on what wec an do in the language, ultimately decreasing reliability (because we can’t guarantee cleanup is done) and ease of use (borrow checker is stricter, APIs that would require cleanup can’t be written). 
+I think the argument for deprecating unwinding boils down to this: unwinding purports to make cheap recovery tenable, but it’s not really reliable in the face of shared state. Meanwhile, it puts limits on what we can do in the language, ultimately decreasing reliability (because we can’t guarantee cleanup is done) and ease of use (borrow checker is stricter, APIs that would require cleanup can’t be written). 
 
 How could we deprecate it, though? It would basically become part of the ABI, much like C vs C-unwind. It’d be possible to opt-in on a finer-grained basis. In functions that are guaranteed not to have unwinding, the borrow checker could be more permissive, and must-move types could be supported. 
 
