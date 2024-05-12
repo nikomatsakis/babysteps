@@ -44,7 +44,7 @@ fn swap<T>(
 
 This code won’t compile today, because `let tmp = *a` requires moving out of `*a`, and `a` is an `&mut` reference. That would leave the reference in an “incomplete” state, so we don’t allow it. But is that constraint truly needed? After all, the reference is going to be restored a few lines below…?
 
-The reason the borrow checker does not accept code like the above is due to unwinding. In general, if you move out of an `&mut`, you leave a hole behind that **MUST** be filled before the function returns. In the function above, it is in fact guaranteed that the hole will be filled before `swap` returns. But in general there is a very narrow range of code that can safely execute, since any function call (and many other operations besides) can initiative a `panic!`. And if unwinding occurred, then the code that restores the `&mut` value would never execute. For this reason, we deemed it not worth the complexity to support moving out of `&mut` references.
+The reason the borrow checker does not accept code like the above is due to unwinding. In general, if you move out of an `&mut`, you leave a hole behind that **MUST** be filled before the function returns. In the function above, it is in fact guaranteed that the hole will be filled before `swap` returns. But in general there is a very narrow range of code that can safely execute, since any function call (and many other operations besides) can initiate a `panic!`. And if unwinding occurred, then the code that restores the `&mut` value would never execute. For this reason, we deemed it not worth the complexity to support moving out of `&mut` references.
 
 ## Unwinding prevents code from running to completion
 
@@ -52,7 +52,7 @@ If the only cost of unwinding was moving out of `&mut`and inflated binary sizes,
 
 ### Unwinding makes unsafe code really hard to write
 
-If you are writing unsafe code, you have to be very to account for possible unwinding. And it can occur in a lot of places! Some of them are obvious, such as when the user gives you a closure and you call it. Others are less obvious, such as when you call a trait method like `x.clone()` where `x` has some unknown type `T: Clone`. Others are downright obscure, such as when you execute `vec[i] = new_value` and `vec` is a `Vec<T>` for some unknown type `T` — that last one will run the destructor on `vec[i]` , which can panic, and hence can unwind (at least until [RFC #3288] is accepted). When developing Rayon, I found I could not feasibly track all the places that unwinding could occur, and thus gave up and just added [code to abort if unwinding occurs when I don’t expect it][abort].
+If you are writing unsafe code, you have to be very careful to account for possible unwinding. And it can occur in a lot of places! Some of them are obvious, such as when the user gives you a closure and you call it. Others are less obvious, such as when you call a trait method like `x.clone()` where `x` has some unknown type `T: Clone`. Others are downright obscure, such as when you execute `vec[i] = new_value` and `vec` is a `Vec<T>` for some unknown type `T` — that last one will run the destructor on `vec[i]` , which can panic, and hence can unwind (at least until [RFC #3288] is accepted). When developing Rayon, I found I could not feasibly track all the places that unwinding could occur, and thus gave up and just added [code to abort if unwinding occurs when I don’t expect it][abort].
 
 [abort]: https://github.com/rayon-rs/rayon/blob/0e8d45dd3e5b62a9ef86fdc754a9b9e3b4f048a8/rayon-core/src/unwind.rs#L24
 
