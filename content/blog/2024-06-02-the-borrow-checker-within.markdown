@@ -156,7 +156,9 @@ impl WidgetFactory {
 
 This allows the compiler to compile `count_widgets` just fine, since it can see that iterating over `self.widgets` while modifying `self.counter` is not a problem.[^2229]
 
-[^2229]: In fact, view types will also allow us to implement the "disjoint closure capture" rules from [RFC 2229][] in a more efficient way. Currently a closure using `self.widgets` and `self.counter` will store 2 references, kind of an implicit "view struct". Although [we found this doesn't really affect much code in practice](https://rust-lang.zulipchat.com/#narrow/stream/189812-t-compiler.2Fwg-rfc-2229/topic/measure.20closure.20sizes)), it still bothers me. With view types they could store 1. 
+[^2229]: In fact, view types will also allow us to implement the "disjoint closure capture" rules from [RFC 2229][] in a more efficient way. Currently a closure using `self.widgets` and `self.counter` will store 2 references, kind of an implicit "view struct". Although [we found this doesn't really affect much code in practice](https://rust-lang.zulipchat.com/#narrow/stream/189812-t-compiler.2Fwg-rfc-2229/topic/measure.20closure.20sizes), it still bothers me. With view types they could store 1. 
+
+[RFC 2229]: https://rust-lang.github.io/rfcs/2229-capture-disjoint-fields.html
 
 ### View types also address phased initialization
 
