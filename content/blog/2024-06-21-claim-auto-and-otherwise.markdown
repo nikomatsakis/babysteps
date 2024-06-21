@@ -190,7 +190,7 @@ What's not to like?
 
 ### What kind of code would `#[deny(automatic_claims)]`?
 
-That's actually an interesting question! At first I thought this would correspond to the "high-level, business-oriented code" vs "low-level systems software" distinction, but I am no longer convinced.
+That's actually an interesting question! At first I thought this would correspond to the "high-level, business-logic-oriented code" vs "low-level systems software" distinction, but I am no longer convinced.
 
 For example, I spoke with someone from Rust For Linux who felt that autoclaim would be useful, and it doesn't get more low-level than that! Their basic constraint is that they want to track carefully where memory allocation and other fallible operations occur, and incrementing a reference count is fine.
 
