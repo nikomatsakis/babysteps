@@ -212,7 +212,7 @@ Ooh, deep cut! [RFC 936][] was a proposal to split `Pod` (memcopyable values) fr
 
 [RFC 936]: https://github.com/rust-lang/rfcs/pull/936
 
-I am definitely offering another alternative aiming at the same problem identified by the RFC. I don't think this means we made the wrong decision at the time. The problem was real, but the proposed solutions were not worth it. This proposal solves the same problems and more, and it has the benefit for ~10 years of experience.[^bestworst] (Also, it's worth pointing out that this RFC came two months before 1.0, and I *definitely* feel to avoid derailing 1.0 with last minute changes -- stability without stagnation!)
+I am definitely offering another alternative aiming at the same problem identified by the RFC. I don't think this means we made the wrong decision at the time. The problem was real, but the proposed solutions were not worth it. This proposal solves the same problems and more, and it has the benefit of ~10 years of experience.[^bestworst] (Also, it's worth pointing out that this RFC came two months before 1.0, and I *definitely* feel to avoid derailing 1.0 with last minute changes -- stability without stagnation!)
 
 [^bestworst]: This seems to reflect the best and worst of Rust decision making. The best because autoclaim represents (to my mind) a nice "third way" in between two extreme alternatives. The worst because the rough design for autoclaim has been clear for years but it sometimes takes a long time for us to actually act on things. Perhaps that's just the nature of the beast, though.
 
