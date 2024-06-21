@@ -186,7 +186,7 @@ I mean, maybe? The Copy/Clone split has been a part of Rust for a long time[^his
 
 What's not to like?
 
-[^history]: I've noticed I'm often more willing to revisit long-standing design decisions than others I talk to. I think it comes from having been present when the decisions were made. I know most of them were close calls and often began with "let's try this for a while and see how it feels...". Well, I think it comes that and a certain predilection for recklessness. 🤘
+[^history]: I've noticed I'm often more willing to revisit long-standing design decisions than others I talk to. I think it comes from having been present when the decisions were made. I know most of them were close calls and often began with "let's try this for a while and see how it feels...". Well, I think it comes from that *and* a certain predilection for recklessness. 🤘
 
 ### What kind of code would `#[deny(automatic_claims)]`?
 
