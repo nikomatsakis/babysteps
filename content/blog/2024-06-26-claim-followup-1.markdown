@@ -159,6 +159,8 @@ To a first approximation, "claiming" something means calling `x.claim()` (which 
 * If the compiler sees `x` is "live" (may be used again later), it transforms the use of `x` to `use_claimed_value(&x)` ([as defined earlier](#Clarifying-claim-codegen)).
 * If `x` is dead, then it is just moved.
 
+### Why I proposed it
+
 There's a reason I proposed this change in the way that I did. I really value the way Rust handles "by value consumption" in a consistent way across all those contexts. It fits with Rust's ethos of orthogonal, consistent rules that fit together to make a harmonious, usable whole.
 
 My goal is to retain Rust's consistency while also improving the gaps in the current rule, which neither highlights the things I want to pay attention to (large copies), hides the things I (almost always) don't (reference count increments), nor covers all the patterns I sometimes want (e.g., being able to `get` and `set` a `Cell<Range<u32>>`, which doesn't work today because making `Range<u32>: Copy` would introduce footguns). My *hope* is that we can do this in a way that it benefits most every Rust program, whether it be low-level or high-level in nature.
