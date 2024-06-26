@@ -17,31 +17,7 @@ If you read only one additional thing from the post&mdash;well, don't do that, b
 
 I got a few questions about the relationship of the Copy/Clone/Claim traits to one another. I think the best way to show it is with a venn diagram:
 
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="300" height="300" viewBox="0 0 1080 1080" xml:space="preserve">
-<g transform="matrix(1 0 0 1 540 540)" id="ba299d2e-6da0-4fbf-8b73-fe1551fc4ac6"  >
-</g>
-<g transform="matrix(1 0 0 1 540 540)" id="1a096556-e035-4948-bda7-cdfa086a6429"  >
-<rect style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,255,255); fill-rule: nonzero; opacity: 1; visibility: hidden;" vector-effect="non-scaling-stroke"  x="-540" y="-540" rx="0" ry="0" width="1080" height="1080" />
-</g>
-<g transform="matrix(13.37 0 0 13.37 541.67 541.67)" id="88b2d636-c1ba-4f61-ac16-7892c3ee8051"  >
-<circle style="stroke: rgb(0,0,0); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(101,101,101); fill-rule: nonzero; opacity: 1;" vector-effect="non-scaling-stroke"  cx="0" cy="0" r="35" />
-</g>
-<g transform="matrix(6.74 0 0 6.74 404.3 565.37)" id="290c2dfd-0ee6-418a-8711-86389a0e2ecc"  >
-<circle style="stroke: rgb(0,0,0); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,45,255); fill-rule: nonzero; opacity: 0.7;" vector-effect="non-scaling-stroke"  cx="0" cy="0" r="35" />
-</g>
-<g transform="matrix(6.49 0 0 6.49 699.6 569.67)" id="9006d9ac-4678-4099-af62-5692884165aa"  >
-<circle style="stroke: rgb(0,0,0); stroke-width: 0; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(255,8,177); fill-rule: nonzero; opacity: 0.7;" vector-effect="non-scaling-stroke"  cx="0" cy="0" r="35" />
-</g>
-<g transform="matrix(1 0 0 1 540 216.07)" style="" id="d417f05c-8db2-4516-a4f3-7dee5f72096f"  >
-		<text xml:space="preserve" font-family="Lato" font-size="89" font-style="normal" font-weight="700" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-115.5" y="27.96" >Clone</tspan></text>
-</g>
-<g transform="matrix(1 0 0 1 339.71 557.45)" style="" id="e06f084b-f2d6-4909-a40d-da3467e12ca6"  >
-		<text xml:space="preserve" font-family="Lato" font-size="70" font-style="normal" font-weight="400" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-80.48" y="21.99" >Copy</tspan></text>
-</g>
-<g transform="matrix(1 0 0 1 762.98 569.29)" style="" id="ade70649-ef99-4687-841d-48e71eefc645"  >
-		<text xml:space="preserve" font-family="Lato" font-size="70" font-style="normal" font-weight="400" style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(0,0,0); fill-rule: nonzero; opacity: 1; white-space: pre;" ><tspan x="-86.65" y="21.99" >Claim</tspan></text>
-</g>
-</svg>
+{{< embed "content/blog/2024-06-26-venn-diagram.svg" >}}
 
 * The `Clone` trait is the most general, representing any way of duplicating the value. There are two important subtraits:
     * `Copy` represents values that can be cloned via memcpy and which lack destructors ("plain old data").
