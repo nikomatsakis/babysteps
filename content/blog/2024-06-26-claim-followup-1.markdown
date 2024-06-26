@@ -156,7 +156,7 @@ I am proposing that, modulo the staging required for backwards compatibility, we
 
 To a first approximation, "claiming" something means calling `x.claim()` (which is the same as `x.clone()`). But in reality we can be more efficient, and the definition I would use is as follows:
 
-* If the compiler sees `x` is "live" (may be used again later), it transforms the use of `x` to `use_claimed_value(&x)` ([as defined earlier](#Clarifying-claim-codegen)).
+* If the compiler sees `x` is "live" (may be used again later), it transforms the use of `x` to `use_claimed_value(&x)` ([as defined earlier](#clarifying-claim-codegen)).
 * If `x` is dead, then it is just moved.
 
 ### Why I proposed it
