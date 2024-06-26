@@ -5,7 +5,7 @@ date: 2024-06-26T08:20:43-04:00
 
 This is the first of what I think will be several follow-up posts to ["Claiming, auto and otherwise"][cao]. This post is focused on clarifying and tweaking the design I laid out previously in response to some of the feedback I've gotten. In future posts I want to lay out some of the alternative designs I've heard.
 
-[cao]: https://smallcultfollowing.com/babysteps/blog/2024/06/21/claim-auto-and-otherwise/
+[cao]: {{< baseurl >}}/blog/2024/06/21/claim-auto-and-otherwise/
 
 ## TL;DR: People like it
 
