@@ -79,7 +79,7 @@ In fact, I think we should go further and have the compiler insert an abort if a
 
 [RFC #3288]: https://github.com/rust-lang/rfcs/pull/3288
 
-[uw]: https://smallcultfollowing.com/babysteps/blog/2024/05/02/unwind-considered-harmful/
+[uw]: {{< baseurl >}}/blog/2024/05/02/unwind-considered-harmful/
 
 [^follow-up]: Another blog post for which I ought to post a follow-up!
 
