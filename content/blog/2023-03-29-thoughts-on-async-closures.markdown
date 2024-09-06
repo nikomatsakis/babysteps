@@ -42,7 +42,7 @@ Given that an async function is just a sync function that returns a future, perh
 
 
 ```rust
-fn call_twice_async<F>(op: impl FnMut(&str) -> F)
+async fn call_twice_async<F>(op: impl FnMut(&str) -> F)
 where
     F: Future<Output = ()>,
 {
