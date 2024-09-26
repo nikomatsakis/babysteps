@@ -9,7 +9,7 @@ HUGOURL=https://github.com/gohugoio/hugo/releases/download/v0.118.2/hugo_extende
 hugo ?= ./hugo
 
 hugo:
-	curl -L ${HUGOURL} | tar zxf - hugo
+	curl -L ${HUGOURL} | tar zxf -> hugo
 
 post: hugo
 	@if [ -z "${NAME}" ]; then echo "Set NAME to something!"; else ${hugo} new content content/blog/`date '+%Y-%m-%d'`-${NAME}.markdown; fi
