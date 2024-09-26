@@ -305,7 +305,9 @@ Interestingly, type parameters declared as `T: ?Sized` *also* opt-out from `Over
 
 #### Associated type bounds are annoying, but perhaps not fatal
 
-Still, the fact that default bounds apply to associated types and `impl Trait` is a pain in the neck. For example, it implies that `Iterator::Item` would require its items to be `Overwrite`, which would prevent you from authoring iterators that iterate over structs with immutable fields. This can to some extent be overcome by associated type aliases (we could declare `Item` to be a “virtual associated type”, mapping to `Item2021` in older editions, which require `Overwrite`, and `ItemNext` in newer ones, which do not).
+Still, the fact that default bounds apply to associated types and `impl Trait` is a pain in the neck. For example, it implies that `Iterator::Item` would require its items to be `Overwrite`, which would prevent you from authoring iterators that iterate over structs with immutable fields. This can to some extent be overcome by associated type aliases[^TC] (we could declare `Item` to be a “virtual associated type”, mapping to `Item2021` in older editions, which require `Overwrite`, and `ItemNext` in newer ones, which do not).
+
+[^TC]: Hat tip to TC, who pointed this out to me.
 
 ## Frequently asked questions
 
