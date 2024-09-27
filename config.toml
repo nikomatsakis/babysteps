@@ -25,3 +25,8 @@ noClasses = false
 [module]
   [[module.imports]]
     path = "github.com/kaushalmodi/hugo-atom-feed"
+
+[taxonomies]
+category = 'categories'
+series = 'series'
+tag = 'tags'

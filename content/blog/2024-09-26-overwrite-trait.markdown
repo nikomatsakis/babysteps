@@ -1,6 +1,8 @@
 ---
 title: "Making overwrite opt-in #crazyideas"
 date: 2024-09-26T21:51:55Z
+series:
+- "Overwrite trait"
 ---
 
 What would you say if I told you that it was possible to (a) eliminate a lot of “inter-method borrow conflicts” *without* introducing something like [view types][] and (b) make pinning easier even than boats’s [pinned places][] proposal, all without needing pinned fields or even a pinned keyword? You’d probably say “Sounds great… what’s the catch?” The catch it requires us to change Rust’s fundamental assumption that, given `x: &mut T`, you can always overwrite `*x` by doing `*x = /* new value */`, for any type `T: Sized`. This kind of change is tricky, but not impossible, to do over an edition.

@@ -1,10 +1,21 @@
 {{ define "body" }}
-  <header>
-    <h1>{{ .Title }}</h1>
-    <p class="date">{{ .Date.Format "2 January 2006" }}</p>
-  </header>
+<header>
+  <h1>{{ .Title }}</h1>
+  <p class="date">{{ .Date.Format "2 January 2006" }}</p>
+</header>
 
-  <div class="markdown">
-    {{ .Page.Content }}
-  </div>
+{{ with .GetTerms "series" }}
+
+{{ range . }}
+<div class="series">
+  NB. This page is part of the <a href="{{ .RelPermalink }}">series "{{ .LinkTitle }}"</a>.
+  <br><a href="{{ .RelPermalink }}">Click here to see all posts</a>.
+</div>
+{{ end}}
+
+{{ end }}
+
+<div class="markdown">
+  {{ .Page.Content }}
+</div>
 {{ end }}
