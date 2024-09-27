@@ -41,6 +41,14 @@
         <li><a href="https://twitter.com/nikomatsakis">Twitter</a></li>
         <li><a href="{{ .Site.BaseURL }}/index.xml">RSS</a>/<a href="{{ .Site.BaseURL }}/atom.xml">Atom</a> feeds</li>
       </ul>
+
+      <p class="description">Selected posts:</p>
+
+      <ul class="links">
+        {{ range .Site.Taxonomies.pinned.yes.Pages.ByWeight }}
+        <li><a href="{{ .Permalink }}">{{ .Title }}</a></li>
+        {{ end }}
+      </ul>
     </div>
   </nav>
 

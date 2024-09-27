@@ -30,3 +30,4 @@ noClasses = false
 category = 'categories'
 series = 'series'
 tag = 'tags'
+pinned = 'pinned'

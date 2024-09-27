@@ -6,7 +6,7 @@ series:
 - "Dyn async traits"
 ---
 
-One interesting question about async fn in traits is whether or not we should label the *trait itself* as async. Until recently, I didn’t see any need for that. But as we discussed the question of how to enable “maybe async” code, we realized that there would be some advantages to distinguishing “async traits” (which could contain async functions) from sync traits (which could not). However, as I’ve thought about the idea more, I’m more and more of the mind that we should not take this step — at least not now. I wanted to write a blog post diving into the considerations as I see them now.
+One interesting question about async fn in traits is whether or not we should label the *trait itself* as async. Until recently, I didn’t see any need for that. But as we discussed the question of how to enable “maybe async” code, we realized that there would be some advantages to distinguishing “async traits” (which could contain async functions) from sync traits (which could not). However, as I’ve thought about the idea more, I’m more and more of the mind that we should not take this step — at least not now. I wanted to write a blog post divin g into the considerations as I see them now.
 
 ## What is being proposed?
 

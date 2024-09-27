@@ -1,6 +1,9 @@
 ---
 title: "Empathy in open source: be gentle with each other"
 date: 2023-09-27T11:50:51-04:00
+pinned:
+- "yes"
+pinned_weight: 44
 ---
 
 Over the last few weeks I had been preparing a talk on “Inclusive Mentoring: Mentoring Across Differences” with one of my good friends at Amazon. Unfortunately, that talk got canceled because I came down with COVID when we were supposed to be presenting. But the themes we covered in the talk have been rattling in my brain ever since, and suddenly I’m seeing them everywhere. One of the big ones was about *empathy* — what it is, what it isn’t, and how you can practice it. Now that I’m thinking about it, I see empathy so often in open source.

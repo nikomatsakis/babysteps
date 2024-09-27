@@ -1,6 +1,8 @@
 ---
 title: "The borrow checker within"
 date: 2024-06-02T08:33:48-04:00
+pinned:
+- "yes"
 ---
 
 This post lays out a 4-part roadmap for the borrow checker that I call "the borrow checker within". These changes are meant to help Rust become a better version of itself, enabling patterns of code which feel like they fit within Rust's *spirit*, but run afoul of the letter of its *law*. I feel fairly comfortable with the design for each of these items, though work remains to scope out the details. My belief is that a-mir-formality will make a perfect place to do that work.
