@@ -2,6 +2,8 @@
 layout: post
 title: 'Dyn async traits, part 9: call-site selection'
 date: 2022-09-21 17:35 -0400
+series:
+- "Dyn async traits"
 ---
 
 After my last post on dyn async traits, some folks pointed out that I was overlooking a seemingly obvious possibility. Why not have the choice of how to manage the future be made at the call site? It's true, I had largely dismissed that alternative, but it's worth consideration. This post is going to explore what it would take to get call-site-based dispatch working, and what the ergonomics might look like. I think it's actually fairly appealing, though it has some limitations.

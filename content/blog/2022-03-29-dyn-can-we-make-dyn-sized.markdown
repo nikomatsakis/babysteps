@@ -2,6 +2,8 @@
 layout: post
 title: "dyn*: can we make dyn sized?"
 date: 2022-03-29 05:32 -0400
+series:
+- "Dyn async traits"
 ---
 
 Last Friday, tmandry, cramertj, and I had an exciting conversation. We were talking about the design for combining async functions in traits with `dyn Trait` that tmandry and I had presented to the lang team on Friday. cramertj had an insightful twist to offer on that design, and I want to talk about it here. Keep in mind that this is a piece of "hot off the presses", in-progress design and hence may easily go nowhere -- but at the same time, I'm pretty excited about it. If it works out, it could go a long way towards making `dyn Trait` user-friendly and accessible in Rust, which I think would be a big deal.

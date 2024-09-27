@@ -2,6 +2,8 @@
 layout: post
 title: Dyn async traits, part 1
 date: 2021-09-30 10:50 -0400
+series:
+- "Dyn async traits"
 ---
 Over the last few weeks, [Tyler Mandry] and I have been digging hard into what it will take to implement async fn in traits. Per the [new lang team initiative process](https://lang-team.rust-lang.org/initiatives.html), we are collecting our design thoughts in an ever-evolving website, the [async fundamentals initiative](https://rust-lang.github.io/async-fundamentals-initiative/). If you're interested in the area, you should definitely poke around; you may be interested to read about the [MVP](https://rust-lang.github.io/async-fundamentals-initiative/roadmap/mvp.html) that we hope to stabilize first, or the (very much WIP) [evaluation doc](https://rust-lang.github.io/async-fundamentals-initiative/evaluation.html) which covers some of the challenges we are still working out. I am going to be writing a series of blog posts focusing on one particular thing that we have been talking through: the [problem of `dyn` and `async fn`](https://rust-lang.github.io/async-fundamentals-initiative/evaluation/challenges/dyn_traits.html). This first post introduces the problem and the general goal that we are shooting for (but don't yet know the best way to reach).
 

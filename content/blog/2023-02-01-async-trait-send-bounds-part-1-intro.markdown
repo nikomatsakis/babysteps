@@ -2,6 +2,8 @@
 layout: post
 title: 'Async trait send bounds, part 1: intro'
 date: 2023-02-01 08:06 -0500
+series:
+- "Send bound problem"
 ---
 
 Nightly Rust now has [support for async functions in traits][irblog], so long as you limit yourself to static dispatch. That’s super exciting! And yet, for many users, this support won’t yet meet their needs. One of the problems we need to resolve is how users can conveniently specify when they need an async function to return a `Send` future. This post covers some of the background on send futures, why we don't want to adopt the solution from the `async_trait` crate for the language, and the general direction we would like to go. Follow-up posts will dive into specific solutions.

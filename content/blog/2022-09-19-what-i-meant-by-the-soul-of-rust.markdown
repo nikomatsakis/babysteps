@@ -2,6 +2,8 @@
 layout: post
 title: What I meant by the "soul of Rust"
 date: 2022-09-19 10:15 -0400
+series:
+- "Dyn async traits"
 ---
 
 Re-reading my [previous post][pp], I felt I should clarify why I called it the “soul of Rust”. The soul of Rust, to my mind, is definitely **not** being explicit about allocation. Rather, it’s about the struggle between a few key values — especially *productivity* and *versatility*[^v] in tension with *transparency*. Rust’s goal has always been to *feel* like a high-level but with the performance and control of a *low-level* one. Oftentimes, we are able to find a [“third way” that removes the tradeoff][AiC], solving both goals pretty well. But finding those “third ways” takes time — and sometimes we just have to accept a certain hit to one value or another for the time being to make progress. It’s exactly at these times, when we have to make a difficult call, that questions about the “soul of Rust” starts to come into play. I’ve been thinking about this a lot, so I thought I would write a post that expands on the role of transparency in Rust, and some of the tensions that arise around it.

@@ -2,6 +2,8 @@
 layout: post
 title: Dyn async traits, part 5
 date: 2021-10-14 13:46 -0400
+series:
+- "Dyn async traits"
 ---
 
 If you’re willing to use nightly, you can already model async functions in traits by using GATs and impl Trait — this is what the [Embassy] async runtime does, and it’s also what the [real-async-trait] crate does. One shortcoming, though, is that your trait doesn’t support dynamic dispatch. In the previous posts of this series, I have been exploring some of the reasons for that limitation, and what kind of primitive capabilities need to be exposed in the language to overcome it. My thought was that we could try to stabilize those primitive capabilities with the plan of enabling experimentation. I am still in favor of this plan, but I realized something yesterday: **using procedural macros, you can ALMOST do this experimentation today!** Unfortunately, it doesn't quite work owing to some relatively obscure rules in the Rust type system (perhaps some clever readers will find a workaround; that said, these are rules I have wanted to change for a while).

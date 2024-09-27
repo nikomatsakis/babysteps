@@ -2,6 +2,8 @@
 layout: post
 title: 'Dyn async traits, part 8: the soul of Rust'
 date: 2022-09-18 13:49 -0400
+series:
+- "Dyn async traits"
 ---
 
 In the last few months, Tyler Mandry and I have been circulating a [“User’s Guide from the Future”][UMF] that describes our current proposed design for async functions in traits. In this blog post, I want to deep dive on one aspect of that proposal: how to handle dynamic dispatch. My goal here is to explore the space a bit and also to address one particularly tricky topic: how explicit do we have to be about the possibility of allocation? This is a tricky topic, and one that gets at that core question: what is the soul of Rust?

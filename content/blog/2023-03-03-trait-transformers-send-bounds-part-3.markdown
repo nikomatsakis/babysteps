@@ -2,6 +2,8 @@
 layout: post
 title: Trait transformers (send bounds, part 3)
 date: 2023-03-03 09:39 -0500
+series:
+- "Send bound problem"
 ---
 
 I previously introduced [the "send bound" problem][sb], which refers to the need to add a `Send` bound to the future returned by an async function. This post continues my tour over the various solutions that are available. This post covers "Trait Transformers". This proposal arose from a joint conversation with myself, Eric Holk, Yoshua Wuyts, Oli Scherer, and Tyler Mandry. It's a variant of Eric Holk's [inferred async send bounds][iasb] proposal as well as the work that Yosh/Oli have been doing in the [keyword generics][kg] group. Those posts are worth reading as well, lots of good ideas there.[^plan]

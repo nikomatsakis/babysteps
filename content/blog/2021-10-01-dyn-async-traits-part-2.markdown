@@ -2,6 +2,8 @@
 layout: post
 title: Dyn async traits, part 2
 date: 2021-10-01 11:56 -0400
+series:
+- "Dyn async traits"
 ---
 
 In the [previous post], we uncovered a key challenge for `dyn` and async traits: the fact that, in Rust today, `dyn` types have to specify the values for all associated types. This post is going to dive into more background about how dyn traits work today, and in particular it will talk about where that limitation comes from.

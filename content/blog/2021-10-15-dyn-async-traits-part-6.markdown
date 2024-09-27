@@ -2,6 +2,8 @@
 layout: post
 title: Dyn async traits, part 6
 date: 2021-10-15 15:57 -0400
+series:
+- "Dyn async traits"
 ---
 
 A quick update to my last post: first, a better way to do what I was trying to do, and second, a sketch of the crate I'd like to see for experimental purposes.

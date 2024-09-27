@@ -2,6 +2,8 @@
 layout: post
 title: "Dyn async traits, part 7: a design emerges?"
 date: 2022-01-07 19:37 -0500
+series:
+- "Dyn async traits"
 ---
 
 Hi all! Welcome to 2022! Towards the end of last year, Tyler Mandry and I were doing a lot of iteration around supporting "dyn async trait" -- i.e., making traits that use `async fn` dyn safe -- and we're starting to feel pretty good about our design. This is the start of several blog posts talking about where we're at. In this first post, I'm going to reiterate our goals and give a high-level outline of the design. The next few posts will dive more into the details and the next steps.

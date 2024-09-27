@@ -1,6 +1,8 @@
 ---
 title: "Polonius revisited, part 2"
 date: 2023-09-29T06:43:09-04:00
+series:
+- "Polonius revisited"
 ---
 
 In the [previous Polonius post][pp], we formulated the original borrow checker in a Polonius-like style. In this post, we are going to explore how we can extend that formulation to be flow-sensitive. In so doing, we will enable the original Polonius goals, but also overcome some of its shortcomings. I believe this formulation is also more amenable to efficient implementation. As I'll cover at the end, though, I do find myself wondering if there's still more room for improvement.

@@ -2,6 +2,8 @@
 layout: post
 title: Dyn async traits, part 3
 date: 2021-10-06 11:06 -0400
+series:
+- "Dyn async traits"
 ---
 
 In the previous "dyn async traits" posts, I talked about how we can think about the compiler as synthesizing an impl that performed the dynamic dispatch. In this post, I wanted to start explore a theoretical future in which this impl was written manually by the Rust programmer. This is in part a thought exercise, but it’s also a possible ingredient for a future design: if we could give programmers more control over the “impl Trait for dyn Trait” impl, then we could enable a lot of use cases.

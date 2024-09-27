@@ -2,6 +2,8 @@
 layout: post
 title: Dyn async traits, part 4
 date: 2021-10-07 12:33 -0400
+series:
+- "Dyn async traits"
 ---
 
 In the previous post, I talked about how we could write our own `impl Iterator for dyn Iterator` by adding a few primitives. In this post, I want to look at what it would take to extend that to an async iterator trait. As before, I am interested in exploring the “core capabilities” that would be needed to make everything work.

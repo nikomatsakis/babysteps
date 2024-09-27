@@ -1,6 +1,8 @@
 ---
 title: "Claiming, auto and otherwise"
 date: 2024-06-21T07:21:21-04:00
+series:
+- "Claim"
 ---
 
 This blog post proposes adding a third trait, `Claim`, that would live alongside `Copy` and `Clone`. The goal of this trait is to improve Rust's existing split, where types are categorized as either `Copy` (for ["plain old data"][POD][^PDS] that is safe to `memcpy`) and `Clone` (for types that require executing custom code or which have destructors). This split has served Rust fairly well but also has some shortcomings that we've seen over time, including maintenance hazards, performance footguns, and (at times quite significant) ergonomic pain and user confusion.
