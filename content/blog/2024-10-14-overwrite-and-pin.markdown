@@ -11,7 +11,7 @@ In July, boats presented a compelling vision in their post [pinned places][]. Wi
 
 ## Just show me the dang code
 
-Before I dive into the details, let's start by reviewing a few examples to show you what we are aiming at (you can also skip to the [TL;DR](http://localhost:1313/babysteps/blog/2024/10/14/overwrite-and-pin/#sotheres-a-lot-here-whats-the-key-takeaways), in the FAQ).
+Before I dive into the details, let's start by reviewing a few examples to show you what we are aiming at (you can also skip to the [TL;DR](#sotheres-a-lot-here-whats-the-key-takeaways), in the FAQ).
 
 I'm assuming a few changes here:
 
