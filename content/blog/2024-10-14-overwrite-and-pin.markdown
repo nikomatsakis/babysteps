@@ -8,7 +8,7 @@ series:
 In July, boats presented a compelling vision in their post [pinned places][]. With the `Overwrite` trait that I introduced in my previous post, however, I think we can get somewhere even *more* compelling, albeit at the cost of a tricky transition. As I will argue in this post, the `Overwrite`  trait effectively becomes a better version of the existing `Unpin` trait, one that effects not only pinned references but also regular `&mut` references. Through this it's able to make `Pin` fit much more seamlessly with the rest of Rust.
 
 [pinned places]: https://without.boats/blog/pinned-places/
-≈g
+
 ## Just show me the dang code
 
 Before I dive into the details, let's start by reviewing a few examples to show you what we are aiming at (you can also skip to the [TL;DR](http://localhost:1313/babysteps/blog/2024/10/14/overwrite-and-pin/#sotheres-a-lot-here-whats-the-key-takeaways), in the FAQ).
