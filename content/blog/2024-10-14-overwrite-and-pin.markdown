@@ -283,7 +283,7 @@ An uninitialized place can be **freed**. This corresponds to e.g. popping a stac
 `p` may at some point become **initialized** by an assignment like `p = v`. At that point, there are three ways to transition back to uninitialized:
 
 * The value `v` could be moved somewhere else, e.g. by moving it somewhere else, like `let p2 = p`. At that point, `p` goes back to being uninitialized.
-* The value `v` can be *forgotten*, with `std::mem::forget(p)`. At this point, no destructor runs, but `p` goes back to being considered uninitialized.[^regret]
+* The value `v` can be *forgotten*, with `std::mem::forget(p)`. At this point, no destructor runs, but `p` goes back to being considered uninitialized.
 * The value `v` can be *dropped*, which occurs when the place `p` goes out of scope. At this point, the destructor runs, and `p` goes back to being considered uninitialized.
 
 Alternatively, the value `v` can be **pinned in place**:
