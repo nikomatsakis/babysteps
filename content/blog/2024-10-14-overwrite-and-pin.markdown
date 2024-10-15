@@ -506,21 +506,27 @@ The shortest version of this post I can manage is[^llm]
 
 ### Why do you only mention swaps? Doesn't `Overwrite` affect other things?
 
-Indeed the `Overwrite` trait as I defined it is overkill for pinning. The more precise, we might imagine two special traits that affect what we can do with the referent an `&mut` reference:
+Indeed the `Overwrite` trait as I defined it is overkill for pinning. The more precise, we might imagine two special traits that affect how and when we can drop or move values:
 
 ```rust
-trait DropWhileBorrowed { }
-trait SwapWhileBorrowed: DropWhileBorrowed { }
+trait DropWhileBorrowed: Sized { }
+trait Swap: DropWhileBorrowed { }
 ```
 
-Given a reference `r: &mut T`:
+* Given a reference `r: &mut T`, overwriting its referent `*r` with a new value would require `T: DropWhileBorrowed`;
+* Swapping two values of type `T` requires that `T: Swap`.
+    * This is true regardless of whether they are borrowed or not.
 
-* Overwriting its referent `*r` with a new value would require `T: DropWhileBorrowed`;
-* Swapping the referent `*r` with another value would require `T: SwapWhileBorrowed`.
+Today, every type is `Swap`. What I argued in the previous post is that we should make the default be that user-defined types implement **neither** of these two traits (over an edition, etc etc). Instead, you could opt-in to both of them at once by implementing `Overwrite`.
 
-Today, every type is `SwapWhileBorrowed`. What I argued in the previous post is that we should make the default be that user-defined types implement **neither** of these two traits (over an ediiton, etc etc). Instead, you could opt-in to both of them at once by implementing `Overwrite`.
+But we could get all the pin benefits by making a weaker change. Instead of having types opt out from both traits by default, they could only opt out of `Swap`, but continue to implement `DropWhileBorrowed`. This is enough to make pinning work smoothly. To see why, recall the [pinning state diagram](#pinning-is-part-of-the-lifecycle-of-a-place): dropping the value in `*r` (permitted by `DropWhileBorrowed`) will exit the "pinned" state and return to the "uninitialized" state. This is valid. Swapping, in contrast, is UB.
 
-But we could get all the pin benefits by making a weaker change. Instead of having types opt out from both traits by default, they could only opt out of `SwapWhileBorrowed`, but continue to implement `DropWhileBorrowed`. This is enough to make pinning work smoothly. To see why, recall the [pinning state diagram](#pinning-is-part-of-the-lifecycle-of-a-place): dropping the value in `*r` (permitted by `DropWhileBorrowed`) will exit the "pinned" state and return to the "uninitialized" state. This is valid. Swapping, in contrast, is UB.
+Two subtle observations here worth calling out:
+
+1. Both `DropWhileBorrowed` and `Swap` have `Sized` as a supertrait. Today in Rust you can't drop a `&mut dyn SomeTrait` value and replace it with another, for example. I think it's a bit unclear whether unsafe could do this if it knows the dynamic type of value behind the `dyn`. But under this model, it would only be valid for unsafe code do that drop if (a) it knew the dynamic type and (b) the dynamic type implemented `DropWhileBorrowed`. Same applies to `Swap`.
+2. The `Swap` trait applies longer than just the duration of a borrow. This is because, once you pin a value to create a `Pin<&mut T>` reference, the state of being pinned persists even after that reference has ended. I say a bit more about this in [another FAQ below](#theres-a-lot-of-subtle-reasoning-in-this-post-are-you-sure-this-is-correct).
+
+EDIT: An earlier draft of this post named the trait `SwapWhileBorrowed`. This was wrong, as described in the FAQ on [subtle reasoning](#theres-a-lot-of-subtle-reasoning-in-this-post-are-you-sure-this-is-correct).
 
 ### Why then did you propose opting out from both overwrites *and* swaps?
 
@@ -532,17 +538,67 @@ All the trait names I've given so far (`Overwrite`, `DropWhileBorrowed`, `SwapWh
 
 My current favorite "semantic style name" is `Mobile`, which corresponds to implementing `SwapWhileBorrowed`. A *mobile* type is one that, while borrowed, can move to a new place. This name doesn't convey that it's also ok to *drop* the value, but that follows, since if you can swap the value to a new place, you can presumably drop that new place.
 
-I don't have a "semantic" name for `DropWhileBorrowed`. As I said, I'm hard pressed to characterize the type that would want to implement `DropWhileBorrowed` but not `SwapWhileBorrowed`.
+I don't have a "semantic" name for `DropWhileBorrowed`. As I said, I'm hard pressed to characterize the type that would want to implement `DropWhileBorrowed` but not `Swap`.
 
-### What do `DropWhileBorrowed` and `SwapWhileBorrowed` have in common?
+### What do `DropWhileBorrowed` and `Swap` have in common?
 
-Together these traits guarantee that, as the owner of some local variable `let mut lv`, if I create a mutable reference `r = &mut v` that refers to the current value in `lv`, then once `r` is no longer in use, the variable `lv` will still have the same value. When you think about it, that's actually a pretty reasonable guarantee, and one that holds on for almost every method.
+These traits pertain to whether an owner who lends out a local variable (i.e., executes `r = &mut lv`) can rely on that local variable `lv` to store the same value after the borrow completes. Under this model, the answer depends on the type `T` of the local variable:
+
+* If `T: DropWhileBorrowed` (or `T: SwapWhileBorrowed`, which implies `DropWhileBorrowed`), the answer is "no", the local variable may point at some other value, because it is possible to do `*r = /* new value */`.
+* But if `T: !DropWhileBorrowed`, then the owner can be sure that `lv` still stores the same value (though `lv`'s fields may have changed).
 
 Let's use an analogy. Suppose I own a house and I lease it out to someone else to use. I expect that they will make changes on the inside, such as hanging up a new picture. But I don't expect them to tear down the house and build a new one on the same lot. I also don't expect them to drive up a flatbed truck, load my house onto it, and move it somewhere else (while proving me with a new one in return). In Rust today, a reference `r: &mut T` reference allows all of these things:
 
 * Mutating a field like `r.count += 1` corresponds to *hanging up a picture*. The values inside `r` change, but `r` still refers to the same conceptual value.
 * Overwriting `*r = t` with a new value `t` is like tearing down the house and building a new one. The original value that was in `r` no longer exists.
 * Swapping `*r` with some other reference `*r2` is like moving my house somewhere else and putting a new house in its place.
+
+EDIT: Wording refined based on feedback.
+
+### What does it mean to be the "same value"?
+
+One question I received was what it meant for two structs to have the "same value"? Imagine a struct with all public fields -- can we make any sense of it having an *identity*? The way I think of it, every struct has a "ghost" private field `$identity` (one that doesn't exist at runtime) that contains its identity. Every `StructName { }` expression has an implicit `$identity: new_value()` that assigns the identity a distinct value from every other struct that has been created thus far. If two struct values have the same `$identity`, then they are the same value.
+
+Admittedly, if a struct has all public fields, then it doesn't really matter whether it's identity is the same, except [perhaps to philosophers](https://en.wikipedia.org/wiki/Ship_of_Theseus). But most structs don't.
+
+An example that can help clarify this is what I call the "scope pattern". Imagine I have a `Scope` type that has some private fields and which can be "installed" in some way and later "deinstalled" (perhaps it modifies thread-local values):
+
+```rust
+pub struct Scope {...}
+
+impl Scope {
+    fn new() -> Self { /* install scope */ }
+}
+
+impl Drop for Scope {
+    fn drop(&mut self) {
+        /* deinstall scope */
+    }
+}
+```
+
+And the only way for users to get their hands on a "scope" is to use `with_scope`, which ensures it is installed and deinstalled properly:
+
+```rust
+pub fn with_scope(op: impl FnOnce(&mut Scope)) {
+    let mut scope = Scope::new();
+    op(&mut scope);
+}
+```
+
+It may appear that this code enforces a "stack discipline", where nested scopes will be installed and deinstalled in a stack-like fashion. But in fact, thanks to `std::mem::swap`, this is not guaranteed:
+
+```rust
+with_scope(|s1| {
+    with_scope(|s2| {
+        std::mem::swap(s1, s2);
+    })
+})
+```
+
+This could easily cause logic bugs or, in unsafe is involved, something worse. This is why lending out scopes requires some extra step to be safe, such as using a `&`-reference or adding a "fresh" lifetime paramteer of some kind to ensure that each scope has a unique type. In principle you could also use a type like `&mut dyn ScopeTrait`, because the compiler disallows overwriting or swapping `dyn Trait` values: but I think it's ambiguous today whether unsafe code could validly do such a swap.
+
+EDIT: Question added based on feedback.
 
 ### There's a lot of subtle reasoning in this post. Are you sure this is correct?
 
@@ -568,6 +624,8 @@ The argument proceeds by cases:
 
 * If `F: Overwrite`, then `Pin<&mut F>` is equivalent to `&mut F`. We showed in Theorem A that `Pin<&mut O>` could be upcast to `&mut O` and it is possible to create an `&mut F` from `&mut O`, so this must be safe.
 * If `F: !Overwrite`, then `Pin<&mut F>` refers to a pinned value found in `o.f`. The lemma tells us that the value in `o.f` will not be disturbed for the duration of the borrow.
+
+EDIT: It was pointed out to me that this last theorem isn't quite proving what it needs to prove. It shows that `o.f` will not be disturbed for the duration of the borrow, but to meet the pin rules, we need to ensure that the value is not swapped even after the borrow ends. We can do this by committing to never permit swaps of values unless `T: Overwrite`, regardless of whether they are borrowed. I meant to clarify this in the post but forgot about it, and then I made a mistake and talked about `SwapWhileBorrowed` -- but `Swap` is the right name.
 
 ### What part of this post are you most proud of?
 
