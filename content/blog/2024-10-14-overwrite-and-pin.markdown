@@ -526,17 +526,17 @@ Two subtle observations here worth calling out:
 1. Both `DropWhileBorrowed` and `Swap` have `Sized` as a supertrait. Today in Rust you can't drop a `&mut dyn SomeTrait` value and replace it with another, for example. I think it's a bit unclear whether unsafe could do this if it knows the dynamic type of value behind the `dyn`. But under this model, it would only be valid for unsafe code do that drop if (a) it knew the dynamic type and (b) the dynamic type implemented `DropWhileBorrowed`. Same applies to `Swap`.
 2. The `Swap` trait applies longer than just the duration of a borrow. This is because, once you pin a value to create a `Pin<&mut T>` reference, the state of being pinned persists even after that reference has ended. I say a bit more about this in [another FAQ below](#theres-a-lot-of-subtle-reasoning-in-this-post-are-you-sure-this-is-correct).
 
-EDIT: An earlier draft of this post named the trait `SwapWhileBorrowed`. This was wrong, as described in the FAQ on [subtle reasoning](#theres-a-lot-of-subtle-reasoning-in-this-post-are-you-sure-this-is-correct).
+EDIT: An earlier draft of this post named the trait `Swap`. This was wrong, as described in the FAQ on [subtle reasoning](#theres-a-lot-of-subtle-reasoning-in-this-post-are-you-sure-this-is-correct).
 
 ### Why then did you propose opting out from both overwrites *and* swaps?
 
-Opting out of overwrites (i.e., making the default be *neither* `DropWhileBorrowed` *nor* `SwapWhileBorrowed`) gives us the additional benefit of truly immutable fields. This will make cross-function borrows less of an issue, as I described in my previous post, and make some other things (e.g., variance) less relevant. Moreover, I don't think overwriting an entire reference like `*r` is that common, versus accessing individual fields. And in the cases where people *do* do it, it is [easy to make a dummy struct with a single field, and then overwrite `r.value` instead of `*r`](https://smallcultfollowing.com/babysteps/blog/2024/09/26/overwrite-trait/#subtle-overwrite-is-not-infectious). To me, therefore, distinguishing between `DropWhileBorrowed` and `SwapWhileBorrowed` doesn't obviously carry its weight.
+Opting out of overwrites (i.e., making the default be *neither* `DropWhileBorrowed` *nor* `Swap`) gives us the additional benefit of truly immutable fields. This will make cross-function borrows less of an issue, as I described in my previous post, and make some other things (e.g., variance) less relevant. Moreover, I don't think overwriting an entire reference like `*r` is that common, versus accessing individual fields. And in the cases where people *do* do it, it is [easy to make a dummy struct with a single field, and then overwrite `r.value` instead of `*r`](https://smallcultfollowing.com/babysteps/blog/2024/09/26/overwrite-trait/#subtle-overwrite-is-not-infectious). To me, therefore, distinguishing between `DropWhileBorrowed` and `Swap` doesn't obviously carry its weight.
 
 ### Can you come up with a more *semantic* name for `Overwrite`?
 
-All the trait names I've given so far (`Overwrite`, `DropWhileBorrowed`, `SwapWhileBorrowed`) answer the question of "what operation does this trait allow". That's pretty common for traits (e.g., `Clone` or, for that matter, `Unpin`) but it is sometimes useful to think instead about "what kinds of types should implement this trait" (or not implement it, as the case may be).
+All the trait names I've given so far (`Overwrite`, `DropWhileBorrowed`, `Swap`) answer the question of "what operation does this trait allow". That's pretty common for traits (e.g., `Clone` or, for that matter, `Unpin`) but it is sometimes useful to think instead about "what kinds of types should implement this trait" (or not implement it, as the case may be).
 
-My current favorite "semantic style name" is `Mobile`, which corresponds to implementing `SwapWhileBorrowed`. A *mobile* type is one that, while borrowed, can move to a new place. This name doesn't convey that it's also ok to *drop* the value, but that follows, since if you can swap the value to a new place, you can presumably drop that new place.
+My current favorite "semantic style name" is `Mobile`, which corresponds to implementing `Swap`. A *mobile* type is one that, while borrowed, can move to a new place. This name doesn't convey that it's also ok to *drop* the value, but that follows, since if you can swap the value to a new place, you can presumably drop that new place.
 
 I don't have a "semantic" name for `DropWhileBorrowed`. As I said, I'm hard pressed to characterize the type that would want to implement `DropWhileBorrowed` but not `Swap`.
 
@@ -544,7 +544,7 @@ I don't have a "semantic" name for `DropWhileBorrowed`. As I said, I'm hard pres
 
 These traits pertain to whether an owner who lends out a local variable (i.e., executes `r = &mut lv`) can rely on that local variable `lv` to store the same value after the borrow completes. Under this model, the answer depends on the type `T` of the local variable:
 
-* If `T: DropWhileBorrowed` (or `T: SwapWhileBorrowed`, which implies `DropWhileBorrowed`), the answer is "no", the local variable may point at some other value, because it is possible to do `*r = /* new value */`.
+* If `T: DropWhileBorrowed` (or `T: Swap`, which implies `DropWhileBorrowed`), the answer is "no", the local variable may point at some other value, because it is possible to do `*r = /* new value */`.
 * But if `T: !DropWhileBorrowed`, then the owner can be sure that `lv` still stores the same value (though `lv`'s fields may have changed).
 
 Let's use an analogy. Suppose I own a house and I lease it out to someone else to use. I expect that they will make changes on the inside, such as hanging up a new picture. But I don't expect them to tear down the house and build a new one on the same lot. I also don't expect them to drive up a flatbed truck, load my house onto it, and move it somewhere else (while proving me with a new one in return). In Rust today, a reference `r: &mut T` reference allows all of these things:
@@ -625,7 +625,7 @@ The argument proceeds by cases:
 * If `F: Overwrite`, then `Pin<&mut F>` is equivalent to `&mut F`. We showed in Theorem A that `Pin<&mut O>` could be upcast to `&mut O` and it is possible to create an `&mut F` from `&mut O`, so this must be safe.
 * If `F: !Overwrite`, then `Pin<&mut F>` refers to a pinned value found in `o.f`. The lemma tells us that the value in `o.f` will not be disturbed for the duration of the borrow.
 
-EDIT: It was pointed out to me that this last theorem isn't quite proving what it needs to prove. It shows that `o.f` will not be disturbed for the duration of the borrow, but to meet the pin rules, we need to ensure that the value is not swapped even after the borrow ends. We can do this by committing to never permit swaps of values unless `T: Overwrite`, regardless of whether they are borrowed. I meant to clarify this in the post but forgot about it, and then I made a mistake and talked about `SwapWhileBorrowed` -- but `Swap` is the right name.
+EDIT: It was pointed out to me that this last theorem isn't quite proving what it needs to prove. It shows that `o.f` will not be disturbed for the duration of the borrow, but to meet the pin rules, we need to ensure that the value is not swapped even after the borrow ends. We can do this by committing to never permit swaps of values unless `T: Overwrite`, regardless of whether they are borrowed. I meant to clarify this in the post but forgot about it, and then I made a mistake and talked about `Swap` -- but `Swap` is the right name.
 
 ### What part of this post are you most proud of?
 
