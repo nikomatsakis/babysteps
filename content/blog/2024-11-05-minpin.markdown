@@ -171,6 +171,11 @@ There's a similar dynamic around replace and swap. Replace and swap are only use
 [immutable fields]: https://smallcultfollowing.com/babysteps/blog/2024/09/26/overwrite-trait/#motivating-example-1-immutable-fields
 [scopepattern]: https://smallcultfollowing.com/babysteps/blog/2024/10/14/overwrite-and-pin/#what-does-it-mean-to-be-the-same-value
 
+### Why did you adopt `pinned &mut` and not `&pin mut` as the syntax?
+
+The main reason was that I wanted a syntax that scaled to `Pin<Box<T>>`. But also the `pin!` macro exists, making the `pin` keyword somewhat awkward (though not impossible).
+
+One thing I was wondering about is the phrase "pinned reference" or "pinned pointer". On the one hand, it is really a *reference to a pinned value* (which suggests `&pin mut`). On the other hand, I think this kind of ambiguity is pretty common. The main thing I have found is that my brain has trouble with `Pin<P>` because it wants to think of `Pin` as a "smart pointer" versus a modifier on *another* smart pointer. `pinned Box<T>` feels much better this way.
 
 ### Can you show me an example? What about the `MaybeDone` example?
 
