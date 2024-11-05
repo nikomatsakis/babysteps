@@ -1,6 +1,8 @@
 ---
 title: "MinPin: yet another pin proposal"
 date: 2024-11-05T17:20:18Z
+series:
+- "Overwrite trait"
 ---
 
 This post floats a variation of boats' [UnpinCell] proposal that I'm calling *MinPin*.[^hat] MinPin's goal is to integrate `Pin` into the language in a "minimally disruptive" way[^notmaxmin] -- and in particular a way that is fully backwards compatible. Unlike `Overwrite`, MinPin does not attempt to make `Pin` and `&mut` "play nicely" together. It does however leave the door open to add `Overwrite` in the future, and I think helps to clarify the positives and negatives that `Overwrite` would bring.
@@ -49,7 +51,7 @@ Yes. I think the rule of thumb would be this. For any given type, you should dec
 
 Most types do not care about pinning. They just go on using `&self` and `&mut self` as normal. Everything works as today (this is the "zero-conceptual-cost" goal).
 
-But *some* types *do* care about pinning. These are typicaly future implementations but they could be other special case things. In that case, you should explicitly implement `!Unpin` to declare yourself as pinnable. When you declare your methods, you have to make a choice
+But *some* types *do* care about pinning. These are typically future implementations but they could be other special case things. In that case, you should explicitly implement `!Unpin` to declare yourself as pinnable. When you declare your methods, you have to make a choice
 
 * Is the method read-only? Then use `&self`, that always works.
 * Otherwise, use `&mut self` or `pinned &mut self`, depending...
