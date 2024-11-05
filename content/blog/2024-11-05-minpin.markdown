@@ -1,0 +1,346 @@
+---
+title: "MinPin: yet another pin proposal"
+date: 2024-11-05T17:20:18Z
+---
+
+This post floats a variation of boats' [UnpinCell] proposal that I'm calling *MinPin*.[^hat] MinPin's goal is to integrate `Pin` into the language in a "minimally disruptive" way[^notmaxmin] -- and in particular a way that is fully backwards compatible. Unlike `Overwrite`, MinPin does not attempt to make `Pin` and `&mut` "play nicely" together. It does however leave the door open to add `Overwrite` in the future, and I think helps to clarify the positives and negatives that `Overwrite` would bring.
+
+[^hat]: Hat tip to Tyler Mandry and Eric Holk who discussed these ideas with me in detail.
+
+[^notmaxmin]: MinPin is the "minimal" proposal that I feel meets my desiderata; I think you could devise a *maximally minimal* proposal is even smaller if you truly wanted.
+
+[UnpinCell]: https://without.boats/blog/unpin-cell/
+
+## TL;DR: Key design decisions
+
+Here is a brief summary of MinPin's rules
+
+* The `pinned` keyword can be used to get pinned variations of things:
+    * In types, `pinned P` is equivalent to `Pin<P>`, so `pinned &mut T` and `pinned Box<T>` are equivalent to `Pin<&mut T>` and `Pin<Box<T>>` respectively.
+    * In function signatures, `pinned &mut self` can be used instead of `self: Pin<&mut Self>`.
+    * In expressions, `pinned &mut $place` is used to get a `pinned &mut` that refers to the value in `$place`.
+* The `Drop` trait is modified to have `fn drop(pinned &mut self)` instead of `fn drop(&mut self)`.
+    * However, impls of `Drop` are still permitted (even encouraged!) to use `fn drop(&mut self)`, but it means that your type will not be able to use (safe) pin-projection. For many types that is not an issue; for futures or other "address sensitive" types, you should use `fn drop(pinned &mut self)`.
+* The rules for field projection from a `s: pinned &mut S` reference are based on whether or not `Unpin` is implemented:
+    * Projection is always allowed for fields whose type implements `Unpin`.
+    * For fields whose types are not known to implement `Unpin`:
+        * If the struct `S` is `Unpin`, `&mut` projection is allowed but not `pinned &mut`.
+        * If the struct `S` is `!Unpin`[^neg] and does not have a `fn drop(&mut self)` method, `pinned &mut` projection is allowed but not `&mut`.
+        * If the type checker does not know whether `S` is `Unpin` or not, or if the type `S` has a `Drop` impl with `fn drop(&mut self)`, neither form of projection is allowed for fields that are not `Unpin`.
+* There is a type `struct Unpinnable<T> { value: T }` that always implements `Unpin`.
+
+## Design axioms
+
+Before I go further I want to layout some of my design axioms (beliefs that motivate and justify my design).
+
+* **`Pin` is part of the Rust language.** Despite Pin being entirely a "library-based" abstraction at present, it is very much a part of the language semantics, and it deserves first-class support. It should be possible to create pinned references and do pin projections in safe Rust.
+* **`Pin` is its own world.** Pin is only relevant in specific use cases, like futures or in-place linked lists. 
+* **`Pin` should have zero-conceptual-cost.** Unless you are writing a `Pin`-using abstraction, you shouldn't have to know or think about pin at all.
+* **Explicit is possible.** Automatic operations are nice but it should always be possible to write operations explicitly when needed.
+* **Backwards compatible.** Existing code should continue to compile and work.
+
+## Frequently asked questions
+
+For the rest of the post I'm just going to go into FAQ mode.
+
+### I see the rules, but can you summarize how MinPin would feel to *use*?
+
+Yes. I think the rule of thumb would be this. For any given type, you should decide whether your type *cares* about pinning or not.
+
+Most types do not care about pinning. They just go on using `&self` and `&mut self` as normal. Everything works as today (this is the "zero-conceptual-cost" goal).
+
+But *some* types *do* care about pinning. These are typicaly future implementations but they could be other special case things. In that case, you should explicitly implement `!Unpin` to declare yourself as pinnable. When you declare your methods, you have to make a choice
+
+* Is the method read-only? Then use `&self`, that always works.
+* Otherwise, use `&mut self` or `pinned &mut self`, depending...
+    * If the method is meant to be called before pinning, use `&mut self`.
+    * If the method is meant to be called after pinning, use `pinned &mut self`.
+
+This design works well so long as all mutating methods can be categorized into before-or-after pinning. If you have methods that need to be used in both settings, you have to start using workarounds -- in the limit, you make two copies.
+
+### How does MinPin compare to UnpinCell?
+
+Those of you who have been following the various posts in this area will recognize many elements from boats' recent [UnpinCell][]. While the proposals share many elements, there is also one big difference between them that makes a big difference in how they would feel when used. Which is overall better is not yet clear to me.
+
+Let's start with what they have in common. Both propose syntax for pinned references/borrows (albeit slightly different syntax) and both include a type for "opting out" from pinning (the eponymous `UnpinCell<T>` in [UnpinCell], `Unpinnable<T>` in MinPin). Both also have a similar "special case" around `Drop` in which writing a drop impl with `fn drop(&mut self)` disables safe pin-projection.
+
+Where they differ is how they manage generic structs like `WrapFuture<F>`, where it is not known whether or not they are `Unpin`.
+
+```rust
+struct WrapFuture<F: Future> {
+    future: F,
+}
+```
+
+The `r: pinned &mut WrapFuture<F>`, the question is whether we can project the field `future`:
+
+```rust
+impl<F: Future> WrapFuture<F> {
+    fn method(pinned &mut self) {
+        let f = pinned &mut r.future;
+        //      --------------------
+        //      Is this allowed?
+    }
+}
+```
+
+There is a specific danger case that both sets of rules are trying to avoid. Imagine that `WrapFuture<F>` implements `Unpin` but `F` does not -- e.g., imagine that you have a `impl<F: Future> Unpin for WrapFuture<F>`. In that case, the referent of the `pinned &mut WrapFuture<F>` reference is not actually pinned, because the type is unpinnable. If we permitted the creation of a `pinned &mut F`, where `F: !Unpin`, we would be under the (mistaken) impression that `F` is pinned. Bad.
+
+[UnpinCell] handles this case by saying that projecting from a `pinned &mut` is only allowed so long as there is no explicit impl of `Unpin` for `WrapFuture` ("if \[WrapFuture\<F>] implements `Unpin`, it does so using the auto-trait mechanism, not a manually written impl"). Basically: if the user doesn't say whether the type is `Unpin` or not, then you can do pin-projection. The idea is that *if* the self type is `Unpin`, that will only be because all fields are unpin (in which case it is fine to make `pinned &mut` references to them); *if* the self type is *not* `Unpin`, then the field `future` is pinned, so it is safe.
+
+In contrast, in MinPin, this case is only allowed if there is an explicit `!Unpin` impl for `WrapFuture`:
+
+```rust
+impl<F: Future> !Unpin for WrapFuture<F> {
+    // This impl is required in MinPin, but not in UnpinCell
+}
+```
+
+Explicit negative impls are not allowed on stable, but they were included in the original auto trait RFC. The idea is that a negative impl is an explicit, semver-binding commitment *not* to implement a trait. This is different from simply not including an impl at all, which allows for impls to be added later.
+
+### Why would you prefer MinPin over UnpinCell or vice versa?
+
+I'm not totally sure which of these is better. I came to the `!Unpin` impl based on my axiom that **pin is its own world** -- the idea was that it was better to push types to be explicitly unpin all the time than to have "dual-mode" types that masquerade as sometimes pinned and sometimes not.
+
+In general I feel like it's better to justify language rules by the presence of a declaration than the absence of one. So I don't like the idea of saying "the absence of an `Unpin` impl allows for pin-projection" -- after all, adding impls is supposed to be semver-compliant. Of course, that's much lesss true for auto traits, but it can still be true.
+
+In fact, `Pin` has [had some unsoundness](https://github.com/rust-lang/rust/issues/66544) in the past based on unsafe reasoning that was justified by the **lack** of an impl. We assumed that `&T` could never implemented `DerefMut`, but it turned out to be possible to add weird impls of `DerefMut` in very specific cases. We fixed this by [adding an explicit `impl<T> !DerefMut for &T` impl](https://github.com/rust-lang/rust/pull/68004).
+
+On the other hand, I can imagine that many explicitly implemented futures might benefit from being able to be ambiguous about whether they are `Unpin`.
+
+### What does your design axiom "`Pin` is its own world" mean?
+
+The way I see it is that, in Rust today (and in MinPin, pinned places, UnpinCell, etc), if you have a `T: !Unpin` type (that is, a type that is pinnable), it lives a double life. Initially, it is unpinned, and you interact can move it, `&`-ref it, or `&mut`-ref it, just like any other Rust value. But once a `!Unpin` value becomes pinned to a place, it enters a different state, in which you can no longer move it or use `&mut`, you have to use `pinned &mut`:
+
+```mermaid
+flowchart TD
+Unpinned[
+    Unpinned: can access 'v' with '&amp;' and '&amp;mut'
+]
+
+Pinned[
+    Pinned: can access 'v' with '&amp;' and 'pinned &amp;mut'
+]
+
+Unpinned --
+    pin 'v' in place (only if T is '!Unpin')
+--> Pinned
+```
+
+One-way transitions like this limit the amount of interop and composability you get in the language. For example, if my type has `&mut` methods, I can't use them once the type is pinned, and I have to use some workaround, such as duplicating the method with `pinned &mut`.[^last_mut] In this specific case, however, I don't think this transition is so painful, and that's because of the specifics of the domain: futures go through a pretty hard state change where they start in "preparation mode" and then eventually start executing. The set of methods you need at these two phases are quite distinct. So this is what I meant by "pin is its own world": pin is not very interopable with Rust, but this is not as bad as it sounds, because you don't often need that kind of interoperability.
+
+### How would `Overwrite` affect pin being in its own world?
+
+With `Overwrite`, when you pin a value in place, you just gain the ability to use `pinned &mut`, you don't give up the ability to use `&mut`:
+
+```mermaid
+flowchart TD
+Unpinned[
+    Unpinned: can access 'v' with '&amp;' and '&amp;mut'
+]
+
+Pinned[
+    Pinned: can additionally access 'v' with 'pinned &amp;mut'
+]
+
+Unpinned --
+    pin 'v' in place (only if T is '!Unpin')
+--> Pinned
+```
+
+Making pinning into a "superset" of the capabilities of pinned means that `pinned &mut` can be coerced into an `&mut` (it could even be a "true subtype", in Rust terms). This in turn means that a `pinned &mut Self` method can invoke `&mut self` methods, which helps to make pin feel like a smoothly integrated part of the language.[^last_mut]
+
+[^last_mut]: It's worth noting that coercions and subtyping though only go so far. For example, `&mut` can be coerced to `&`, but we often need methods that return "the same kind of reference they took in", which can't be managed with coercions. That's why you see things like `last` and `last_mut`.
+
+### So does the axiom mean you think Overwrite is a bad idea?
+
+Not exactly, but I do think that if `Overwrite` is justified, it is not on the basis of `Pin`, it is on the basis of [immutable fields][]. If you just look at `Pin`, then `Overwrite` does make `Pin` work better, but it does that by limiting the capabilities of `&mut` to those that are compatible with `Pin`. There is no free lunch! As Eric Holk memorably put it to me in privmsg:
+
+> It seems like there's a fixed amount of inherent complexity to pinning, but it's up to us how we distribute it. Pin keeps it concentrated in a small area which makes it seem absolutely terrible, because you have to face the whole horror at once.[^absolute]
+
+I think `Pin` as designed is a "zero-conceptual-cost" abstraction, meaning that if you are not trying to use it, you don't really have to care about it. That's worth maintaining, if we can. If we are going to limit what `&mut` can do, the reason to do it is primarily to get other benefits, not to benefit pin code specifically.
+
+[^absolute]: I would say that the current complexity of pinning is, in no small part, due to *accidental complexity*, as demonstrated by the recent round of exploration, but Eric's wider point stands.
+
+To be clear, this is largely a function of where we are in Rust's evolution. If we were still in the early days of Rust, I would say `Overwrite` is the correct call. It reminds me very much of the [IMHTWAMA](https://smallcultfollowing.com/babysteps/blog/2012/11/18/imagine-never-hearing-the-phrase-aliasable/), the core "mutability xor sharing" rule at the heart of Rust's borrow checker. When we decided to adopt the current borrow checker rules, the code was about 85-95% in conformance. That is, although there was plenty of aliased mutation, it was clear that "mutability xor sharing" was capturing a rule that we already *mostly* followed, but not completely. Because combining aliased state with memory safety is more complicated, that meant that a small minority of code was pushing complexity onto the entire language. Confining shared mutation to types like `Cell` and `Mutex` made *most code* simpler at the cost of more complexity around shared state in particular.
+
+There's a similar dynamic around replace and swap. Replace and swap are only used in a few isolated places and in a few particular ways, but the all code has to be more conservative to account for that possibility. If we could go back, I think limiting `Replace` to some kind of `Replaceable<T>` type would be a good move, because it would mean that the more common case can enjoy the benefits: fewer borrow check errors and more precise programs due to [immutable fields] and the ability to pass an `&mut SomeType` and be sure that your callee is not swapping the value under your feet (useful for the ["scope pattern"][scopepattern] and also enables `Pin<&mut>` to be a subtype of `&mut`).
+
+[immutable fields]: https://smallcultfollowing.com/babysteps/blog/2024/09/26/overwrite-trait/#motivating-example-1-immutable-fields
+[scopepattern]: https://smallcultfollowing.com/babysteps/blog/2024/10/14/overwrite-and-pin/#what-does-it-mean-to-be-the-same-value
+
+
+### Can you show me an example? What about the `MaybeDone` example?
+
+Yeah, totally. So boats [pinned places][] post introduced two futures, `MaybeDone` and `Join`. Here is how `MaybeDone` would look in MinPin, along with some inline comments:
+
+```rust
+enum MaybeDone<F: Future> {
+    Polling(F),
+    Done(Unpinnable<Option<F::Output>>),
+    //   ---------- see below
+}
+
+impl<F: Future> !Unpin for MaybeDone<F> { }
+//              -----------------------
+//
+// `MaybeDone` is address-sensitive, so we
+// opt out from `Unpin` explicitly. I assumed
+// opting out from `Unpin` was the *default* in
+// my other posts.
+
+impl<F: Future> MaybeDone<F> {
+    fn maybe_poll(pinned &mut self, cx: &mut Context<'_>) {
+        if let MaybeDone::Polling(fut) = self {
+            //                    ---
+            // This is in fact pin-projection, although
+            // it's happening implicitly as part of pattern
+            // matching. `fut` here has type `pinned &mut F`.
+            // We are permitted to do this pin-projection
+            // to `F` because we know that `Self: !Unpin`
+            // (because we declared that to be true).
+            
+            if let Poll::Ready(res) = fut.poll(cx) {
+                *self = MaybeDone::Done(Some(res));
+            }
+        }
+    }
+
+    fn is_done(&self) -> bool {
+        matches!(self, &MaybeDone::Done(_))
+    }
+
+    fn take_output(pinned &mut self) -> Option<F::Output> {
+        //         ----------------
+        //     This method is called after pinning, so it
+        //     needs a `pinned &mut` reference...  
+
+        if let MaybeDone::Done(res) = self {
+            res.value.take()
+            //  ------------
+            //
+            //  ...but take is an `&mut self` method
+            //  and `F:Output: Unpin` is known to be true.
+            //  
+            //  Therefore we have made the type in `Done`
+            //  be `Unpinnable`, so that we can do this
+            //  swap.
+        } else {
+            None
+        }
+    }
+}
+```
+
+### Can you translate the `Join` example?
+
+Yep! Here is `Join`:
+
+```rust
+struct Join<F1: Future, F2: Future> {
+    fut1: MaybeDone<F1>,
+    fut2: MaybeDone<F2>,
+}
+
+impl<F1: Future, F2: Future> !Unpin for Join<F> { }
+//                           ------------------
+//
+// Join is a custom future, so implement `!Unpin`
+// to gain access to pin-projection.
+
+impl<F1: Future, F2: Future> Future for Join<F1, F2> {
+    type Output = (F1::Output, F2::Output);
+
+    fn poll(pinned &mut self, cx: &mut Context<'_>) -> Poll<Self::Output> {
+        // The calls to `maybe_poll` and `take_output` below
+        // are doing pin-projection from `pinned &mut self`
+        // to a `pinned &mut MaybeDone<F1>` (or `F2`) type.
+        // This is allowed because we opted out from `Unpin`
+        // above.
+
+        self.fut1.maybe_poll(cx);
+        self.fut2.maybe_poll(cx);
+        
+        if self.fut1.is_done() && self.fut2.is_done() {
+            let res1 = self.fut1.take_output().unwrap();
+            let res2 = self.fut2.take_output().unwrap();
+            Poll::Ready((res1, res2))
+        } else {
+            Poll::Pending
+        }
+    }
+}
+```
+
+### What's the story with `Drop` and why does it matter?
+
+Drop's current signature takes `&mut self`. But [recall that](#What-does-your-design-axiom-Pin-is-its-own-world-mean) once a `!Unpin` type is pinned, it is only safe to use `pinned &mut`. This is a combustible combination. It means that, for example, I can write a `Drop` that uses `mem::replace` or swap to move values out from my fields, even though they have been pinned.
+
+For types that are always `Unpin`, this is no problem, because `&mut self` and `pinned &mut self` are equivalent. For types that are always `!Unpin`, I'm not too worried, because Drop as is is a poor fit for them, and `pinned &mut self` will be beter.
+
+The tricky bit is types that are *conditionally* `Unpin`. Consider something like this:
+
+```rust
+struct LogWrapper<T> {
+    value: T,
+}
+
+impl<T> Drop for LogWrapper<T> {
+    fn drop(&mut self) {
+        ...
+    }
+}
+```
+
+At least today, whether or not `LogWrapper` is `Unpin` depends on whether `T: Unpin`, so we can't know it for sure. 
+
+The solution that boats and I both landed on effectively creates three categories of types:[^category]
+
+* those that implement `Unpin`, which are *unpinnable*;
+* those that do not implement `Unpin` but which have `fn drop(&mut self)`, which are *unsafely pinnable*;
+* those that do not implement `Unpin` and do not have `fn drop(&mut self)`, which are *safely pinnable*.
+
+[^category]: Here I am talking about the category of a particular monomorphized type in a particular version of the crate. At that point, every type either implements `Unpin` or it doesn't. Note that at *compilation time* there is more grey area, as they can be types that may or may not be pinnable, etc.
+
+The idea is that using `fn drop(&mut self)` puts you in this purgatory category of being "unsafely pinnable" (it might be more accurate to say being "maybe unsafely pinnable", since often at compilation time with generics we won't know if there is an `Unpin` impl or not). You don't get access to safe pin projection or other goodies, but you can do projection with unsafe code (e.g., the way the `pin-project-lite` crate does it today).
+
+### It feels weird to have `Drop` let you use `&mut self` when other traits don't.
+
+Yes, it does, but in fact any method whose trait uses `pinned &mut self` can be *implemented* safely with `&mut self` so long as `Self: Unpin`. So we could just allow that in general. This would be cool because many hand-written futures are in fact `Unpin`, and so they could implement the `poll` method with `&mut self`.
+
+### Wait, so if `Unpin` types can use `&mut self`, why do we need special rules for `Drop`?
+
+Well, it's true that an `Unpin` type can use `&mut self` in place of `pinned &mut self`, but in fact we don't always *know* when types are `Unpin`. Moreover, per the zero-conceptual-cost axiom, we don't want people to have to know anything about `Pin` to use `Drop`. The obvious approaches I could think of all either violated that axiom or just... well... seemed weird:
+
+* Permit `fn drop(&mut self)` but only if `Self: Unpin` seems like it would work, since most types are `Unpin`. But in fact types, by default, are only `Unpin` if their fields are `Unpin`, and so generic types are not *known* to be `Unpin`. This means that if you write a `Drop` impl for a generic type and you use `fn drop(&mut self)`, you will get an error that can only be fixed by implementing `Unpin` unconditionally. Because "pin is its own world", I believe adding the impl is fine, but it violates "zero-conceptual-cost" because it means that you are forced to understand what `Unpin` even means in the first place.
+* To address that, I considered treating `fn drop(&mut self)` as implicitly declaring `Self: Unpin`. This doesn't violate our axioms but just seems *weird* and kind of surprising. It's also backwards incompatible with pin-project-lite.
+
+These considerations let me to conclude that actually the current design kind of puts in a place where we want three categories. I think in retrospect it'd be better if `Unpin` were implemented by default but not as an auto trait (i.e., all types were unconditionally `Unpin` unless they declare otherwise), but oh well.
+
+### What is the forwards compatibility story for `Overwrite`?
+
+I mentioned early on that MinPin could be seen as a first step that can later be extended with `Overwrite` if we choose. How would that work? 
+
+Basically, if we did the `s/Unpin/Overwrite/` change, then we would 
+
+* rename `Unpin` to `Overwrite` (literally rename, they would be the same trait);
+* prevent overwriting the referent of an `&mut T` unless `T: Overwrite` (or replacing, swapping, etc).
+
+These changes mean that `&mut T` is pin-preserving. If `T: !Overwrite`, then `T` may be pinned, but then `&mut T` won't allow it to be overwritten, replaced, or swapped, and so pinning guarantees are preserved (and then some, since technically overwrites are ok, just not replacing or swapping). As a result, we can simplify the MinPin rules for pin-projection to the following:
+ 
+> Given a reference `s: pinned &mut S`, the rules for projection of the field `f` are as follows:
+>
+> * `&mut` projection is allowed via `&mut s.f`.
+> * `pinned &mut` projection is allowed via `pinned &mut s.f` if `S: !Unpin`
+
+### What would it *feel* like if we adopted `Overwrite`?
+
+We actually got a bit of a preview when we talked about `MaybeDone`. Remember how we had to introduce `Unpinnable` around the final value so that we could swap it out? If we adopted `Overwrite`, I think the TL;DR of how code would be different is that most any code that today uses `std::mem::replace` or `std::mem::swap` would probably wind up using an explicit `Unpinnable`-like wrapper. I'll cover this later.
+
+This goes a bit to show what I meant about there being a certain amount of inherent complexity that we can choose to distibute: in MinPin, this pattern of wrapping "swappable" data is isolated to `pinned &mut self` methods in `!Unpin` types. With `Overwrite`, it would be more widespread (but you would get more widespread benefits, as well).
+
+## Conclusion
+
+My conclusion is that this is a fascinating space to think about![^toomuch] So fun.
+
+[^toomuch]: Also that I spent way too much time iterating on this post. JUST GONNA POST IT.
