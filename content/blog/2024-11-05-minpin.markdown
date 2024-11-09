@@ -179,7 +179,9 @@ One thing I was wondering about is the phrase "pinned reference" or "pinned poin
 
 ### Can you show me an example? What about the `MaybeDone` example?
 
-Yeah, totally. So boats [pinned places][] post introduced two futures, `MaybeDone` and `Join`. Here is how `MaybeDone` would look in MinPin, along with some inline comments:
+Yeah, totally. So boats [pinned places] post introduced two futures, `MaybeDone` and `Join`. Here is how `MaybeDone` would look in MinPin, along with some inline comments:
+
+[pinned places]: https://without.boats/blog/pinned-places/
 
 ```rust
 enum MaybeDone<F: Future> {
