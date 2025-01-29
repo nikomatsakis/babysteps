@@ -74,7 +74,7 @@ One thing I like about the preview crates is that then others can begin to do th
 
 ### Why else might we use previews?
 
-Even if we know the semantics, we could use previews to stabilize features where the user experience is not great. I'm thinking of Generic Associated Types as one example, where the stabilization was slowed because .
+Even if we know the semantics, we could use previews to stabilize features where the user experience is not great. I'm thinking of Generic Associated Types as one example, where the stabilization was slowed because of usability concerns.
 
 ### What are the risks from this?
 
