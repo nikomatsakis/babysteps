@@ -37,7 +37,7 @@ At the moment, I personally have a preference between these (I'll let you guess)
 
 ## Enter preview crates
 
-So what if we released a crate `rust_lang::const_preview`. In my dream world, this is released on crates.io, using the namespaces described in [RFC #3243][]. Like any crate, `const_preview` can be versioned. It would expose exactly one item, a macro `const_item` that can be used to write const functions that have const trait bounds:
+So what if we released a crate `rust_lang::const_preview`. In my dream world, this is released on crates.io, using the namespaces described in [RFC #3243][https://rust-lang.github.io/rfcs/3243-packages-as-optional-namespaces.html]. Like any crate, `const_preview` can be versioned. It would expose exactly one item, a macro `const_item` that can be used to write const functions that have const trait bounds:
 
 ```rust
 const_preview::const_item! {
@@ -50,7 +50,8 @@ const_preview::const_item! {
 Interally, this `const_item!` macro can make use of internal APIs in the compiler to parse the contents and deploy the special semantics.
 
 ### Releasing v2.0
-Now, maybe we use this for a while, and we find that people really don't like the `~`, so we decide to change the syntax. Perhaps we opt to write `const Default` instead of `~const Default`. No problem, we release a 2.0 version of the crate and we also rewrite 1.0 to take in the tokens and invoke 2.0 using the [semver trick])(https://github.com/dtolnay/semver-trick).
+
+Now, maybe we use this for a while, and we find that people really don't like the `~`, so we decide to change the syntax. Perhaps we opt to write `const Default` instead of `~const Default`. No problem, we release a 2.0 version of the crate and we also rewrite 1.0 to take in the tokens and invoke 2.0 using the [semver trick](https://github.com/dtolnay/semver-trick).
 
 ```rust
 const_preview::const_item! {
@@ -59,8 +60,6 @@ const_preview::const_item! {
     }
 }
 ```
-
-[RFC #3243](https://rust-lang.github.io/rfcs/3243-packages-as-optional-namespaces.html)
 
 ### Integrating into the language
 
