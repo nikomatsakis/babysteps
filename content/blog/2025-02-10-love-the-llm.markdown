@@ -205,14 +205,15 @@ Just as an AI can help novices understand the borrow checker, it can help advanc
 ## Rust's emphasis on "reliability" makes it a great target for AI
 
 
-Anyone who has used an LLM-based tool has encountered hallucinations, where the AI just makes up APIs that "seem like they ought to exist".[^favorite] And yet anyone who has used *Rust* knows that "if it compiles, it works" is true may more often than it has a right to be.[^functional] This suggests to me that any attempt to use the Rust compiler to validate AI-generated code or solutions is far more likely to 
+Anyone who has used an LLM-based tool has encountered hallucinations, where the AI just makes up APIs that "seem like they ought to exist".[^favorite] And yet anyone who has used *Rust* knows that "if it compiles, it works" is true may more often than it has a right to be.[^functional] This suggests to me that any attempt to use the Rust compiler to validate AI-generated code or solutions is going to also help ensure that the code is correct.
 
+AI-based code assistants right now don't really have this property. I've noticed that I kind of have to pick between "shallow but correct" or "deep but hallucinating". A good example is `match` statements. I can use rust-analyzer to fill in the match arms and it will do a perfect job, but the body of each arm is `todo!`. Or I can let the LLM fill them in and it tends to cover most-but-not-all of the arms but it generates bodies. I would love to see us doing deeper integration, so that the tool is talking to the compiler to get perfect answers to questions like "what variants does this enum have" while leveraging the LLM for open-ended questions like "what is the body of this arm".[^distract]
 
 [^favorite]: My personal favorite story of this is when I asked ChatGPT to generate me a list of "real words and their true definition along with 2 or 3 humorous fake definitions" for use in a birthday party game. I told it that "I know you like to hallucinate so please include links where I can verify the real definition". It generated a great list of words along with plausible looking URLs for merriamwebster.com and so forth---but when I clicked the URLs, they turned out to all be 404s (the words, it turned out, were real---just not the URLs).
 
-
 [^functional]: This is not a unique property of Rust, it is shared by other languages with rich type systems, like Haskell or ML. Rust happens to be the most widespread such language.
 
+[^distract]: I'd also like it if the LLM could be a bit less interrupt-y sometimes. Especially when I'm writing type-system code or similar things, it can be distracting when it keeps trying to author stuff it clearly doesn't understand. I expect this too will improve over time---and I've noticed that while, in the beginning, it tends to guess very wrong, over time it tends to guess better. I'm not sure what inputs and context are being fed by the LLM in the background but it's evident that it can come to see patterns even for relatively subtle things.
 
 ## Conclusion
 
