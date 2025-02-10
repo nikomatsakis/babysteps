@@ -194,8 +194,7 @@ Premature optimization is the root of all evil, or so Donald Knuth is said to ha
 Let's look a bit to the future. I want us to get to a place where the "minimum bar" for writing unsafe code is that you test that unsafe code with some kind of sanitizer that checks for both C and Rust UB---something like miri today, except one that works "at scale" for code that invokes FFI or does other arbitrary things. I expect a smaller set of people will go further, leveraging automated reasoning tools like Kani or Verus to prove statically that their unsafe code is correct[^paradox]. 
 
 
-[^paradox]: The student asks, "When unsafe code is proven free of UB, does that make it safe?" The master says, "Yes."
-
+[^paradox]: The student asks, "When unsafe code is proven free of UB, does that make it safe?" The master says, "Yes." The student asks, "And is it then still unsafe?" The master says, "Yes." Then, a minute later, "Well, sort of." (We may need new vocabulary.)
 
 From my experience using miri today, I can tell you two things. (1) Every bit of unsafe code I write has some trivial bug or other. (2) If you enjoy puzzling out the occasionally inscrutable error messages you get from Rust, you're gonna *love* miri! To be fair, miri has a much harder job---the (still experimental) rules that govern Rust aliasing are intended to be flexible enough to allow all the things people want to do that the borrow checker doesn't permit. This means they are much more complex. It also means that explaining why you violated them (or may violate them) is that much more complicated.
 
