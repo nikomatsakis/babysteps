@@ -9,7 +9,9 @@ You may have heard that [the Rust 2021 Edition is coming](https://blog.rust-lang
 
 ### Video
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/q0aNduqb2Ro" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+Watch the movie embedded here, or [watch it on YouTube](https://youtu.be/q0aNduqb2Ro):
+
+{{< youtube q0aNduqb2Ro >}}
 
 ### Lyrics
 

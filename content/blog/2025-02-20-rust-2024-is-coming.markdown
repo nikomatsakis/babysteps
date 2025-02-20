@@ -12,7 +12,7 @@ So, a little bird told me that Rust 2024 is going to become stable today, along 
 
 Watch the movie embedded here, or [watch it on YouTube](https://youtu.be/thdpaw_3VTw?si=ezmhK9fXdWNNNVug):
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/thdpaw_3VTw?si=DvB809aSnUbnNjFL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+{{< youtube thdpaw_3VTw >}}
 
 ### Lyrics
 
