@@ -1,0 +1,89 @@
+---
+title: "Rust 2024 Is Coming"
+date: 2025-02-20T10:37:08Z
+---
+So, a little bird told me that Rust 2024 is going to become stable today, along with Rust 1.85.0. In honor of this momentous event, I have penned a little ditty that I'd like to share with you all. Unfortunately, for those of you who remember Rust 2021's ["Edition: The song"](https://smallcultfollowing.com/babysteps/blog/2021/05/26/edition-the-song/), in the 3 years between Rust 2021 and now, my daughter was realized that her father is deeply uncool[^bound] and so I had to take this one on solo[^sorry]. Anyway, enjoy! Or, you know, suffer. As the case may be.
+
+[^bound]: It was bound to happen eventually.
+
+[^sorry]: Actually, I had a plan to make this a duet with somebody who shall remain nameless (they know who they are). But I was too lame to get everything done on time. In fact, I may or may not have realized "Oh, shit, I need to finish this recording!" while in the midst of a beer with Florian Gilcher last night. Anyway, sorry, would-be-collaborator-I -was-really-looking-forward-to-playing-with! Next time!
+
+### Video
+
+Watch the movie embedded here, or [watch it on YouTube](https://youtu.be/thdpaw_3VTw?si=ezmhK9fXdWNNNVug):
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/thdpaw_3VTw?si=DvB809aSnUbnNjFL" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+### Lyrics
+
+In ChordPro format, for those of you who are inspired to play along.
+
+```
+{title: Rust 2024}
+{subtitle: }
+
+{key: C}
+
+[Verse 1]
+[C] When I got functions that never return
+I write an exclamation point [G]
+But use it for an error that could never be
+the compiler [C] will yell at me
+
+[Verse 2]
+[C] We Rust designers, we want that too
+[C7] But we had to make a [F] change
+[F] That will be [Fm]better
+[C] Oh so much [A]better
+[D] in Rust Twenty [G7]Twenty [C]Four
+
+[Bridge]
+[Am] ... [Am] But will my program [E] build?
+[Am] Yes ... oh that’s [D7] for sure
+[F] edi-tions [G] are [C] opt in
+
+[Verse 3]
+[C] Usually when I return an `impl Trait`
+everything works out fine [G]
+but sometimes I need a tick underscore
+and I don’t really [C] know what that’s for
+
+[Verse 4]
+[C] We Rust designers we do agree
+[C7] That was con- [F] fusing 
+[F] But that will be [Fm]better
+[C] Oh so much [A]better
+[D] in Rust Twenty [G7]Twenty [C]Four
+
+[Bridge 2]
+[Am] Cargo fix will make the changes
+automatically [G] Oh that sure sounds great...
+[Am] but wait... [Am] my de-pen-denc-[E]-ies
+[Am] Don’t worry e-[D7]ditions
+[F] inter [G] oper [C] ate
+
+[Verse 5]
+[C] Whenever I match on an ampersand T
+The borrow [G] propagates
+But where do I put the ampersand
+when I want to [C] copy again?
+
+[Verse 6]
+[C] We Rust designers, we do agree
+[C7] That really had to [F] change
+[F] That will be [Fm]better
+[C] Oh so much [A]better
+[D] in Rust Twenty [G7]Twenty [C]Four
+
+[Outro]
+[F] That will be [Fm]better
+[C] Oh so much [A]better
+[D] in Rust Twenty [G7]Twenty [C]Four
+
+One more time!
+
+[Half speed]
+[F] That will be [Fm]better
+[C] Oh so much [A]better
+[D] in Rust Twenty [G7]Twenty [C]Four
+```
