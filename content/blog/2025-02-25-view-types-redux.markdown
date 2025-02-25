@@ -186,7 +186,7 @@ We would integrate these place-set variables into inference, so that `{?A} Ta <:
 
 Place-set variables only appear as an internal inference detail, so users can’t (e.g.) write a function that is generic over a place-set, and the only kind of constraints you can get are subset (`P1 <= P2`) and inclusion (`f in P1`). I *think* it should be relatively straightforward to integrate these into HIR type check inference. When generalizing, we can replace each specific view set with a variable, just as we do for lifetimes. When we go to construct MIR, we would always know the precise set of fields we wish to include in the view. In the case where the set of fields is `*` we can also omit the view from the MIR.
 
-## Ghosts
+## Abstract fields
 
 So, view types allow us to address these sorts of conflicts by making it more explicit what sets of types we are going to access, but they introduce a new problem — does this mean that the names of our private fields become part of our interface? That seems obviously undesirable.
 
