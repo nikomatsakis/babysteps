@@ -101,7 +101,7 @@ We would also modify the `add_successful` method to flag what field it needs:
 impl Data {
     pub fn add_successful(
         self: &mut {successful} Self,
-    ) -> impl Iterator<Item = &String> {
+    ) {
        self.successful += 1;
     }
 }
@@ -137,7 +137,7 @@ Consider this function from our example:
 impl Data {
     pub fn add_successful(
         self: &mut {successful} Self,
-    ) -> impl Iterator<Item = &String> {
+    ) {
        self.successful += 1;
     }
 }
@@ -154,7 +154,7 @@ If however you tried to modify a function to access a field not declared as part
 impl Data {
     pub fn add_successful(
         self: &mut {successful} Self,
-    ) -> impl Iterator<Item = &String> {
+    ) {
        assert!(!self.experiments.is_empty()); // <— modified to include this
        self.successful += 1;
     }
