@@ -1,0 +1,79 @@
+---
+title: "Rust in 2025: Targeting *foundational* software"
+date: 2025-03-10T13:33:43Z
+---
+
+Rust turns 10 this year. It's a good time to take a look at where we are and where I think we need to be going. This post is the first in a series I'm calling "Rust in 2025". This first post describes my general vision for how Rust fits into the computing landscape. The remaining posts will outline major focus areas that I think are needed to make this vision come to pass. Oh, and fair warning, I'm expecting some controversy along the way---at least I hope so, since otherwise I'm just repeating things everyone knows.
+
+## My vision for Rust: foundational software
+
+I see Rust's mission as making it dramatically more accessible to author and maintain *foundational* software easier. By foundational I mean *the software that underlies everything else*. You can already see this in the areas where Rust is highly successful: CLI and development tools that everybody uses to do their work and which are often embedded into other tools[^dev]; cloud platforms that people use to run their applications[^whatdo]; embedded devices that are in the things around[^emb][] (and above[^space]) us; and, increasingly, the kernels that run everything else (both [Windows][] and [Linux][]!).
+
+[Windows]: https://www.theregister.com/2023/04/27/microsoft_windows_rust/
+
+[Linux]: https://rust-for-linux.com
+
+[^emb]: https://docs.rust-embedded.org
+
+[^space]: https://www.youtube.com/watch?v=O09rje6yC90&list=TLPQMjUxMDIwMjR6gKXQdU9PnA&index=4
+
+[^dev]: Plenty of people use ripgrep, but did you know that when you do full text search in VSCode, you are [also using ripgrep](https://github.com/microsoft/vscode-ripgrep)? And of course [Deno](https://deno.com/) makes heavy use of Rust, as does a lot of Python tooling, like the [uv](https://github.com/astral-sh/uv) package manager. The list goes on and on.
+
+[^whatdo]: What do AWS, Azure, CloudFlare, and Fastly all have in common? They're all big Rust users.
+
+### Foundational software needs performance, reliability---and productivity
+
+The needs of foundational software have a lot in common with all software, but everything is extra important. Reliability is paramount, because when the foundations fail, everything on top fails also. Performance overhead is to be avoided because it becomes a floor on the performance achievable by the layers above you.
+
+Traditionally, achieving the extra-strong requirements of foundational software has meant that you canâ€™t do it with "normal" code. You had two choices. You could use C or C++, which give great powerâ€”but demand perfection in response[^alas]. Or, you could use a higher-level language like Java or Go, but in a very particular way designed to keep performance high. You have to avoid abstractions and conveniences and minimizing allocations so as not to trigger the garbage collector.
+
+Rust changed the balance by combining C++'s innovations in zero-cost abstractions with a type system that can guarantee memory safety. The result is a pretty cool tool, one that (often, at least) lets you write high-level code with low-level performance and without fear of memory safety errors.
+
+[^alas]: Alas, we are but human.
+
+### Empowerment and lowering the barrier to entry
+
+In my Rust talks, I often say that type systems and static checks sound to most developers like "spinach", something their parents forced them to eat because it was "good for them", but not something anybody wants. The truth is that type systems *are* like spinach---popeye spinach. Having a type system to structure your thinking makes you more effective, regardless of your experience level. If you are a beginner, learning the type system helps you learn how to structure software for success. If you are an expert, the type system helps you create structures that will catch your mistakes faster (as well as those of your less experienced colleagues). Yehuda Katz sometimes says, "When I'm feeling alert, I build abstractions that will help tired Yehuda be more effective", which I've always thought was a great way of putting it.
+
+### What about non-foundational software?
+
+When I say that Rust's mission is to target foundational software, I don't mean that's all it's good for. Projects like [Dioxus][], [Tauri][], and [Leptos][] are doing fascinating, pioneering work pushing the boundaries of Rust into higher-level applications like GUIs and Webpages. I don't believe this kind of high-level development will ever be Rust's *sweet spot*. But that doesn't mean I think we should ignore them---in fact, quite the opposite.
+
+[Dioxus]: https://dioxuslabs.com
+[Tauri]: https://v2.tauri.app
+[Leptos]: https://leptos.dev
+
+### Stretch goals are how you grow
+
+The traditional thinking goes that, because foundational software often needs control over low-level details, it's not as important to focus on accessibility and [ergonomics][]. In my view, though, the fact that foundational software needs control over low-level details only makes it **more** important to try and achieve good ergonomics. Anything you can do to help the developer focus on the details that matter most will make them more productive.
+
+[ergonomics]: https://blog.rust-lang.org/2017/03/02/lang-ergonomics.html
+
+I think projects that stretch Rust to higher-level areas, like [Dioxus][], [Tauri][], and [Leptops][], are a great way to identify opportunities to make Rust programming more convenient. These opportunities then trickle down to make Rust easier to use for everyone. The trick is to avoid losing the control and reliability that foundational applications need along the way (and it ain't always easy).
+
+### Cover the whole stack
+
+There's another reason to make sure that higher-level applications are pleasant in Rust: it means that people can build their entire stack using one technology. I've talked to a number of people who expected just to use Rust for one thing, say a[tail-latency-sensitive data plane service][discord], but they wound up using it for everything. Why? Because it turned out that, once they learned it, Rust was quite productive and using one language meant they could share libraries and support code. Put another way, simple code is simple no matter what language you build it in.[^c]
+
+[^c]: Well, that's true *if* the language meets a certain base bar. I'd say that even "simple" code in C isn't all that simple, given that you don't even have basic types like vectors and hashmaps available.
+
+[discord]: https://discord.com/blog/why-discord-is-switching-from-go-to-rust
+
+### "Smooth, iterative deepening"
+
+The other lesson I've learned is that you want to enable what I think of as *smooth, iterative deepening*. This rather odd phrase is the one that always comes to my mind, somehow. The idea is that a user's first experience should be *simple*--they should be able to get up and going quickly. As they get further into their project, the user will find places where it's not doing what they want, and they'll need to take control. They should be able to do this in a localized way, changing one part of their project without disturbing everything else.
+
+Smooth, iterative deepening sounds easy but is in fact very hard. Many projects fail either because the initial experience is hard or because the step from simple-to-control is in fact more like scaling a cliff, requiring users to learn a *lot* of background material. Rust certainly doesn't always succeed--but we succeed enough, and I like to think we're always working to do better.
+
+### What's to come
+
+This is the first post of the series. My current plan[^reserve] is to post four follow-ups that cover what I see as the core investments we need to make to improve Rust's fit for foundational software. In my mind, the first three talk about how we should double down on some of Rust's core values:
+
+1. achieving *smooth language interop* by doubling down on *extensibility*;
+2. extending the type system to achieve *clarity of purpose*;
+3. *leveling up the Rust ecosystem* by building out better guidelines, tools, and leveraging the Rust Foundation.
+
+After that, I'll target about the Rust open-source organization and what I think we should be doing there to make it contributing to and maintaining Rust as accessible and, dare I say it, joyful as we can.
+
+[^reserve]: I reserve the right to change it as I go!
+
