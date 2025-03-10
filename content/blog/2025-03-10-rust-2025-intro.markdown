@@ -1,5 +1,5 @@
 ---
-title: "Rust in 2025: Targeting *foundational* software"
+title: "Rust in 2025: Targeting foundational software"
 date: 2025-03-10T13:33:43Z
 ---
 
