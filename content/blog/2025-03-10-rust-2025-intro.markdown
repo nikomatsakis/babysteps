@@ -15,6 +15,8 @@ I see Rust's mission as making it dramatically more accessible to author and mai
 
 [emb]: https://docs.rust-embedded.org
 
+[space]: https://www.youtube.com/watch?v=O09rje6yC90&list=TLPQMjUxMDIwMjR6gKXQdU9PnA&index=4
+
 [^dev]: Plenty of people use ripgrep, but did you know that when you do full text search in VSCode, you are [also using ripgrep](https://github.com/microsoft/vscode-ripgrep)? And of course [Deno](https://deno.com/) makes heavy use of Rust, as does a lot of Python tooling, like the [uv](https://github.com/astral-sh/uv) package manager. The list goes on and on.
 
 [^whatdo]: What do AWS, Azure, CloudFlare, and Fastly all have in common? They're all big Rust users.
