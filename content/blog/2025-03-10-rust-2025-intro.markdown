@@ -25,7 +25,7 @@ I see Rust's mission as making it dramatically more accessible to author and mai
 
 The needs of foundational software have a lot in common with all software, but everything is extra important. Reliability is paramount, because when the foundations fail, everything on top fails also. Performance overhead is to be avoided because it becomes a floor on the performance achievable by the layers above you.
 
-Traditionally, achieving the extra-strong requirements of foundational software has meant that you canâ€™t do it with "normal" code. You had two choices. You could use C or C++, which give great powerâ€”but demand perfection in response[^alas]. Or, you could use a higher-level language like Java or Go, but in a very particular way designed to keep performance high. You have to avoid abstractions and conveniences and minimizing allocations so as not to trigger the garbage collector.
+Traditionally, achieving the extra-strong requirements of foundational software has meant that you can't do it with "normal" code. You had two choices. You could use C or C++, which give great power but demand perfection in response[^alas]. Or, you could use a higher-level language like Java or Go, but in a very particular way designed to keep performance high. You have to avoid abstractions and conveniences and minimizing allocations so as not to trigger the garbage collector.
 
 Rust changed the balance by combining C++'s innovations in zero-cost abstractions with a type system that can guarantee memory safety. The result is a pretty cool tool, one that (often, at least) lets you write high-level code with low-level performance and without fear of memory safety errors.
 
