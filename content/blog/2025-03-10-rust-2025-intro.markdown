@@ -53,7 +53,7 @@ I think projects that stretch Rust to higher-level areas, like [Dioxus][], [Taur
 
 ### Cover the whole stack
 
-There's another reason to make sure that higher-level applications are pleasant in Rust: it means that people can build their entire stack using one technology. I've talked to a number of people who expected just to use Rust for one thing, say a[tail-latency-sensitive data plane service][discord], but they wound up using it for everything. Why? Because it turned out that, once they learned it, Rust was quite productive and using one language meant they could share libraries and support code. Put another way, simple code is simple no matter what language you build it in.[^c]
+There's another reason to make sure that higher-level applications are pleasant in Rust: it means that people can build their entire stack using one technology. I've talked to a number of people who expected just to use Rust for one thing, say a [tail-latency-sensitive data plane service][discord], but they wound up using it for everything. Why? Because it turned out that, once they learned it, Rust was quite productive and using one language meant they could share libraries and support code. Put another way, simple code is simple no matter what language you build it in.[^c]
 
 [^c]: Well, that's true *if* the language meets a certain base bar. I'd say that even "simple" code in C isn't all that simple, given that you don't even have basic types like vectors and hashmaps available.
 
