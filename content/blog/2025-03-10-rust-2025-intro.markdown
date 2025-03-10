@@ -49,7 +49,7 @@ The traditional thinking goes that, because foundational software often needs co
 
 [ergonomics]: https://blog.rust-lang.org/2017/03/02/lang-ergonomics.html
 
-I think projects that stretch Rust to higher-level areas, like [Dioxus][], [Tauri][], and [Leptops][], are a great way to identify opportunities to make Rust programming more convenient. These opportunities then trickle down to make Rust easier to use for everyone. The trick is to avoid losing the control and reliability that foundational applications need along the way (and it ain't always easy).
+I think projects that stretch Rust to higher-level areas, like [Dioxus][], [Tauri][], and [Leptos][], are a great way to identify opportunities to make Rust programming more convenient. These opportunities then trickle down to make Rust easier to use for everyone. The trick is to avoid losing the control and reliability that foundational applications need along the way (and it ain't always easy).
 
 ### Cover the whole stack
 
