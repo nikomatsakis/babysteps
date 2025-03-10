@@ -7,7 +7,7 @@ Rust turns 10 this year. It's a good time to take a look at where we are and whe
 
 ## My vision for Rust: foundational software
 
-I see Rust's mission as making it dramatically more accessible to author and maintain *foundational* software easier. By foundational I mean *the software that underlies everything else*. You can already see this in the areas where Rust is highly successful: CLI and development tools that everybody uses to do their work and which are often embedded into other tools[^dev]; cloud platforms that people use to run their applications[^whatdo]; embedded devices that are in the things [around][emb] (and [above][space]) us; and, increasingly, the kernels that run everything else (both [Windows][] and [Linux][]!).
+I see Rust's mission as making it dramatically more accessible to author and maintain *foundational* software. By foundational I mean *the software that underlies everything else*. You can already see this in the areas where Rust is highly successful: CLI and development tools that everybody uses to do their work and which are often embedded into other tools[^dev]; cloud platforms that people use to run their applications[^whatdo]; embedded devices that are in the things [around][emb] (and [above][space]) us; and, increasingly, the kernels that run everything else (both [Windows][] and [Linux][]!).
 
 [Windows]: https://www.theregister.com/2023/04/27/microsoft_windows_rust/
 
