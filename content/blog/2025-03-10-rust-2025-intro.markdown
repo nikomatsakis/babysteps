@@ -75,7 +75,7 @@ This is the first post of the series. My current plan[^reserve] is to post four 
 2. extending the type system to achieve *clarity of purpose*;
 3. *leveling up the Rust ecosystem* by building out better guidelines, tools, and leveraging the Rust Foundation.
 
-After that, I'll target about the Rust open-source organization and what I think we should be doing there to make it contributing to and maintaining Rust as accessible and, dare I say it, joyful as we can.
+After that, I'll talk about the Rust open-source organization and what I think we should be doing there to make contributing to and maintaining Rust as accessible and, dare I say it, joyful as we can.
 
 [^reserve]: I reserve the right to change it as I go!
 
