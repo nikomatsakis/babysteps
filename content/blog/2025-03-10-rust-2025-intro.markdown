@@ -1,6 +1,8 @@
 ---
 title: "Rust in 2025: Targeting foundational software"
 date: 2025-03-10T13:33:43Z
+series:
+- "Rust in 2025"
 ---
 
 Rust turns 10 this year. It's a good time to take a look at where we are and where I think we need to be going. This post is the first in a series I'm calling "Rust in 2025". This first post describes my general vision for how Rust fits into the computing landscape. The remaining posts will outline major focus areas that I think are needed to make this vision come to pass. Oh, and fair warning, I'm expecting some controversy along the way---at least I hope so, since otherwise I'm just repeating things everyone knows.
