@@ -2,7 +2,7 @@
 title: "Rust 2024 Is Coming"
 date: 2025-02-20T10:37:08Z
 ---
-So, a little bird told me that Rust 2024 is going to become stable today, along with Rust 1.85.0. In honor of this momentous event, I have penned a little ditty that I'd like to share with you all. Unfortunately, for those of you who remember Rust 2021's ["Edition: The song"](https://smallcultfollowing.com/babysteps/blog/2021/05/26/edition-the-song/), in the 3 years between Rust 2021 and now, my daughter has realized that her father is deeply uncool[^bound] and so I had to take this one on solo[^sorry]. Anyway, enjoy! Or, you know, suffer. As the case may be.
+So, a little bird told me that Rust 2024 is going to become stable today, along with Rust 1.85.0. In honor of this momentous event, I have penned a little ditty that I'd like to share with you all. Unfortunately, for those of you who remember Rust 2021's ["Edition: The song"]({{< baseurl >}}/blog/2021/05/26/edition-the-song/), in the 3 years between Rust 2021 and now, my daughter has realized that her father is deeply uncool[^bound] and so I had to take this one on solo[^sorry]. Anyway, enjoy! Or, you know, suffer. As the case may be.
 
 [^bound]: It was bound to happen eventually.
 

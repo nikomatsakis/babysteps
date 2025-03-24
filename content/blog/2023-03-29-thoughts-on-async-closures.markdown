@@ -127,7 +127,7 @@ So maybe we can declare the fact that we hold on to the data? It turns out you *
 
 Before we dive more deeply into the closure case, let's back up and imagine a top-level function that returns a future:
 
-```rust!
+```rust
 fn push_buf(buf: &mut String, s: &str) -> impl Future<Output = ()> {
     async move {
         buf.push_str(s);
@@ -281,7 +281,7 @@ async fn call_twice_async<F>(mut op: impl AsyncFnMut(&str)) {
 
 The translation between the normal `FnMut` trait and the `AsyncFnMut` trait was pretty automatic. The only thing we did was change the "call" function to `async`. So what if we had an [async trait transformer][tt], as was discussed earlier? Then we only have one "maybe async" trait, `FnMut`:
 
-```rust!
+```rust
 #[maybe(async)]
 trait FnMut<A> {
     type Output;
@@ -295,7 +295,7 @@ trait FnMut<A> {
 
 Now we can write `call_twice` either sync or async, as we like, and the code is virtually identical. The only difference is that I write `impl FnMut` for sync or `impl async FnMut` for async:
 
-```rust!
+```rust
 fn call_twice_sync<F>(mut op: impl FnMut(&str)) {
     op.call("Hello");
     op.call("World");

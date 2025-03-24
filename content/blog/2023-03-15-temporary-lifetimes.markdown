@@ -217,7 +217,7 @@ and therefore, since `E.last()` is being assigned to `last_elem`, we would exten
 
 Even assuming we created some rules for RFC 66, there can be confusing cases that wouldn't be covered. Consider this statement:
 
-```rust!
+```rust
 let l = get_data().last().unwrap();
 drop(l); // ERROR
 ```
@@ -297,7 +297,7 @@ Partly as a result of this lack of equivalence, we have had a lot of trouble doi
 
 Tail expressions aren't the only way to "escape" a value from a block, the same applies to breaking with a named label, but they don't benefit from lifetime extension. The following example, therefore, [fails to compile](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=3fe08dd173a4bbf18a4321b36bc74d50):
 
-```rust!
+```rust
 fn main() {
     let x = 'a: {
         break 'a &vec![0]; // ERROR
@@ -368,7 +368,7 @@ One way to overcome the concerns of the core proposal would be to extend with mo
 
 * Pro: things like this will build
 
-```rust!
+```rust
 let x = Foo { 
     data: &get_data()
     //     ---------- stored in a temporary that outlives `x`
@@ -377,7 +377,7 @@ let x = Foo {
 
 * Con: the following example would build again, which leads to a (perhaps surprising) [panic](https://play.rust-lang.org/?version=stable&mode=debug&edition=2021&gist=2e9e4077c3558c3da5d9df9ba717c8af) -- that said, I've never seen a case like this in the wild, the confusion *always* occurs with match
 
-```rust!
+```rust
 use std::cell::RefCell;
 
 struct Foo<'a> {
@@ -408,13 +408,13 @@ fn main() {
 
 Allow `expr.let` as an operator that means "introduce a let to store this value inside the innermost block but before the current statement and replace this statement with a reference to it". So for example:
 
-```rust!
+```rust
 let x = get_data().let.last();
 ```
 
 would be equivalent to 
 
-```rust!
+```rust
 let tmp = get_data();
 let x = tmp.last();
 ```

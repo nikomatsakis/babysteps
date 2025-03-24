@@ -120,4 +120,4 @@ Usability of decorators like `#p[const_preview::const_item]` is better, particul
 
 ### So is this a done deal? Is this happening?
 
-I don't know! People often think that because I write a blog post about something it will happen, but this is currently just in "early ideation" stage. As I've written before, though, I continue to feel that we need something kind of "middle state" for our release process (see e.g. this blog post, [*Stability without stressing the !@#! out*](https://smallcultfollowing.com/babysteps/blog/2023/09/18/stability-without-stressing-the-out/)), and I think preview crates could be a good tool to have in our toolbox.
+I don't know! People often think that because I write a blog post about something it will happen, but this is currently just in "early ideation" stage. As I've written before, though, I continue to feel that we need something kind of "middle state" for our release process (see e.g. this blog post, [*Stability without stressing the !@#! out*]({{< baseurl >}}/blog/2023/09/18/stability-without-stressing-the-out/)), and I think preview crates could be a good tool to have in our toolbox.

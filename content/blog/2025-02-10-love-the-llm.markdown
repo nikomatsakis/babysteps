@@ -70,7 +70,7 @@ This is a pretty good error message! And yet it requires significant context to 
 
 ## The fix is easy... *if* you know what to do
 
-Ultimately, the answer to the engineer's problem was just to insert a call to `clone`[^subtle]. But deciding on that fix requires a surprisingly large amount of context. In order to figure out the right next step, I first explained to the engineer that this confusing error is, in fact, [what it feels like when Rust saves your bacon](https://smallcultfollowing.com/babysteps/blog/2022/06/15/what-it-feels-like-when-rust-saves-your-bacon/), and talked them through how the ownership model works and what it means to free memory. We then discussed why they were spawning a task in the first place (the answer: to avoid the latency of logging)---after all, the right fix might be to just not spawn at all, or to use something like rayon to block the function until the work is done.
+Ultimately, the answer to the engineer's problem was just to insert a call to `clone`[^subtle]. But deciding on that fix requires a surprisingly large amount of context. In order to figure out the right next step, I first explained to the engineer that this confusing error is, in fact, [what it feels like when Rust saves your bacon]({{< baseurl >}}/blog/2022/06/15/what-it-feels-like-when-rust-saves-your-bacon/), and talked them through how the ownership model works and what it means to free memory. We then discussed why they were spawning a task in the first place (the answer: to avoid the latency of logging)---after all, the right fix might be to just not spawn at all, or to use something like rayon to block the function until the work is done.
 
 Once we established that the task needed to run asynchronously from its parent, and hence had to own the data, we looked into changing the `log_request_in_background` function to take an `Arc<String>` so that it could avoid a deep clone. This would be more efficient, but only if the caller themselves could cache the `Arc<String>` somewhere. It turned out that the origin of this string was in another team's code and that this code only returned an `&str`. Refactoring that code would probably be the best long term fix, but given that the strings were expected to be quite short, we opted to just clone the string.
 
@@ -149,7 +149,7 @@ A follow-on to the previous point is that, in Rust, when your data access patter
 [^lang]: I also think we should add a feature like [View Types][] to make this less necessary. In this case instead of refactoring the type structure, AI could help by generating the correct type annotations, which might be non-obvious.
 
 
-[View Types]: https://smallcultfollowing.com/babysteps/blog/2021/11/05/view-types/
+[View Types]: {{< baseurl >}}/blog/2021/11/05/view-types/
 
 
 [^goodbad]: Garbage Collection allows you to make all kinds of refactorings in ownership structure without changing your interface at all. This is convenient, but---as we discussed early on---it can hide bugs. Overall I prefer having that information be explicit in the interface, but that comes with the downside that changes have to be refactored.

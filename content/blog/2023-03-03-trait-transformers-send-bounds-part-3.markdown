@@ -102,7 +102,7 @@ Forbidding traits of this kind means that traits can move from "always async" to
 
 The const transformer works similarly to `async`. One can write
 
-```rust!
+```rust
 #[maybe(const)]
 trait Compute {
     #[maybe(const)]
