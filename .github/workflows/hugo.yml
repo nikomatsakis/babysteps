@@ -56,10 +56,14 @@ jobs:
           hugo \
             --minify \
             --baseURL "${{ steps.pages.outputs.base_url }}/"
+      - name: Rename output directory
+        run: |
+          mkdir upload
+          mv public upload/babysteps
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
+          path: ./upload/
 
   # Deployment job
   deploy:
