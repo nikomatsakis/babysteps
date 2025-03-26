@@ -29,7 +29,7 @@ Now that we have the two goals, let's talk about some of the specific issues I s
 
 ### Observation: you know it's a `dyn`
 
-One interesting thing about this scenario is that, by definition, you are storing a `dyn Trait` explicitly. That is, you are not working with a `T: ?Sized + Trait` where `T` just happens to be `dyn Trait`. This is important because it opens up the design space. We talked about this some in the previous blog post: it means that  You don't need working with this `dyn Trait` to be exactly the same as working with any other `T` that implements `Trait` (in the previous post, we took advance of this by saying that calling an async function on a `dyn` trait had to be done in a `.box` context).
+One interesting thing about this scenario is that, by definition, you are storing a `dyn Trait` explicitly. That is, you are not working with a `T: ?Sized + Trait` where `T` just happens to be `dyn Trait`. This is important because it opens up the design space. We talked about this some in the previous blog post: it means that  You don't need working with this `dyn Trait` to be exactly the same as working with any other `T` that implements `Trait` (in the previous post, we took advantage of this by saying that calling an async function on a `dyn` trait had to be done in a `.box` context).
 
 ### Able to avoid the `Box`
 
