@@ -1,4 +1,4 @@
-baseURL = "http://smallcultfollowing.com/babysteps/"
+baseURL = "https://smallcultfollowing.com/babysteps/"
 languageCode = "en-us"
 title = "baby steps"
 enableEmoji = true
