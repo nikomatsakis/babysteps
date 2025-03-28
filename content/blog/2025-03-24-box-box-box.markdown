@@ -175,7 +175,7 @@ This trait has two methods. The `report` method is dyn-compatible, no problem. T
 
 [^notnow]: At least, it is not `dyn` compatible under today's rules. Convievably it could be made to work but more on that later.
 
-And yet, just because `report_to` is not dyn compatible mean that a `dyn ReportError` would be useless. What if I only plan to call `report`, as in a function like this?
+And yet, just because `report_to` is not dyn compatible doesn't mean that a `dyn ReportError` would be useless. What if I only plan to call `report`, as in a function like this?
 
 ```rust
 fn report_all(
@@ -383,7 +383,7 @@ Now however I can't create values with `List { value: 22, next: None }` syntax a
 ```rust
 box struct List {
     value: u32,
-    next: Option<List>, // ERROR
+    next: Option<List>,
 }
 ```
 
@@ -392,7 +392,7 @@ and have `List { value: 22, next: None }` automatically allocate the box for me?
 ```rust
 box struct List {
     value: u32,
-    next: Option<List>, // ERROR
+    next: Option<List>,
 }
 
 fn foo(list: &List) {
@@ -503,7 +503,7 @@ In my [soul of Rust blog post], I talked about the idea that one of the things t
 
 ### If traits don't have to be dyn compatible, can we make dyn compatibility opt in?
 
-The way that Rust today detects automatically whether traits should be dyn compatible versus having it be declared is, I think, nogr eat. It creates confusion for users and also permits quiet semver violations, where a new defaulted method makes a trait no longer be dyn compatible. It's also a source for a lot of soundness bugs over time. 
+The way that Rust today detects automatically whether traits should be dyn compatible versus having it be declared is, I think, not great. It creates confusion for users and also permits quiet semver violations, where a new defaulted method makes a trait no longer be dyn compatible. It's also a source for a lot of soundness bugs over time. 
 
 I want to move us towards a place where traits are *not* dyn compatible by default, meaning that `dyn Trait` does not implement `Trait`. We would always allow `dyn Trait` types and we would allow individual items to be invoked so long as the item itself is dyn compatible.
 
