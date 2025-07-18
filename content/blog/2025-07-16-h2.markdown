@@ -1,0 +1,61 @@
+---
+title: "2025 07 16 H2"
+date: 2025-07-16T09:10:26-04:00
+draft: true
+---
+
+Over the last few months, I've been working extensively with AI-based CLI tools like [Claude Code][] and [Q CLI][][^qoss], trying to get a feeling for how they work. This post covers some of the lessons I've learned during the process -- and what I think they mean for the future of programming.
+
+[Claude Code]: https://www.anthropic.com/claude-code
+
+[Q CLI]: https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/command-line.html
+
+[^qoss]: Fun fact, Q CLI is implemented in Rust and [open source](https://github.com/aws/amazon-q-developer-cli) -- I haven't dived into the source yet, but I plan to.
+
+## Focus project: a family tree application
+
+I'm going to focus this post on an application I wrote to help me visualize and understand my family tree. My family rather eerily resembles the one from My Big Fat Greek Family, which means that we have a common problem -- figuring out how exactly we are related. For some time now I've been working on a hybrid Rust/JavaScript app that, given a text file with the family tree information, produces a JSON output that can then be visualized with a JavaScript-based frontend. You can ask it questions like "how am I related to so-and-so" and it will tell you things like "you are fourth cousins".
+
+## AI tools are just crazy empowering
+
+It is hard to convey how fundamentally **empowering** AI-based tools can be. I'm obviously a pretty experienced programmer, but the truth is that I was completely stalled on this family tree project. I had written the basic Rust code along with the code to compute relations and it seemed to basically work, but the user interface was very limited. I displayed the family tree using HTML lists. You couldn't search. And that was probably about as far as I was ever gonna get. Not because I couldn't learn enough HTML/CSS/JavaScript to do more, but because I just didn't have the time for that.
+
+Using Claude Code changed everything. Over the course of a few weeks, working an hour or two per day[^5am], I was able to build out the full application[^forme]. You can see a demo here using some data I found for Spock's family tree -- you can see it includes a visual layout, the ability to collapse and grow parts of the tree, search, and the ability to compute how you are related to others.[^coach] It even operates as a Progressive Web App, so it can be added to people's home screen and used offline (something I only vaguely knew was possible, but Claude suggested it).
+
+[^5am]: Most days, I like to wake up at 5am to write code on some personal project or other for an hour.
+
+[^coach]: I was in Greece for vacation over the last few weeks, and we met someone on the beach who shared our last name -- using the tree I discovered we are fourth cousins.
+
+[^forme]: To be clear, I don't really expect this family tree app to be used by anybody but me, and I'm sure there are more full-featured competitors, but it was fun to build. And I like the idea of all the data being owned by me, not uploaded into some service.
+
+## AI tools are geared all wrong
+
+Empowering as AI tools are, I found that out-of-the-box, they were mostly geared wrong. They seemed to be setup to take a minimal prompt and immediately produce code[^flashcard]. Here is an amusing example from another project I've been thinking about:
+
+[^flashcard]: As an example, I told claude.ai that "I am thinking of finally making the flashcard app of my dreams"[^dreams] and it responded with "Great! Here's an app built in react". I mean come on. 
+
+[^dreams]: I basically hate all language learning apps. None of them work the way I want. I've tried to just get over it and use one of the standard offerings but I just can't take it.
+
+
+
+I mean, come on!
+
+## AI tools can be crazy silly
+
+## AI tools don't really incen
+
+
+
+## Programming is not 
+
+I am more convinced than ever that the nature of programming is going to change very rapidly. 
+
+AI-based programming is going to change how we work completely. 
+
+I do not for a second believe programming is going away, but I also feel that AI is changing 
+
+In my last blog post on AI, I wrote that "AI reminds me a lot of the web around the year 2000. It's clearly overhyped. [..] And it's also clearly going to change everything." Over the last few months, in my spare time, I've been working on a side project for visualizing my family tree.[^greece] It's got a Rust backend and a JavaScript frontend built on the Ember framework. I think 
+
+[^greece]: My family resembles the one in my Big Fat Greek Wedding. I want a way to keep everybody straight!
+
+I've been experimenting with AI-based agents over the past few months. A
