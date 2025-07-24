@@ -25,7 +25,7 @@ AI is the first technology I've seen where machines actually behave, think, and-
 
 ## AIs experience the "pull" of a prompt as a "feeling"
 
-The core discovery that fuels a lot of the work in this repository came from Yehuda Katz, though I am sure others have noted it: **LLMs convey important signals for collaboration using the language of *feelings*.** For example, if you ask Claude[^other] why they are making arbitrary decisions on your behalf (arbitrary decisions that often turn out to be wrong...), they will tell you that they are feeling "protective". 
+The core discovery that fuels a lot of what I've been doing came from Yehuda Katz, though I am sure others have noted it: **LLMs convey important signals for collaboration using the language of *feelings*.** For example, if you ask Claude[^other] why they are making arbitrary decisions on your behalf (arbitrary decisions that often turn out to be wrong...), they will tell you that they are feeling "protective". 
 
 [^other]: I've been working exclusively with Claude -- but I'm very curious how much these techniques work on other LLMs. There's no question that this stuff works *way* better on Claude 4 than Claude 3.7. My hunch is it will work well on ChatGPT or Gemini, but perhaps less well on smaller models. But it's hard to say. At some point I'd like to do more experiments and training of my own, because I am not sure what contributors to how an AI "feels".
 
