@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "More on fns"
-date: 2013-06-03 13:40
+date: 2013-06-03T13:40:00Z
 comments: true
 categories: [Rust]
 ---

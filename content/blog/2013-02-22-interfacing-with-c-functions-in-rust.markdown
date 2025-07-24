@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Interfacing with C functions in Rust"
-date: 2013-02-22 16:19
+date: 2013-02-22T16:19:00Z
 comments: true
 categories: [Rust]
 ---

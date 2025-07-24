@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Trait transformers (send bounds, part 3)
-date: 2023-03-03 09:39 -0500
+date: 2023-03-03T09:39:00-0500
 series:
 - "Send bound problem"
 ---

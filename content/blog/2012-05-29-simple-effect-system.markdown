@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Simple effect system"
-date: 2012-05-29 11:15
+date: 2012-05-29T11:15:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Regions and let polymorphism"
-date: 2012-04-20 20:19
+date: 2012-04-20T20:19:00Z
 comments: true
 categories: [Rust]
-published: false
+draft: true
 ---
 
 **Warning**: Brain dump post ahead.  This is kind of a "work in

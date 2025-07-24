@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Restrict pointers"
-date: 2012-10-24 21:15
+date: 2012-10-24T21:15:00Z
 comments: true
 categories: [Rust]
 ---

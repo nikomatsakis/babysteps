@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Block-scoped parallelism without unsafe code"
-date: 2011-12-14 15:32
+date: 2011-12-14T15:32:00Z
 comments: true
 categories: [Rust, PL]
-published: false
+draft: true
 ---
 
 I've been discussing my [evolving][bsp1] [ideas][bsp2] for a simple mechanism for

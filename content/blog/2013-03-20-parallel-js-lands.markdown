@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Parallel JS lands"
-date: 2013-03-20 09:56
+date: 2013-03-20T09:56:00Z
 comments: true
 categories: [PJs, JS]
 ---

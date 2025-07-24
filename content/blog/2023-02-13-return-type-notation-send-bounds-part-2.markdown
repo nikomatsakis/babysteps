@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Return type notation (send bounds, part 2)
-date: 2023-02-13 11:14 -0500
+date: 2023-02-13T11:14:00-0500
 series:
 - "Send bound problem"
 ---

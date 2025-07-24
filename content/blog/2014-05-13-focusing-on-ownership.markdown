@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Focusing on ownership"
-date: 2014-05-13 17:04
+date: 2014-05-13T17:04:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Rustc Reading Club, Take 2
-date: 2021-11-18 12:49 -0500
+date: 2021-11-18T12:49:00-0500
 ---
 
 <img src="https://miro.medium.com/max/850/1*T__f3-PmPA5TDDoPW_uX3A.png" width="222" style="float:left;"/> Wow! The response to the last Rustc Reading Club was overwhelming -- literally! We maxed out the number of potential zoom attendees and I couldn't even join the call! It's clear that there's a lot of demand here, which is great. We've decided to take another stab at running the Rustc Reading Club, but we're going to try it a bit differently this time. We're going to start by selecting a smaller group to do it a few times and see how it goes, and then decide how to scale up. 

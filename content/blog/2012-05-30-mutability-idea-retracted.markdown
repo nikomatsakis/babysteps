@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Mutability idea retracted"
-date: 2012-05-30 18:47
+date: 2012-05-30T18:47:00Z
 comments: true
 categories: [Rust, Mutability]
 ---

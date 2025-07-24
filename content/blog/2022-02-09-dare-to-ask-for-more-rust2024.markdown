@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Dare to ask for more #rust2024'
-date: 2022-02-09 14:52 -0500
+date: 2022-02-09T14:52:00-0500
 ---
 
 Last year, we shipped [Rust 2021] and I have found the changes to be a real improvement in usability. Even though the actual changes themselves were quite modest, the combination of [precise capture closure] and [simpler formatting strings] (`println!("{x:?}")` instead of `println!("{:?}", x)`) is making a real difference in my "day to day" life.[^coding] Just like [NLL] and the [new module system] from [Rust 2018], I've quickly adapted to these new conventions. When I go back to older code, with its clunky borrow checker workarounds and format strings, I die a little inside.[^die]

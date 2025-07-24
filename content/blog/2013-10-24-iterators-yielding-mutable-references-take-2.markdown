@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Iterators yielding mutable references, take 2"
-date: 2013-10-24 16:32
+date: 2013-10-24T16:32:00Z
 comments: true
 categories: 
 ---

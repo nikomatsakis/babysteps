@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Pure blocks"
-date: 2011-12-09 10:05
+date: 2011-12-09T10:05:00Z
 comments: true
 categories: [Rust,PL]
 ---

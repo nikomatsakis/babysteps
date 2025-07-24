@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Non-lexical lifetimes based on liveness"
-date: 2016-05-04 05:19:04 -0400
+date: 2016-05-04T05:19:04-0400
 comments: false
 categories: [Rust, NLL]
 ---

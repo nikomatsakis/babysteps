@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Avoiding region explosion in Rust"
-date: 2012-03-28 06:18
+date: 2012-03-28T06:18:00Z
 comments: true
 categories: [Rust, PL]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Virtual Structs Part 4: Extended Enums And Thin Traits"
-date: 2015-10-08 12:46:29 -0400
+date: 2015-10-08T12:46:29-0400
 comments: false
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Update"
-date: 2012-02-01 20:50
+date: 2012-02-01T20:50:00Z
 comments: true
 categories: [Rust, PL, PJs, JS]
 ---

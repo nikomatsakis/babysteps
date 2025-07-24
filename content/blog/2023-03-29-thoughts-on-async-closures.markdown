@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Thoughts on async closures
-date: 2023-03-29 11:41 -0400
+date: 2023-03-29T11:41:00-0400
 ---
 
 I've been thinking about async closures and how they could work once we have static async fn in trait. Somewhat surprisingly to me, I found that async closures are a strong example for where [async transformers][at] could be an important tool. Let's dive in! We're going to start with the problem, then show why modeling async closures as "closures that return futures" would require some deep lifetime magic, and finally circle back to how async transformers can make all this "just work" in a surprisingly natural way.

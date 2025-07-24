@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Many modes: a GATs pattern'
-date: 2022-06-27 10:00 -0400
+date: 2022-06-27T10:00:00-0400
 ---
 
 As some of you may know, on May 4th [Jack Huey][jackh726] opened a [PR to stabilize an initial version of generic associated types](https://github.com/rust-lang/rust/pull/96709). The current version is at best an MVP: the compiler support is limited, resulting in unnecessary errors, and the syntax is limited, making code that uses GATs much more verbose than I'd like. Nonetheless, I'm super excited, since GATs unlock a lot of interesting use cases, and we can continue to smooth out the rough edges over time. However, folks on the thread have raised some [strong concerns about GAT stabilization](https://github.com/rust-lang/rust/pull/96709#issuecomment-1129311660), including asking whether GATs are worth including in the language at all. The fear is that they make Rust the language too complex, and that it would be better to just use them as an internal building block for other, more accessible features (like async functions and [return position impl trait in traits][RPITIT]).  In response to this concern, a number of people have posted about how they are using GATs. I recently took some time to deep dive into these comments and to write about some of the patterns that I found there, including a pattern I am calling the "many modes" pattern, which comes from the [chumsky] parser combinator library. I posted about this pattern [on the thread](https://github.com/rust-lang/rust/pull/96709#issuecomment-1167220240), but I thought I would cross-post my write-up here to the blog as well, because I think it's of general interest.

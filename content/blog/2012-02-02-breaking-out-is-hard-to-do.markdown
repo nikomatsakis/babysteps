@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Breaking out is hard to do"
-date: 2012-02-02 11:23
+date: 2012-02-02T11:23:00Z
 comments: true
 categories: [Rust]
 ---

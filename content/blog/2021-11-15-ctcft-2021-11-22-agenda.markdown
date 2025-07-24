@@ -1,7 +1,7 @@
 ---
 layout: post
 title: CTCFT 2021-11-22 Agenda
-date: 2021-11-15 10:19 -0500
+date: 2021-11-15T10:19:00-0500
 ---
 
 The next ["Cross Team Collaboration Fun Times" (CTCFT)](https://rust-ctcft.github.io/ctcft/) meeting will take place next Monday, on 2021-11-22 at **11am US Eastern Time** ([click to see in your time zone](https://everytimezone.com/s/91c9791f)). **Note that this is a new time:** we are experimenting with rotating in an earlier time that occurs during the European workday. This post covers the agenda. You’ll find the full details (along with a calendar event, zoom details, etc) [on the CTCFT website](https://rust-ctcft.github.io/ctcft/meetings/2021-11-22.html).

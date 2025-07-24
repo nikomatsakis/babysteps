@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rust RFC: Opt-in builtin traits"
-date: 2014-02-28 10:48
+date: 2014-02-28T10:48:00Z
 comments: true
 categories: [Rust]
 ---

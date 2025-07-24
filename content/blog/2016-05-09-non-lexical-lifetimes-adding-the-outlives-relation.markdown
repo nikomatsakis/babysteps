@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Non-lexical lifetimes: adding the outlives relation"
-date: 2016-05-09 16:15:58 -0700
+date: 2016-05-09T16:15:58-0700
 comments: false
 categories: [Rust, NLL]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rust without implicit copies"
-date: 2011-12-03 08:50
+date: 2011-12-03T08:50:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Versioning considered OK"
-date: 2012-02-18 09:59
+date: 2012-02-18T09:59:00Z
 comments: true
 categories: [Rust]
 ---

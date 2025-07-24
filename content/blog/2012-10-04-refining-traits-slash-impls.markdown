@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Refining traits and impls"
-date: 2012-10-04 09:32
+date: 2012-10-04T09:32:00Z
 comments: true
 categories: [Rust, Traits]
 ---

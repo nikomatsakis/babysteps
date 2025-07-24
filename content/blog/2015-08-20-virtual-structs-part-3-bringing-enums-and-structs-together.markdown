@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Virtual Structs Part 3: Bringing Enums and Structs Together"
-date: 2015-08-20 09:29:45 -0400
+date: 2015-08-20T09:29:45-0400
 comments: true
 categories: [Rust]
 ---

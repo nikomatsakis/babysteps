@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Statement-level parallelism"
-date: 2011-12-05 09:25
+date: 2011-12-05T09:25:00Z
 comments: true
 categories: [Rust]
 ---

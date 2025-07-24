@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Rustc Reading Club
-date: 2021-10-28 10:01 -0400
+date: 2021-10-28T10:01:00-0400
 ---
 
 Ever wanted to understand how rustc works? Me too! [Doc Jones] and I have been talking and we had an idea we wanted to try. Inspired by the very cool [Code Reading Club](https://code-reading.org/), we are launching an experimental [Rustc Reading Club](https://github.com/rust-lang/rustc-reading-club). Doc Jones posted an [announcement on her blog](https://mojosd.medium.com/rust-code-reading-club-8fe356287049?source=social.tw), so go take a look!

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Implied bounds and perfect derive
-date: 2022-04-12 17:48 -0400
+date: 2022-04-12T17:48:00-0400
 ---
 
 There are two ergonomic features that have been discussed for quite some time in Rust land: *perfect derive* and *expanded implied bounds*. Until recently, we were a bit stuck on the best way to implement them. Recently though I’ve been working on a new formulation of the Rust trait checker that gives us a bunch of new capabilities — among them, it resolved a soundness formulation that would have prevented these two features from being combined. I’m not going to describe my fix in detail in this post, though; instead, I want to ask a different question. Now that we *can* implement these features, should we?

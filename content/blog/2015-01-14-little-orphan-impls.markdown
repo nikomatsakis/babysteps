@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Little Orphan Impls"
-date: 2015-01-14 14:03:45 -0500
+date: 2015-01-14T14:03:45-0500
 comments: true
 categories: [Rust]
 ---

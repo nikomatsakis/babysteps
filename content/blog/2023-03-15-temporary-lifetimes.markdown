@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Temporary lifetimes
-date: 2023-03-15 14:22 -0400
+date: 2023-03-15T14:22:00-0400
 ---
 In [today's lang team design meeting][m], we reviewed a doc I wrote about temporary lifetimes in Rust. The current rules were [established in a blog post I wrote in 2014][rl]. Almost a decade later, we've seen that they have some rough edges, and in particular can be a common source of bugs for people. The Rust 2024 Edition gives us a chance to address some of those rough edges. This blog post is a copy of the document that the lang team reviewed. It's not a *proposal*, but it covers some of what works well and what doesn't, and includes a few sketchy ideas towards what we could do better.
 

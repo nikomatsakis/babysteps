@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Allocators in Rust"
-date: 2014-11-14 21:13:52 -0500
+date: 2014-11-14T21:13:52-0500
 comments: true
 categories: [Rust]
 ---

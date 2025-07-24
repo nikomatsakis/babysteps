@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "Revisiting regions"
-date: 2012-02-06 09:25
+date: 2012-02-06T09:25:00Z
 comments: true
-published: false
+draft: true
 categories: [Rust, PL]
 ---
 

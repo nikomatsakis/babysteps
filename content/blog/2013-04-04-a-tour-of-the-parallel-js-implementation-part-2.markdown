@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "A tour of the Parallel JS implementation (Part 2)"
-date: 2013-04-04 10:17
+date: 2013-04-04T10:17:00Z
 comments: true
 categories: [PJs, JS]
 ---

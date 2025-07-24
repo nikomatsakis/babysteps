@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Dyn async traits, part 9: call-site selection'
-date: 2022-09-21 17:35 -0400
+date: 2022-09-21T17:35:00-0400
 series:
 - "Dyn async traits"
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "On the connection between memory management and data-race freedom"
-date: 2013-06-11 16:01
+date: 2013-06-11T16:01:00Z
 comments: true
 categories: [Rust]
 ---

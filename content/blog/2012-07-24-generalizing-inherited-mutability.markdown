@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Generalizing inherited mutability"
-date: 2012-07-24 11:33
+date: 2012-07-24T11:33:00Z
 comments: true
 categories: [Rust, Mutability]
 ---

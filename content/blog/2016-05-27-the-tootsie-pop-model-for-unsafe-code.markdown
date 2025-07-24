@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The 'Tootsie Pop' model for unsafe code"
-date: 2016-05-27 12:12:15 -0400
+date: 2016-05-27T12:12:15-0400
 comments: false
 categories: [Rust, Unsafe]
 ---

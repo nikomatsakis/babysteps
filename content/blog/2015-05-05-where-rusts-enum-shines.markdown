@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Virtual Structs Part 1: Where Rust's enum shines"
-date: 2015-05-05 06:15:26 -0400
+date: 2015-05-05T06:15:26-0400
 comments: true
 categories: [Rust]
 ---

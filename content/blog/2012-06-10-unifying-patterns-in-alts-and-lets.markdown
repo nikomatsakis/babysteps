@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unifying patterns in alts and lets"
-date: 2012-06-10 05:41
+date: 2012-06-10T05:41:00Z
 comments: true
 categories: [Rust]
 ---

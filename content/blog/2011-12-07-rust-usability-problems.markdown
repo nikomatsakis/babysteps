@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rust usability problems"
-date: 2011-12-07 17:38
+date: 2011-12-07T17:38:00Z
 comments: true
 categories: [Rust]
 ---

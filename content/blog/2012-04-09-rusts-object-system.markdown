@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rust's object system"
-date: 2012-04-09 10:05
+date: 2012-04-09T10:05:00Z
 comments: true
 categories: [Rust, Traits]
 ---

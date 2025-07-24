@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Parallel pipelines for JS"
-date: 2014-04-24 19:33
+date: 2014-04-24T19:33:00Z
 comments: true
 categories: [JS]
 ---

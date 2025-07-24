@@ -18,6 +18,9 @@ blog = '/blog/:year/:month/:day/:slug/'
 [markup.highlight]
 noClasses = false
 
+[markup.goldmark.renderer]
+unsafe = true
+
 [outputs]
   # <domain>/atom.xml
   home = ["HTML", "RSS", "ATOM"]     # default = ["HTML", "RSS"]

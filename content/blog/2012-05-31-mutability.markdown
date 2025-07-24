@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Mutability"
-date: 2012-05-31 10:32
+date: 2012-05-31T10:32:00Z
 comments: true
 categories: [Rust, Mutability]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Panics vs cancellation, part 1
-date: 2022-01-27 15:55 -0500
+date: 2022-01-27T15:55:00-0500
 ---
 
 One of the things people often complain about when doing Async Rust is cancellation. This has always been a bit confusing to me, because it seems to me that async cancellation should feel a lot like panics in practice, and people don't complain about panics very often (though they do sometimes). This post is the start of a short series comparing panics and cancellation, seeking after the answer to the question "Why is async cancellation a pain point and what should we do about it?" This post focuses on explaining Rust's *panic philosophy* and explaining why I see panics and cancellation as being quite analogous to one another.

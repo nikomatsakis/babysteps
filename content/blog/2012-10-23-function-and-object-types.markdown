@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Function and object types"
-date: 2012-10-23 16:41
+date: 2012-10-23T16:41:00Z
 comments: true
 categories: [Rust, FnTypes]
 ---

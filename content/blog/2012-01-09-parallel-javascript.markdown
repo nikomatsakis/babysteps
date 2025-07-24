@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Parallel Javascript"
-date: 2012-01-09 16:55
+date: 2012-01-09T16:55:00Z
 comments: true
 categories: [PL, PJs, JS]
 ---

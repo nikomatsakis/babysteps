@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Instance coherence"
-date: 2012-04-17 06:54
+date: 2012-04-17T06:54:00Z
 comments: true
 categories: [Rust]
-published: false
+draft: true
 ---
 
 After yesterday's dalliance in

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Returning refs"
-date: 2012-02-16 08:06
+date: 2012-02-16T08:06:00Z
 comments: true
 categories: [Rust, PL]
 ---

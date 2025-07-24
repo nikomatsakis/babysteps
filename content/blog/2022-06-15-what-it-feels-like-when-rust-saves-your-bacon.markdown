@@ -1,7 +1,7 @@
 ---
 layout: post
 title: What it feels like when Rust saves your bacon
-date: 2022-06-15 19:34 -0400
+date: 2022-06-15T19:34:00-0400
 ---
 
 You've probably heard that the Rust type checker can be a great "co-pilot", helping you to avoid subtle bugs that would have been a royal pain in the !@#!$! to debug. This is truly awesome! But what you may not realize is how it feels *in the moment* when this happens. The answer typically is: **really, really frustrating!** Usually, you are trying to get some code to compile and you find you just can't do it. 

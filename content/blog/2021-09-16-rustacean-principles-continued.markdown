@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Rustacean Principles, continued
-date: 2021-09-16 09:42 -0400
+date: 2021-09-16T09:42:00-0400
 categories: [AiC]
 ---
 

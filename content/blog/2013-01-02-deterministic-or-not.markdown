@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Deterministic or not?"
-date: 2013-01-02 12:30
+date: 2013-01-02T12:30:00Z
 comments: true
 categories: [PJs, JS]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Sendable functions"
-date: 2011-12-08 09:47
+date: 2011-12-08T09:47:00Z
 comments: true
 categories: [Rust]
 ---

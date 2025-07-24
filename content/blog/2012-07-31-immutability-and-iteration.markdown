@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Immutability and iteration"
-date: 2012-07-31 08:37
+date: 2012-07-31T08:37:00Z
 comments: true
 categories: [Rust, Mutability]
-published: false
+draft: true
 ---
 
 I am trying to figure out how our APIs should look in light of the

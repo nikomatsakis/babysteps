@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Type system for borrowing permissions"
-date: 2012-09-26 11:19
+date: 2012-09-26T11:19:00Z
 comments: true
 categories: [Papers]
 ---

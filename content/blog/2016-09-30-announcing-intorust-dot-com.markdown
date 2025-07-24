@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Announcing intorust.com"
-date: 2016-09-30 15:48:54 -0400
+date: 2016-09-30T15:48:54-0400
 comments: true
 categories: [Rust, IntoRust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Purging proc"
-date: 2014-11-26 16:58:56 -0500
+date: 2014-11-26T16:58:56-0500
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "For loops"
-date: 2012-04-06 09:51
+date: 2012-04-06T09:51:00Z
 comments: true
 categories: [Rust]
 ---

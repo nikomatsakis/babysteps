@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Implied bounds"
-date: 2014-07-06 11:10
+date: 2014-07-06T11:10:00Z
 comments: true
 categories: [Rust]
 ---

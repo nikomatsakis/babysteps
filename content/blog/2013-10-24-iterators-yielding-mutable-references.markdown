@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Iterators yielding mutable references"
-date: 2013-10-24 12:02
+date: 2013-10-24T12:02:00Z
 comments: true
 categories: [Rust]
 ---

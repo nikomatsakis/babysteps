@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Datasort refinements"
-date: 2012-08-24 10:24
+date: 2012-08-24T10:24:00Z
 comments: true
 categories: [Rust, PL]
 ---

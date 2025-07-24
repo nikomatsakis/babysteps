@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Imagine never hearing the phrase 'aliasable, mutable' again"
-date: 2012-11-18 16:20
+date: 2012-11-18T16:20:00Z
 comments: true
 categories: [Rust]
 ---

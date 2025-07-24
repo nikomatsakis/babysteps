@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Coherence and crate-level where-clauses
-date: 2022-04-17 12:31 -0400
+date: 2022-04-17T12:31:00-0400
 ---
 Rust has been wrestling with coherence more-or-less since we added methods; our current rule, the “orphan rule”, is safe but overly strict. Roughly speaking, the rule says that one can only implement foreign traits (that is, traits defined by one of your dependencies) for local types (that is, types that you define). The goal of this rule was to help foster the crates.io ecosystem — we wanted to ensure that you could grab any two crates and use them together, without worrying that they might define incompatible impls that can’t be combined. The rule has served us well in that respect, but over time we’ve seen that it can also have a kind of chilling effect, unintentionally working **against** successful composition of crates in the ecosystem. For this reason, I’ve come to believe that we will have to weaken the orphan rule. The purpose of this post is to write out some preliminary exploration of ways that we might do that.
 

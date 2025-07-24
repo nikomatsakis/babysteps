@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Typed Objects Status Report"
-date: 2014-04-01 15:20
+date: 2014-04-01T15:20:00Z
 comments: true
 categories: [JS]
 ---

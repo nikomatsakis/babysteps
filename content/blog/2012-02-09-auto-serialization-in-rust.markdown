@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Auto-serialization in Rust"
-date: 2012-02-09 18:34
+date: 2012-02-09T18:34:00Z
 comments: true
 categories: [Rust]
 ---

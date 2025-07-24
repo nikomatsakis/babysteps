@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "DOA: Don't overabstract"
-date: 2012-04-11 13:21
+date: 2012-04-11T13:21:00Z
 comments: true
 categories: []
 ---

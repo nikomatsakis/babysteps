@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Moves based on type"
-date: 2012-10-01 20:30
+date: 2012-10-01T20:30:00Z
 comments: true
 categories: [Rust]
 ---

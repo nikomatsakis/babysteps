@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Non-lexical lifetimes: introduction"
-date: 2016-04-27 07:52:05 -0700
+date: 2016-04-27T07:52:05-0700
 comments: true
 categories: [Rust, NLL]
 ---

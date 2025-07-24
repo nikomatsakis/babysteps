@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Progress on inlining"
-date: 2012-03-03 06:44
+date: 2012-03-03T06:44:00Z
 comments: true
 categories: [Rust]
 ---

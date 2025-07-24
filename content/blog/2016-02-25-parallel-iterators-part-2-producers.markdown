@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Parallel Iterators Part 2: Producers"
-date: 2016-02-25 11:02:34 -0500
+date: 2016-02-25T11:02:34-0500
 comments: false
 categories: [Rust, Rayon]
 ---

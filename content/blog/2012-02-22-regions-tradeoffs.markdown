@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Regions tradeoffs"
-date: 2012-02-22 17:35
+date: 2012-02-22T17:35:00Z
 comments: true
 categories: [Rust]
 ---

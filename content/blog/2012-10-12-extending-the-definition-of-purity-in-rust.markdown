@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Extending the definition of purity in Rust"
-date: 2012-10-12 13:40
+date: 2012-10-12T13:40:00Z
 comments: true
 categories: [Rust, PJs, JS]
 ---

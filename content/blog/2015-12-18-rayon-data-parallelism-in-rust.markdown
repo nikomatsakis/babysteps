@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rayon: data parallelism in Rust"
-date: 2015-12-18 09:52:00 -0500
+date: 2015-12-18T09:52:00-0500
 comments: false
 categories: [Rust]
 ---

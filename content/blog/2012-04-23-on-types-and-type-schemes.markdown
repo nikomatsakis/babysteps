@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "On types and type schemes"
-date: 2012-04-23 08:54
+date: 2012-04-23T08:54:00Z
 comments: true
 categories: [Rust]
 ---

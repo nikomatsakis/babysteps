@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Procedures, continued"
-date: 2013-05-14 09:20
+date: 2013-05-14T09:20:00Z
 comments: true
 categories: [Rust]
 ---

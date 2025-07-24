@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "A few more remarks on reference-counting and leaks"
-date: 2015-04-30 18:00:05 -0700
+date: 2015-04-30T18:00:05-0700
 comments: true
 categories: [Rust]
 ---

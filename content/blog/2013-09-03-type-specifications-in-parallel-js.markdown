@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Type specifications in Parallel JS"
-date: 2013-09-03 13:35
+date: 2013-09-03T13:35:00Z
 comments: true
 categories: [PJs, JS]
 ---

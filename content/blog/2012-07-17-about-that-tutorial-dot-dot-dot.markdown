@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "About that 'tutorial'..."
-date: 2012-07-17 19:16
+date: 2012-07-17T19:16:00Z
 comments: true
 categories: [Rust]
 ---

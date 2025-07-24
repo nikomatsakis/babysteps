@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Stability without stressing the !@#! out
-date: 2023-09-18 11:04 -0400
+date: 2023-09-18T11:04:00-0400
 ---
 
 One of Rust's core principles is ["stability without stagnation"](https://doc.rust-lang.org/book/appendix-07-nightly-rust.html#stability-without-stagnation). This is embodied by our use of a ["release train"](https://doc.rust-lang.org/book/appendix-07-nightly-rust.html#choo-choo-release-channels-and-riding-the-trains) model, in which we issue a new release every 6 weeks. Release trains make releasing a new release a "non-event". Feature-based releases, in contrast, are super stressful! Since they occur infrequently, people try to cram everything into that release, which inevitably makes the release late. In contrast, with a release train, it's not so important to make any particular release -- if you miss one deadline, you can always catch the next one six weeks later. *That's the theory, anyway:* but I've observed that, in practice, stabilizing a feature in Rust can still be a pretty stressful process. And the more important the feature, the more stress. This blog post talks over my theories as to why this is the case, and how we can tweak our processes (and our habits) to address it.

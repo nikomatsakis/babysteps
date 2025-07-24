@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Virtual Structs Part 2: Classes strike back"
-date: 2015-05-29 11:52:26 -0400
+date: 2015-05-29T11:52:26-0400
 comments: true
 categories: [Rust]
 ---

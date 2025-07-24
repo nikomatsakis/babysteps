@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "References"
-date: 2012-04-25 07:53
+date: 2012-04-25T07:53:00Z
 comments: true
 categories: [Rust]
 ---

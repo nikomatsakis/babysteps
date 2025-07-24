@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Vectors, strings, and slices"
-date: 2012-04-23 14:31
+date: 2012-04-23T14:31:00Z
 comments: true
 categories: [Rust]
 ---

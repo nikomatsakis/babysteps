@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rvalue lifetimes in Rust"
-date: 2014-01-09 01:04
+date: 2014-01-09T01:04:00Z
 comments: true
 categories: [Rust]
 ---

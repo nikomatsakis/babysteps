@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Reducing DST Annotation"
-date: 2013-06-06 06:16
+date: 2013-06-06T06:16:00Z
 comments: true
 categories: [Rust]
 ---

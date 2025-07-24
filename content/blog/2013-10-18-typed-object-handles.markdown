@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Typed object handles"
-date: 2013-10-18 15:39
+date: 2013-10-18T15:39:00Z
 comments: true
 categories: [PJs, JS]
 ---

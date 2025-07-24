@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Optimizing SIMD"
-date: 2013-11-21 21:56
+date: 2013-11-21T21:56:00Z
 comments: true
 categories: [PJs, JS]
 ---

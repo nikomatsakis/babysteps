@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Switching to Jekyll"
-date: 2016-11-01 12:27:00 -0400
+date: 2016-11-01T12:27:00-0400
 comments: false
 ---
 

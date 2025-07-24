@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Servo design"
-date: 2012-03-28 08:30
+date: 2012-03-28T08:30:00Z
 comments: true
 categories: [Servo]
 ---

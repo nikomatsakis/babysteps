@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Parameter coercion in Rust"
-date: 2013-11-20 11:10
+date: 2013-11-20T11:10:00Z
 comments: true
 categories: [Rust]
 ---

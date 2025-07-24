@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Regions-lite...ish"
-date: 2012-02-15 09:51
+date: 2012-02-15T09:51:00Z
 comments: true
 categories: [Rust, PL]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Thoughts on trusting types and unsafe code"
-date: 2016-09-12 05:39:52 -0400
+date: 2016-09-12T05:39:52-0400
 comments: false
 categories: [Rust, Unsafe]
 ---

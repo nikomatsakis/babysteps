@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Serialization without type information via impls"
-date: 2012-02-25 07:40
+date: 2012-02-25T07:40:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "DST, Take 5"
-date: 2014-01-05 11:39
+date: 2014-01-05T11:39:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The case FOR deterministic results"
-date: 2013-01-03 19:05
+date: 2013-01-03T19:05:00Z
 comments: true
 categories: [PJs, JS]
 ---

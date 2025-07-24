@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Dynamically sized types, revisited"
-date: 2013-04-30 20:06
+date: 2013-04-30T20:06:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Come contribute to Salsa 2022!
-date: 2022-08-18 19:47 -0400
+date: 2022-08-18T19:47:00-0400
 ---
 
 Have you heard of the [Salsa] project? **Salsa** is a library for incremental computation -- it's used by rust-analyzer, for example, to stay responsive as you type into your IDE (we have also [discussed using it in rustc][use-in-rustc], though more work is needed there). We are in the midst of a big push right now to develop and release **Salsa 2022**, a major new revision to the API that will make Salsa far more natural to use. I'm writing this blog post both to advertise that ongoing work and to put out a **call for contribution**. Salsa doesn't yet have a large group of maintainers, and I would like to fix that. If you've been looking for an open source project to try and get involved in, maybe take a look at our [Salsa 2022 tracking issue](https://github.com/salsa-rs/salsa/issues/305) and see if there is an issue you'd like to tackle?

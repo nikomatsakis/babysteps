@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Dyn async traits, part 7: a design emerges?"
-date: 2022-01-07 19:37 -0500
+date: 2022-01-07T19:37:00-0500
 series:
 - "Dyn async traits"
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Borrowed pointer tutorial"
-date: 2012-07-17 12:26
+date: 2012-07-17T12:26:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Coroutines for Rust"
-date: 2011-12-06 08:01
+date: 2011-12-06T08:01:00Z
 comments: true
 categories: [Rust]
 ---

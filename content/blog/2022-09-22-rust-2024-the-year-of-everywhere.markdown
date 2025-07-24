@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Rust 2024...the year of everywhere?
-date: 2022-09-22 15:51 -0400
+date: 2022-09-22T15:51:00-0400
 ---
 
 I’ve been thinking about what “Rust 2024” will look like lately. I don’t really mean the edition itself — but more like, what will Rust feel like after we’ve finished up the next few years of work? I think the answer is that Rust 2024 is going to be the year of “everywhere”. Let me explain what I mean. Up until now, Rust has had a lot of nice features, but they only work *sometimes*. By the time 2024 rolls around, they’re going to work *everywhere* that you want to use them, and I think that’s going to make a big difference in how Rust feels.

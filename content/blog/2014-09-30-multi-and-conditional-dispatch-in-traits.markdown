@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Multi- and conditional dispatch in traits"
-date: 2014-09-30 09:45:47 -0400
+date: 2014-09-30T09:45:47-0400
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Distinguishing reuse from override"
-date: 2016-09-29 06:02:19 -0400
+date: 2016-09-29T06:02:19-0400
 comments: false
 categories: [Rust, Specialization, Traits]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Higher-ranked projections (send bound problem, part 4)
-date: 2023-06-12 09:06 -0400
+date: 2023-06-12T09:06:00-0400
 ---
 
 I recently [posted a draft of an RFC][z] about [Return Type Notation][RTN] to the async working group Zulip stream. In response, Josh Triplett reached out to me to raise some concerns. Talking to him gave rise to a 3rd idea for how to resolve the send bound problem. I still prefer RTN, but I think this idea is interesting and worth elaborating. I call it *higher-ranked projections*.

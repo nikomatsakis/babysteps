@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Data Parallelism in Rust"
-date: 2013-06-11 11:57
+date: 2013-06-11T11:57:00Z
 comments: true
 categories: [Rust]
 ---

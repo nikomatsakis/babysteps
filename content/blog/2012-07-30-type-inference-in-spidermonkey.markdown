@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Type inference in Spidermonkey"
-date: 2012-07-30 08:21
+date: 2012-07-30T08:21:00Z
 comments: true
 categories: [PL, Spidermonkey, Rivertrail]
 ---

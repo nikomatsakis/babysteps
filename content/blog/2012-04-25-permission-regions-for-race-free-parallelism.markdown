@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Permission regions for race-free parallelism"
-date: 2012-04-25 17:50
+date: 2012-04-25T17:50:00Z
 comments: true
 categories: [Papers]
 ---

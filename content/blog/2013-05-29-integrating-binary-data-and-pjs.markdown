@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Integrating binary data and PJs"
-date: 2013-05-29 06:48
+date: 2013-05-29T06:48:00Z
 comments: true
 categories: [PJs, JS]
 ---

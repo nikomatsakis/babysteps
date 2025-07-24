@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Optimizing complex typed object assignments"
-date: 2013-11-04 18:34
+date: 2013-11-04T18:34:00Z
 comments: true
 categories: [PJs, JS]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "CCI and versioning"
-date: 2012-02-17 21:40
+date: 2012-02-17T21:40:00Z
 comments: true
 categories: [Rust]
 ---

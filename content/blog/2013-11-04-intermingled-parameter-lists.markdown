@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Intermingled parameter lists, take 2"
-date: 2013-11-04 14:06
+date: 2013-11-04T14:06:00Z
 comments: true
 categories: [Rust]
 ---

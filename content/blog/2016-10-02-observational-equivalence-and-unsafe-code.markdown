@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Observational equivalence and unsafe code"
-date: 2016-10-02 07:06:23 -0400
+date: 2016-10-02T07:06:23-0400
 comments: false
 categories: [Rust, Unsafe]
 ---

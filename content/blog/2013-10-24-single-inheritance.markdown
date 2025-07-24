@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Single inheritance"
-date: 2013-10-24 14:30
+date: 2013-10-24T14:30:00Z
 comments: true
 categories: [Rust]
 ---

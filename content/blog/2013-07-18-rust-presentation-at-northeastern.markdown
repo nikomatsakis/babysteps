@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rust presentation at Northeastern"
-date: 2013-07-18 22:32
+date: 2013-07-18T22:32:00Z
 comments: true
 categories: [Rust]
 ---

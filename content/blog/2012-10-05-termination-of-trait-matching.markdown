@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Termination of trait matching"
-date: 2012-10-05 10:55
+date: 2012-10-05T10:55:00Z
 comments: true
 categories: [Rust, Traits]
 ---

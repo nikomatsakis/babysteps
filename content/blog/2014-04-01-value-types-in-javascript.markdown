@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Value types in JavaScript"
-date: 2014-04-01 20:33
+date: 2014-04-01T20:33:00Z
 comments: true
 categories: [JS]
 ---

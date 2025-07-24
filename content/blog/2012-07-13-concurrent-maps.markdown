@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Concurrent maps"
-date: 2012-07-13 10:30
+date: 2012-07-13T10:30:00Z
 comments: true
 categories: [PL, Rust, Actors]
 ---

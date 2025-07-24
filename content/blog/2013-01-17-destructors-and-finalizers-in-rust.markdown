@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Destructors and finalizers in Rust"
-date: 2013-01-17 09:45
+date: 2013-01-17T09:45:00Z
 comments: true
 categories: [Rust]
 ---

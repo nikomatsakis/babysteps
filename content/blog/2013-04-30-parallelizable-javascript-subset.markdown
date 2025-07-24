@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Parallelizable JavaScript Subset"
-date: 2013-04-30 11:30
+date: 2013-04-30T11:30:00Z
 comments: true
 categories: [PJs, JS]
 ---

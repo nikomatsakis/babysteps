@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Self-hosted Parallel JS"
-date: 2012-12-05 09:53
+date: 2012-12-05T09:53:00Z
 comments: true
 categories: [PJs, JS]
 ---

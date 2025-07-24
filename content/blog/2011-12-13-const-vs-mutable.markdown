@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Const vs Mutable"
-date: 2011-12-13 19:41
+date: 2011-12-13T19:41:00Z
 comments: true
 categories: [Rust]
 ---

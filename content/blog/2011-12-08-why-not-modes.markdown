@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Why not modes?"
-date: 2011-12-08 19:54
+date: 2011-12-08T19:54:00Z
 comments: true
 categories: [Rust,PL]
 ---

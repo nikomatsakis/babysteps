@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "Dynamic race detection"
-date: 2011-12-20 11:19
+date: 2011-12-20T11:19:00Z
 comments: true
 categories: [PL]
-published: true
+draft: false
 ---
 
 In the context of thinking about parallelism for Rust, I have been reminded

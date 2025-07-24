@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Removing procs"
-date: 2013-05-30 09:38
+date: 2013-05-30T09:38:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Supporting blanket impls in specialization"
-date: 2016-10-24 13:42:24 -0400
+date: 2016-10-24T13:42:24-0400
 comments: false
 categories: [Rust, Specialization, Traits]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Splitting the PJs API"
-date: 2013-02-26 15:08
+date: 2013-02-26T15:08:00Z
 comments: true
 categories: [PJs, JS]
 ---

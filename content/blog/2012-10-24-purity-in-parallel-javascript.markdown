@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Purity in Parallel JavaScript"
-date: 2012-10-24 13:54
+date: 2012-10-24T13:54:00Z
 comments: true
 categories: [PJs, JS]
 ---

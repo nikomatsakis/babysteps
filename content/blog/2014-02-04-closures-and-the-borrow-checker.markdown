@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Closures and the borrow checker"
-date: 2014-02-04 22:39
+date: 2014-02-04T22:39:00Z
 comments: true
 categories: [Rust]
 ---

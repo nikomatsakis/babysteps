@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Borrowing"
-date: 2012-05-01 19:53
+date: 2012-05-01T19:53:00Z
 comments: true
 categories: [Rust]
 ---

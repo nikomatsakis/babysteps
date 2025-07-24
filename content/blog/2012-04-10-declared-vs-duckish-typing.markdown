@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Declared vs duckish typing"
-date: 2012-04-10 11:19
+date: 2012-04-10T11:19:00Z
 comments: true
 categories: [Rust]
 ---

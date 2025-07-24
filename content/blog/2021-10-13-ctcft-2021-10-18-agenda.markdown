@@ -1,7 +1,7 @@
 ---
 layout: post
 title: CTCFT 2021-10-18 Agenda
-date: 2021-10-13 17:13 -0400
+date: 2021-10-13T17:13:00-0400
 ---
 
 <img src="https://raw.githubusercontent.com/rust-ctcft/ctcft/main/img/camprust.png" width="222" style="float:left;"/> The next ["Cross Team Collaboration Fun Times" (CTCFT)][ctcft] meeting will take place next Monday, on 2021-10-18 ([in your time zone](https://everytimezone.com/s/b65371cd))! This post covers the agenda. You'll find the full details (along with a calendar event, zoom details, etc) [on the CTCFT website](https://rust-ctcft.github.io/ctcft/meetings/2021-10-18.html).

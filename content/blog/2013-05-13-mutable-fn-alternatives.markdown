@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Mutable fn alternatives"
-date: 2013-05-13 17:31
+date: 2013-05-13T17:31:00Z
 comments: true
 categories: [Rust]
 ---

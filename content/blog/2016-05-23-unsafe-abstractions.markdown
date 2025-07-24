@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unsafe abstractions"
-date: 2016-05-23 08:17:07 -0400
+date: 2016-05-23T08:17:07-0400
 comments: false
 categories: [Rust]
 ---

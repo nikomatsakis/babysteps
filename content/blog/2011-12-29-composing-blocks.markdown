@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Composing blocks"
-date: 2011-12-29 21:19
+date: 2011-12-29T21:19:00Z
 comments: true
 categories: [Rust, PL]
 ---

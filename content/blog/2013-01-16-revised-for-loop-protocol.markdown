@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Revised for loop protocol"
-date: 2013-01-16 12:13
+date: 2013-01-16T12:13:00Z
 comments: true
 categories: [Rust]
 ---

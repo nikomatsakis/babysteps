@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Integrating binary data and type inference in SpiderMonkey"
-date: 2013-07-19 06:42
+date: 2013-07-19T06:42:00Z
 comments: true
 categories: [PJs, JS]
 ---

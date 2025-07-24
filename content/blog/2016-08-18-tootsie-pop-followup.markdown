@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "'Tootsie Pop' Followup"
-date: 2016-08-18 09:17:46 -0400
+date: 2016-08-18T09:17:46-0400
 comments: false
 categories: [Rust, Unsafe]
 ---

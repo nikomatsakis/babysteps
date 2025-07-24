@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Nice errors in LALRPOP"
-date: 2016-03-02 12:58:49 -0500
+date: 2016-03-02T12:58:49-0500
 comments: false
 categories: [Rust]
 ---

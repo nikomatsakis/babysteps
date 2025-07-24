@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "LALRPOP"
-date: 2015-09-14 05:49:14 -0400
+date: 2015-09-14T05:49:14-0400
 comments: true
 categories: [Rust]
 ---

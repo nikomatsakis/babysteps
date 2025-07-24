@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Syntax matters...?"
-date: 2012-04-15 19:55
+date: 2012-04-15T19:55:00Z
 comments: true
 categories: [PL]
 ---

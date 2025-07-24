@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Using futures in the task API"
-date: 2012-02-14 10:14
+date: 2012-02-14T10:14:00Z
 comments: true
 categories: [Rust, PL]
 ---

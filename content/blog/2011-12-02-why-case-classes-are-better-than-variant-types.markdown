@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Why case classes are better than variant types"
-date: 2011-12-02 06:57
+date: 2011-12-02T06:57:00Z
 comments: true
 categories: [PL]
 ---

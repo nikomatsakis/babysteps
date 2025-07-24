@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "dyn*: can we make dyn sized?"
-date: 2022-03-29 05:32 -0400
+date: 2022-03-29T05:32:00-0400
 series:
 - "Dyn async traits"
 ---

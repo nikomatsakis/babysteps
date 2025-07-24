@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "In favor of types of unknown size"
-date: 2012-04-27 09:55
+date: 2012-04-27T09:55:00Z
 comments: true
 categories: [Rust]
 ---

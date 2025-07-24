@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Modeling graphs in Rust using vector indices"
-date: 2015-04-06 14:58:37 -0400
+date: 2015-04-06T14:58:37-0400
 comments: true
 categories: [Rust]
 ---

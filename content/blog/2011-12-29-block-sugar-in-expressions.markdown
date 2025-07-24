@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Block sugar in expressions"
-date: 2011-12-29 07:30
+date: 2011-12-29T07:30:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Dyn async traits, part 3
-date: 2021-10-06 11:06 -0400
+date: 2021-10-06T11:06:00-0400
 series:
 - "Dyn async traits"
 ---

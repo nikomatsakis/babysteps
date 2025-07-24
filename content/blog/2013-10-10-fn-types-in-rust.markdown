@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Fn types in Rust, take 3"
-date: 2013-10-10 16:36
+date: 2013-10-10T16:36:00Z
 comments: true
 categories: [Rust]
 ---

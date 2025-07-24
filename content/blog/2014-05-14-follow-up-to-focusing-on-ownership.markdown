@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Follow up to Focusing on Ownership"
-date: 2014-05-14 07:52
+date: 2014-05-14T07:52:00Z
 comments: true
 categories: [Rust]
 ---

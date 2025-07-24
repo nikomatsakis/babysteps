@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Treating vectors like any other container"
-date: 2013-11-14 19:21
+date: 2013-11-14T19:21:00Z
 comments: true
 categories: [Rust]
 ---

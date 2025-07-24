@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "HotPar"
-date: 2012-06-11 15:39
+date: 2012-06-11T15:39:00Z
 comments: true
 categories: [PL]
 ---

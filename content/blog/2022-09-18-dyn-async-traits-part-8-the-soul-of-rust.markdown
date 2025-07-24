@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Dyn async traits, part 8: the soul of Rust'
-date: 2022-09-18 13:49 -0400
+date: 2022-09-18T13:49:00-0400
 series:
 - "Dyn async traits"
 ---

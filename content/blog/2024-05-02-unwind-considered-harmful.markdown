@@ -1,6 +1,6 @@
 ---
 title: "Unwind considered harmful?"
-date: 2024-05-02 12:39 -0400
+date: 2024-05-02T12:39:00-0400
 ---
 
 I’ve been thinking a wild thought lately: we should deprecate `panic=unwind`. Most production users I know either already run with `panic=abort` or use unwinding in a very limited fashion, basically just to run to *cleanup*, not to truly *recover*. Removing unwinding from most case meanwhile has a number of benefits, allowing us to extend the type system in interesting and potentially very impactful ways. It also removes a common source of subtle bugs. Note that I am not saying we should remove unwinding entirely: that’s not an option, both because of stability and because of Rust’s mission to “deeply integrate” with all kinds of languages and systems.

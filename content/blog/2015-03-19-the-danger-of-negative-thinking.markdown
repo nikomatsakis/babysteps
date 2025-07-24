@@ -1,10 +1,10 @@
 ---
 layout: post
 title: "The danger of negative thinking"
-date: 2015-03-19 17:59:39 -0400
+date: 2015-03-19T17:59:39-0400
 comments: true
 categories: [Rust]
-published: false
+draft: true
 ---
 
 One of the aspects of language design that I find the most interesting

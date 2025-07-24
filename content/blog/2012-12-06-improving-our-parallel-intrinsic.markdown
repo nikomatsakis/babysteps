@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Improving our parallel intrinsic"
-date: 2012-12-06 09:27
+date: 2012-12-06T09:27:00Z
 comments: true
 categories: [PJs, JS]
 ---

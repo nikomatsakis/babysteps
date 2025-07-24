@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Intersection Impls"
-date: 2016-09-24 06:07:31 -0400
+date: 2016-09-24T06:07:31-0400
 comments: false
 categories: [Rust, Specialization, Traits]
 ---

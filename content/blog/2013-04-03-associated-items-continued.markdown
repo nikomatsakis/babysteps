@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Associated items continued"
-date: 2013-04-03 08:37
+date: 2013-04-03T08:37:00Z
 comments: true
 categories: [Rust]
 ---

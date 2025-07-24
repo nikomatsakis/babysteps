@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Implementing unique closures"
-date: 2011-12-16 10:32
+date: 2011-12-16T10:32:00Z
 comments: true
 categories: [Rust]
 ---

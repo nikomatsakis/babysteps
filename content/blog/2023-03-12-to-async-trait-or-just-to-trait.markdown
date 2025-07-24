@@ -1,7 +1,7 @@
 ---
 layout: post
 title: To async trait or just to trait
-date: 2023-03-12 19:33 -0400
+date: 2023-03-12T19:33:00-0400
 series:
 - "Dyn async traits"
 ---

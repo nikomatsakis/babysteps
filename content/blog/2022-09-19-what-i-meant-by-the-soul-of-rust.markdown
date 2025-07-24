@@ -1,7 +1,7 @@
 ---
 layout: post
 title: What I meant by the "soul of Rust"
-date: 2022-09-19 10:15 -0400
+date: 2022-09-19T10:15:00-0400
 series:
 - "Dyn async traits"
 ---

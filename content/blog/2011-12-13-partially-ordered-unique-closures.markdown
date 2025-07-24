@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Partially ordered unique closures"
-date: 2011-12-13 10:09
+date: 2011-12-13T10:09:00Z
 comments: true
 categories: [Rust]
 ---

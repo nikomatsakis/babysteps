@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The Case of the Recurring Closure"
-date: 2013-04-30 10:51
+date: 2013-04-30T10:51:00Z
 comments: true
 categories: [Rust]
 ---

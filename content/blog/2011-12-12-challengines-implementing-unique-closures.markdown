@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Challengines implementing unique closures"
-date: 2011-12-12 21:25
+date: 2011-12-12T21:25:00Z
 comments: true
 categories: [Rust]
 ---

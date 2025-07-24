@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Lifetime notation"
-date: 2012-12-30 16:33
+date: 2012-12-30T16:33:00Z
 comments: true
 categories: [Rust]
 ---

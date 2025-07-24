@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Nested lifetimes"
-date: 2013-04-04 19:04
+date: 2013-04-04T19:04:00Z
 comments: true
 categories: [Rust]
 ---

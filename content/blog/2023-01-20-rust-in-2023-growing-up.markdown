@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Rust in 2023: Growing up'
-date: 2023-01-20 08:08 -0500
+date: 2023-01-20T08:08:00-0500
 ---
 
 When I started working on Rust in 2011, my daughter was about three months old. She’s now in sixth grade, and she’s started growing rapidly. Sometimes we wake up to find that her clothes don’t quite fit anymore: the sleeves might be a little too short, or the legs come up to her ankles. Rust is experiencing something similar. We’ve been growing tremendously fast over the last few years, and any time you experience growth like that, there are bound to be a few rough patches. Things that don’t work as well as they used to. This holds both in a technical sense — there are parts of the language that don’t seem to scale up to Rust’s current size — and in a social one — some aspects of how the projects runs need to change if we’re going to keep growing the way I think we should. As we head into 2023, with two years to go until the Rust 2024 edition, this is the theme I see for Rust: **maturation and scaling**.

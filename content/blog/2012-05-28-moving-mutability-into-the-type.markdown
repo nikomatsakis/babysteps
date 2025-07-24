@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Moving mutability into the type"
-date: 2012-05-28 15:17
+date: 2012-05-28T15:17:00Z
 comments: true
 categories: [Rust, PL, Mutability]
 ---

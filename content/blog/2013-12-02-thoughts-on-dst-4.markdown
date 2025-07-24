@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Thoughts on DST, Part 4"
-date: 2013-12-02 12:32
+date: 2013-12-02T12:32:00Z
 comments: true
 categories: [Rust]
 ---

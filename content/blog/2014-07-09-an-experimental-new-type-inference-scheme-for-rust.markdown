@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "An experimental new type inference scheme for Rust"
-date: 2014-07-09 10:08
+date: 2014-07-09T10:08:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rvalue lifetimes"
-date: 2012-09-15 13:27
+date: 2012-09-15T13:27:00Z
 comments: true
 categories: [Rust]
 ---

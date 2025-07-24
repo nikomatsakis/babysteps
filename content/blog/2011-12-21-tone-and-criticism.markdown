@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Tone and criticism"
-date: 2011-12-21 17:02
+date: 2011-12-21T17:02:00Z
 comments: true
 categories: [Rust]
 ---

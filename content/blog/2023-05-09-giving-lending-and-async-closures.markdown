@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Giving, lending, and async closures
-date: 2023-05-09 11:13 -0400
+date: 2023-05-09T11:13:00-0400
 ---
 
 In [a previous post on async closures][pp], I [concluded][] that the best way to support async closures was with an `async` trait combinator. I've had a few conversations since the post and I want to share some additional thoughts. In particular, this post dives into what it would take to make async functions matchable with a type like `impl FnMut() -> impl Future<Output = bool>`. This takes us down some interesting roads, in particular the distinction between giving and lending traits; it turns out that the closure traits specifically are a bit of a special case in turns of what we can do backwards compatibly, due to their special syntax. on!

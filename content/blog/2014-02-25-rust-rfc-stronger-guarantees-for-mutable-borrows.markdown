@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Rust RFC: Stronger guarantees for mutable borrows"
-date: 2014-02-25 12:29
+date: 2014-02-25T12:29:00Z
 comments: true
 categories: [Rust]
 ---

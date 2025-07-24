@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Parallel Iterators Part 1: Foundations"
-date: 2016-02-19 06:32:44 -0500
+date: 2016-02-19T06:32:44-0500
 comments: false
 categories: [Rust, Rayon]
 ---

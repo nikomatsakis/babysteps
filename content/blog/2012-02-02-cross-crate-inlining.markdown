@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Cross-crate inlining"
-date: 2012-02-02 08:41
+date: 2012-02-02T08:41:00Z
 comments: true
 categories: [Rust]
 ---

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 'Async trait send bounds, part 1: intro'
-date: 2023-02-01 08:06 -0500
+date: 2023-02-01T08:06:00-0500
 series:
 - "Send bound problem"
 ---

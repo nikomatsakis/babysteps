@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Recurring closures and dynamically sized types"
-date: 2013-05-13 10:35
+date: 2013-05-13T10:35:00Z
 comments: true
 categories: [Rust]
 ---

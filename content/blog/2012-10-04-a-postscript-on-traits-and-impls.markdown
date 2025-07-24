@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "A postscript on traits and impls"
-date: 2012-10-04 16:45
+date: 2012-10-04T16:45:00Z
 comments: true
 categories: [Rust, Traits]
 ---

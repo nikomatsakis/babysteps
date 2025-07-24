@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Attribute and macro syntax"
-date: 2014-09-11 07:33
+date: 2014-09-11T07:33:00Z
 comments: true
 categories: [Rust]
 ---

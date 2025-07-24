@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Structural arrays in Typed Objects"
-date: 2013-12-12 13:07
+date: 2013-12-12T13:07:00Z
 comments: true
 categories: [PJs, JS]
 ---

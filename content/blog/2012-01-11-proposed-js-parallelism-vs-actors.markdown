@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Proposed JS parallelism vs actors"
-date: 2012-01-11 10:38
+date: 2012-01-11T10:38:00Z
 comments: true
 categories: [PL, PJs, JS]
 ---
