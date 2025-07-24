@@ -11,9 +11,13 @@ We as an industry have long recognized that demanding perfection from people is 
 
 [^COE]: The article about the AWS incident is actually a *fantastic* example of one of Amazon's traditions that I really like: [Correction of Error](https://wa.aws.amazon.com/wellarchitected/2020-07-02T19-33-23/wat.concept.coe.en.html) reports. The idea is that when something goes seriously wrong, whether a production outage or some other kind of process failure, you write a factual, honest report on what happened -- and how you can prevent it from happening again. The key thing is to assume good intent and not lay the blame the individuals involved: people make mistakes. The point is to create protocols that accommodate mistakes.
 
-## AIs make lackluster servants, but they are excellent collaborators
+## AIs make lackluster genies, but they are excellent collaborators
 
-To me, this story is a perfect example of how people are misusing, in fact *misunderstanding*, AI tools. They seem to expect the AI to be some kind of magic wand, where they can give it some vague instruction, go get a coffee, and come back finding that it met their expectations perfectly. Well, I got bad news for ya: that's just not going to work. AI is the first technology I've seen where machines actually behave, think, and--dare I say it?--even *feel* in a way that is recognizably *human*. And that means that, to get the best results, you have to *work with it like you would work with a human*. And that means it is going to be fallible.
+To me, this story is a perfect example of how people are misusing, in fact *misunderstanding*, AI tools. They seem to expect the AI to be some kind of genie, where they can give it some vague instruction, go get a coffee, and come back finding that it met their expectations perfectly.[^thatworkedoutsowell] Well, I got bad news for ya: that's just not going to work.
+
+AI is the first technology I've seen where machines actually behave, think, and--dare I say it?--even *feel* in a way that is recognizably *human*. And that means that, to get the best results, you have to *work with it like you would work with a human*. And that means it is going to be fallible.
+
+[^thatworkedoutsowell]: Because we all know that making vague, underspecified wishes always turns out well in the fairy tales, right?
 
 **The good news is, if you do this, what you get is an intelligent, thoughtful *collaborator*.** And that is actually *way better* than what the mindless serveant you were expecting. To quote the Stones:
 
