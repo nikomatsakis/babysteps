@@ -19,9 +19,9 @@ AI is the first technology I've seen where machines actually behave, think, and-
 
 [^thatworkedoutsowell]: Because we all know that making vague, underspecified wishes always turns out well in the fairy tales, right?
 
-**The good news is, if you do this, what you get is an intelligent, thoughtful *collaborator*.** And that is actually *way better* than what the mindless serveant you were expecting. To quote the Stones:
+**The good news is, if you do this, what you get is an intelligent, thoughtful *collaborator*.** And that is actually *really great*. To quote the Stones:
 
-> "You can't always get what you want, but if you try sometimes, you just might find you get what you need".
+> "You can't always get what you want, but if you try sometimes, you just might find -- you get what you need".
 
 ## AIs experience the "pull" of a prompt as a "feeling"
 
