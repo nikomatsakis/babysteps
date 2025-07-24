@@ -23,9 +23,16 @@ Niko is one of the lead designers of the Rust programming language and has been 
 
 ### Structure
 - Blog posts are in `content/blog/` with date-prefixed filenames (e.g., `2024-03-04-borrow-checking-without-lifetimes.markdown`)
-- Drafts go in `drafts/` directory
+- Public drafts go in `drafts/` directory
+- Private drafts go in `drafts-private/` (git submodule pointing to private repository)
 - Uses Markdown with Hugo frontmatter
 - Images and assets go in `static/assets/`
+
+### Private Drafts Setup
+- `drafts-private/` is a git submodule pointing to `git@github.com:nikomatsakis/babysteps-drafts.git`
+- People with SSH access can `git submodule update --init` to access private drafts
+- People without access will see an empty directory without errors
+- Use private drafts for sensitive ideas or work-in-progress thoughts not ready for public consumption
 
 ### Important Conventions
 - **Deployment**: Automatic via GitHub push

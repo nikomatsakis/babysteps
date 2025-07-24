@@ -1,0 +1,3 @@
+[submodule "drafts-private"]
+	path = drafts-private
+	url = git@github.com:nikomatsakis/babysteps-drafts.git
