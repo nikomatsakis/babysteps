@@ -1,0 +1,13 @@
+# Pin Hugo version for consistency
+hugo = "0.128.0"
+
+[plugins]
+hugo = "https://raw.githubusercontent.com/z0rrn/proto-plugins/main/hugo/plugin-extended.toml"
+
+[settings]
+auto-install = true
+auto-clean = true
+
+[env]
+# Hugo environment variables
+HUGO_ENVIRONMENT = "development"

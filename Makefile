@@ -5,22 +5,19 @@ help:
 	@echo "  make serve-drafts"
 	@echo "  make generate deploy"
 
-HUGOURL=https://github.com/gohugoio/hugo/releases/download/v0.118.2/hugo_extended_0.118.2_linux-amd64.tar.gz
-hugo ?= hugo
+# Use Hugo from proto
+hugo = hugo
 
-hugo:
-	curl -L ${HUGOURL} | tar zxf -> hugo
-
-post: hugo
+post:
 	@if [ -z "${NAME}" ]; then echo "Set NAME to something!"; else ${hugo} new content content/blog/`date '+%Y-%m-%d'`-${NAME}.markdown; fi
 
-serve: hugo
+serve:
 	${hugo} server --minify
 
-serve-drafts: hugo
+serve-drafts:
 	${hugo} server --minify --buildFuture
 
-generate: hugo
+generate:
 	${hugo} --minify --buildFuture
 
 deploy:

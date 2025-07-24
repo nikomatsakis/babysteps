@@ -3,3 +3,4 @@ _site
 /public
 /resources/_gen
 hugo
+proto-ruby-install.log
