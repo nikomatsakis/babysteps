@@ -10,7 +10,7 @@ You heard it here first: my guess is that Rust, Python, and TypeScript are going
 Building with an LLM is presently a rather uneven experience, but I think the long-term trend is clear enough. We are seeing a shift towards a new programming paradigm. Dave Herman and I have recently taken to calling it **idea-oriented programming**. As the name suggests, *idea-oriented programming* is *programming where you are focused first and foremost on **ideas** behind your project*.
 
 Why do I say *idea-oriented programming* and not *vibe coding*? To me, they are different beasts. Vibe coding suggests a kind of breezy indifference to the specifics -- kind of waving your hand vaguely at the AI and saying "do something like this".
-That smacks of [treating the AI genie](https://smallcultfollowing.com/babysteps/blog/2025/07/24/collaborative-ai-prompting/) -- or perhaps a servant, neither of which I think is useful.
+That smacks of [treating the AI like a genie](https://smallcultfollowing.com/babysteps/blog/2025/07/24/collaborative-ai-prompting/) -- or perhaps a servant, neither of which I think is useful.
 
 ## Idea-oriented programming is very much **programming**
 
