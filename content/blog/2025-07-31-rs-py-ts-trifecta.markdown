@@ -16,7 +16,7 @@ That smacks of [treating the AI like a genie](https://smallcultfollowing.com/bab
 
 Idea-oriented programming, in contrast, is definitely **programming**. But your role is different. As the programmer, you're more like the chief architect. Your coding tools are like your apprentices. You are thinking about the goals and the key aspects of the design. You lay out a crisp plan and delegate the heavy lifting to the tools -- and then you review their output, making tweaks and, importantly, generalizing those tweaks into persistent principles. When some part of the problem gets tricky, you are rolling up your sleeves and do some hands-on debugging and problem solving.
 
-If you've been in the industry a while, this description wil lbe familiar. It's essentially the role of a Principal Engineer. It's also a solid description of what I think an open-source mentor ought to do.
+If you've been in the industry a while, this description will be familiar. It's essentially the role of a Principal Engineer. It's also a solid description of what I think an open-source mentor ought to do.
 
 ## Idea-oriented programming changes the priorities for language choice
 
@@ -36,13 +36,13 @@ But of course programmers have evolved a way to cope with human's narrow focus: 
 
 Notably, Rust, TypeScript, and Python all have pretty decent type systems. For Python you have to set things up to use mypy and pydantic.
 
-## Ecosystems and package managers are mmore important than ever
+## Ecosystems and package managers are more important than ever
 
 Ecosystems and package managers are also hugely important to idea-oriented programming. Of course, having a powerful library to build on has always been an accellerator, but it also used to come with a bigger downside, because you had to take the time to get fluent in how the library works. That is much less of an issue now. For example, I have been building a [family tree application](https://github.com/nikomatsakis/www.family-tree/)[^mbfgw] to use with my family. I wanted to add graphical rendering. I talked out the high-level ideas but I was able to lean on Claude to manage the use of the d3 library -- it turned out beautifully!
 
 [^mbfgw]: My family bears a striking resemblance to the family in My Big Fat Greek Wedding. There are many relatives that I consider myself very close to and yet have basically no idea how we are *actually* related (well, I didn't, until I setup my family tree app).
 
-Notably, Rust, TypeScript, and Python all have pretty decent type systems. For Python you have to set things up to use `uv` (at least, that's what I've been using).
+Notably, Rust, TypeScript, and Python all have pretty decent package managers -- `cargo`, `npm`, and `uv` respectively (both TS and Python have other options, I've not evaluated those in depth).
 
 ## Syntactic papercuts and non-obvious workarounds matter less, but error messages and accurate guidance are still important
 
@@ -51,7 +51,7 @@ In 2016, Aaron Turon and I gave a [RustConf keynote][2016] advocating for the [E
 [EI]: https://blog.rust-lang.org/2017/03/02/lang-ergonomics/
 [2016]:https://www.youtube.com/watch?v=pTQxHIzGqFI
 
-In Rust, we've put a lot of effort into addressing those, either by changing the language or, more often, by changing our error messages to guide you to success. What I've observed is that, with Claude, the calculus is different. Some of these mistakes it simply never makes. But others it makes but then, based on the error message, is able to quickly corret. And this is fine. If I were writing the code by hand, I get annoyed having to apply the same repetitive changes over and over again (add `mut`, ok, no, take it away, etc etc). But if Claude is doing, I don't care so much, and maybe I get some added benefit -- e.g., now I have a clearer indicating of which variables are declared as `mut`.
+In Rust, we've put a lot of effort into addressing those, either by changing the language or, more often, by changing our error messages to guide you to success. What I've observed is that, with Claude, the calculus is different. Some of these mistakes it simply never makes. Others it makes but then, based on the error message, is able to quickly corret. And this is fine. If I were writing the code by hand, I get annoyed having to apply the same repetitive changes over and over again (add `mut`, ok, no, take it away, etc etc). But if Claude is doing, I don't care so much, and maybe I get some added benefit -- e.g., now I have a clearer indicating of which variables are declared as `mut`.
 
 But all of this only works if Claude *can* fix the problems -- either because it knows from training or because the errors are good enough to guide it to success. One thing I'm very interested in, though, is that I think we now have more room to give ambiguous guidance (e.g., here are 3 possible fixes, but you have to decide which is best), and have the LLM navigate it.
 
