@@ -1,63 +1,42 @@
-# Sample workflow for building and deploying a Hugo site to GitHub Pages
 name: Deploy Hugo site to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["master"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
-# Default to bash
-defaults:
-  run:
-    shell: bash
-
 jobs:
-  # Build job
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: false
-          fetch-depth: 0
+          fetch-depth: 1
       
-      - name: Setup toolchain
-        uses: moonrepo/setup-toolchain@v0
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
         with:
-          auto-install: true
-          cache: true
+          hugo-version: 'latest'
+          extended: true
       
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5
       
-      - name: Install Node.js dependencies
-        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
-      
       - name: Build with Hugo
         env:
-          HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
           HUGO_ENVIRONMENT: production
-        run: |
-          hugo \
-            --minify \
-            --buildFuture
+        run: hugo --minify
       
       - name: Rename output directory
         run: |
@@ -69,7 +48,6 @@ jobs:
         with:
           path: ./upload/
 
-  # Deployment job
   deploy:
     environment:
       name: github-pages
