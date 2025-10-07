@@ -45,9 +45,11 @@ But really there *is* a semantic underpinning here, and it was Jack Huey who fir
 
 One difference, of course, is cost. Cloning the `Mutex<Vec<u32>>` will deep-clone the vector, cloning the `Arc` will just increment a referece count. 
 
-But the more important difference is what I call *"entanglement"*. When you clone the `Arc`, you don't get a new value -- you get back a *second handle to the same value*.
+But the more important difference is what I call *"entanglement"*. When you clone the `Arc`, you don't get a new value -- you get back a *second handle to the same value*.[^entangled]
 
 [^fp]: and functional programming...
+
+[^entangled]: And, not coincidentally, the types where cloning leads to entanglement tend to also be the types where cloning is cheap.
 
 ## Entanglement changes the meaning of the program
 
@@ -165,6 +167,10 @@ And it would be implemented for types like channel endpoints, that are implement
 impl<T: ?Sized> Handle for mpsc::Sender {}
 ```
 
-## Conclusion: let's call The Trait `Handle`
+## Conclusion: a design axiom emerges
 
-OK, I'm going to stop there with this "byte-sized" blog post. More to come!
+OK, I'm going to stop there with this "byte-sized" blog post. More to come! But before I go, let me layout what I believe to be a useful "design axiom" that we should adopt for this design:
+
+> **Expose entanglement.** Understanding the difference between a *handle* to an underlying value and the value itself is necessary to understand how Rust works.
+
+The phrasing feels a bit awkward, but I think it is the key bit anyway.
