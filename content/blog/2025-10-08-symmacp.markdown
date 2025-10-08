@@ -273,7 +273,7 @@ As it happens, MCP *has* a capability to enable tools to do this -- it's called 
 
 ## SymmACP.contains(simultaneous_sessions)
 
-The key is that ACP already permits a single agent to "serve up" many simultaneous sessions. So that means that if I have a proxy, perhaps one supplying an MCP tool definition, I could use it to start *fresh* sessions -- combine that with the "history replay" capability I mentioned above, and the tool can exactly what context to bring over into that session to start from, as well, which is very cool (that's a challenge for MCP servers today, they don't get access to the conversation history).
+The key is that ACP already permits a single agent to "serve up" many simultaneous sessions. So that means that if I have a proxy, perhaps one supplying an MCP tool definition, I could use it to start *fresh* sessions -- combine that with the "history replay" capability I mentioned above, and the tool can control exactly what context to bring over into that session to start from, as well, which is very cool (that's a challenge for MCP servers today, they don't get access to the conversation history).
 
 ```mermaid
 sequenceDiagram
