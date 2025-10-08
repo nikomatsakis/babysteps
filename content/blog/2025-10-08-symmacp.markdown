@@ -3,7 +3,7 @@ title: "SymmACP: extending Zed's ACP to support Composable Agents"
 date: 2025-10-08T04:54:08-04:00
 ---
 
-This post describes **SymmACP** -- an extension to Zed's [Agent Client Protocol][ACP] that lets you build AI tools like Unix pipes or browser extensions. Want a better TUI? Found some cool slash commands on GitHub? Prefer a different backend? With SymmACP, you can mix and match these pieces and have them all work together without knowing about each other.
+This post describes **SymmACP** -- a proposed extension to Zed's [Agent Client Protocol][ACP] that lets you build AI tools like Unix pipes or browser extensions. Want a better TUI? Found some cool slash commands on GitHub? Prefer a different backend? With SymmACP, you can mix and match these pieces and have them all work together without knowing about each other.
 
 This is pretty different from how AI tools work today, where everything is a monolith -- if you want to change one piece, you're stuck rebuilding the whole thing from scratch. SymmACP allows you to build out new features and modes of interactions in a layered, interoperable way. This post explains how SymmACP would work by walking through a series of examples.
 
