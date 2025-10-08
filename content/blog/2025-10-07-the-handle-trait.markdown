@@ -88,7 +88,7 @@ There are many types that act like a `SharedVec`: it's true for `Rc` and `Arc`, 
 
 ## We have a name for this concept already: handles
 
-Jack's insight was that we should focus on the *semantic concept* (sharing) and not on the operational details (how it's implemented). This makes it clear when the trait ought to be implemented. I liked this idea a lot, although I eventually decided I didn't like the name `Share`. The word isn't specific enough, I felt, and users might not realize it referred to a specific concept: "shareable types" doesn't really sound right. But n fact there *is* a name already in common use for this concept: handles (see e.g. [`tokio::runtime::Handle`](https://docs.rs/tokio/latest/tokio/runtime/struct.Handle.html)).
+Jack's insight was that we should focus on the *semantic concept* (sharing) and not on the operational details (how it's implemented). This makes it clear when the trait ought to be implemented. I liked this idea a lot, although I eventually decided I didn't like the name `Share`. The word isn't specific enough, I felt, and users might not realize it referred to a specific concept: "shareable types" doesn't really sound right. But in fact there *is* a name already in common use for this concept: handles (see e.g. [`tokio::runtime::Handle`](https://docs.rs/tokio/latest/tokio/runtime/struct.Handle.html)).
 
 This is how I arrived at my proposed name and definition for The Trait, which is `Handle`:[^final]
 
