@@ -18,7 +18,9 @@ Right now, SymmACP is just a thought experiment. I've sketched these ideas to th
 
 ## "Composable agents" let you build features independently and then combine them
 
-I'm going to explain the idea of "composable agents" by walking through a series of features. We'll start with a basic CLI agent tool -- basically a chat loop with access to some MCP servers so that it can read/write files and execute bash commands. Then we'll show how you could add several features on top:
+I'm going to explain the idea of "composable agents" by walking through a series of features. We'll start with a basic CLI agent[^whatisanagent] tool -- basically a chat loop with access to some MCP servers so that it can read/write files and execute bash commands. Then we'll show how you could add several features on top:
+
+[^whatisanagent]: Everybody uses agents in various ways. I like Simon Willison's ["agents are models using tools in a loop"](https://simonwillison.net/2025/May/22/tools-in-a-loop/) definition; I feel that an "agentic CLI tool" fits that definition, it's just that part of the loop is reading input from the user. I think "fully autonomous" agents are a subset of all agents -- many agent processes interact with the outside world via tools etc. From a certain POV, you can view the agent "ending the turn" as invoking a tool for "gimme the next prompt".
 
 1. Addressing time-blindness by helping the agent know what time it is.
 2. Injecting context and "personality" to the agent.
