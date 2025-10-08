@@ -1,0 +1,324 @@
+---
+title: "SymmACP: extending Zed's ACP to support Composable Agents"
+date: 2025-10-08T04:54:08-04:00
+---
+
+This post describes **SymmACP** -- an extension to Zed's [Agent Client Protocol][ACP] that lets you build AI tools like Unix pipes or browser extensions. Want a better TUI? Found some cool slash commands on GitHub? Prefer a different backend? With SymmACP, you can mix and match these pieces and have them all work together without knowing about each other.
+
+This is pretty different from how AI tools work today, where everything is a monolith -- if you want to change one piece, you're stuck rebuilding the whole thing from scratch. SymmACP allows you to build out new features and modes of interactions in a layered, interoperable way. This post explains how SymmACP would work by walking through a series of examples.
+
+Right now, SymmACP is just a thought experiment. I've sketched these ideas to the Zed folks, and they seemed interested, but we still have to discuss the details in this post. My plan is to start prototyping in [Symposium][] -- if you think the ideas I'm discussing here are exciting, please join the [Symposium Zulip][] and let's talk!
+
+[Zed]: https://zed.dev/
+[ACP]: https://agentclientprotocol.com/overview/introduction
+[Symposium]: https://symposium-dev.github.io/symposium/
+[Symposium Zulip]: https://symposium-dev.zulipchat.com/
+
+<!--more-->
+
+## "Composable agents" let you build features independently and then combine them
+
+I'm going to explain the idea of "composable agents" by walking through a series of 3 features. We'll start with a basic CLI agent tool -- basically a chat loop with access to some MCP servers so that it can read/write files and execute bash commands. Then we'll show how you could add several features on top:
+
+1. Addressing time-blindness by helping the agent know what time it is.
+2. Injecting context and "personality" to the agent.
+3. Spawning long-running, asynchronous tasks.
+4. A copy of Q CLI's `/tangent` mode that lets you do a bit of "off the books" work that gets removed from your history later.
+5. Implementing [Symposium's interactive walkthroughs][wt], which give the agent a richer vocabulary for communicating with you than just text.
+6. Smarter tool delegation.
+
+[wt]: https://symposium-dev.github.io/symposium/get-started/walkthroughs.html
+
+**The magic trick is that each of these features will be developed as separate repositories.** What's more, they could be applied to any base tool you want, so long as it speaks SymmACP. And you could also combine them with different front-ends, such as a TUI, a web front-end, builtin support from [Zed][] or [IntelliJ][], etc. Pretty neat.
+
+[^QCLI]: Which I hope will be Q CLI soon!
+
+[IntelliJ]: https://zed.dev/blog/jetbrains-on-acp
+
+My hope is that if we can centralize on SymmACP, or something like it, then we could move from everybody developing their own bespoke tools to an interoperable ecosystem of ideas that can build off of one another.
+
+## let mut SymmACP = ACP
+
+SymmACP begins with ACP, so let's explain what ACP is. ACP is a wonderfully simple protocol that lets you abstract over CLI agents. Imagine if you were using an agentic CLI tool except that, instead of communication over the terminal, the CLI tool communicates with a front-end over JSON-RPC messages, currently sent via stdin/stdout.
+
+```mermaid
+flowchart LR
+    Editor <-.->|JSON-RPC via stdin/stdout| Agent[CLI Agent]
+```
+
+When you type something into the GUI, the editor sends a JSON-RPC message to the agent with what you typed. The agent responds with a stream of messages containing text and images. If the agent decides to invoke a tool, it can request permission by sending a JSON-RPC message back to the editor. And when the agent has completed, it responds to the editor with an "end turn" message that says "I'm ready for you to type something else now".
+
+```mermaid
+sequenceDiagram
+    participant E as Editor
+    participant A as Agent
+    participant T as Tool (MCP)
+    
+    E->>A: prompt("Help me debug this code")
+    A->>E: request_permission("Read file main.rs")
+    E->>A: permission_granted
+    A->>T: read_file("main.rs")
+    T->>A: file_contents
+    A->>E: text_chunk("I can see the issue...")
+    A->>E: text_chunk("The problem is on line 42...")
+    A->>E: end_turn
+```
+
+## Telling the agent what time it is
+
+OK, let's tackle our first feature. If you've used a CLI agent, you may have noticed that they don't know what time it is -- or even what *year* it is. This may sound trivial, but it can lead to some real mistakes. For example, they may not realize that some information is outdated. Or when they do web searches for information, they can search for the wrong thing: I've seen CLI agents search the web for "API updates in 2024" for example, even though it is 2025.
+
+To fix this, many CLI agents will inject some extra text along with your prompt, something like `<current-date date="2025-10-08" time="HH:MM:SS"/>`. This gives the LLM the context it needs.
+
+
+So how could use ACP to build that? The idea is to create a **proxy**. This proxy would wrap the original ACP server:
+
+```mermaid
+flowchart LR
+    Editor[Editor/VSCode] <-->|ACP| Proxy[Datetime Proxy] <-->|ACP| Agent[CLI Agent]
+```
+
+This proxy will take every "prompt" message it receives and decorate it with the date and time:
+
+```mermaid
+sequenceDiagram
+    participant E as Editor
+    participant P as Proxy
+    participant A as Agent
+    
+    E->>P: prompt("What day is it?")
+    P->>A: prompt("&lt;current-date .../&gt; What day is it?")
+    A->>P: text_chunk("It is 2025-10-08.")
+    P->>E: text_chunk("It is 2025-10-08.")
+    A->>P: end_turn
+    P->>E: end_turn
+```
+
+Simple, right? And of course this can be used with any editor and any ACP-speaking tool.
+
+## Next feature: Injecting "personality" to the agent
+
+Let's look at another feature that basically "falls out" from ACP: injecting personality. Most agents give you the ability to configure "context" in various ways -- or what Claude Code calls [memory](https://docs.claude.com/en/docs/claude-code/memory). This is useful, but I and others have noticed that if what you want is to change how Claude "behaves" -- i.e., to make it more collaborative -- it's not really enough. You really need to kick off the conversation by reinforcing that pattern.
+
+In Symposium, [the "yiasou" prompt](https://github.com/symposium-dev/symposium/blob/7f437fdf02ab52cd0bd3070d25feaad387b6d23f/symposium/mcp-server/src/server.rs#L885) (also available as "hi", for those of you who don't speak Greek 😛) is meant to be run as the first thing in the conversation. But there's nothing an MCP server can do to *ensure* that the user kicks off the conversation with `/symposium:hi` or something similar. Of course, if Symposium were implemented as an ACP Server, we absolutely could do that:
+
+```mermaid
+sequenceDiagram
+    participant E as Editor
+    participant P as Proxy
+    participant A as Agent
+    
+    E->>P: prompt("I'd like to work on my document")
+    P->>A: prompt("/symposium:hi")
+    A->>P: end_turn
+    P->>A: prompt("I'd like to work on my document")
+    A->>P: text_chunk("Sure! What document is that?") 
+    P->>E: text_chunk("Sure! What document is that?") 
+    A->>P: end_turn
+    P->>E: end_turn
+```
+
+
+## Proxies are a better version of hooks
+
+Some of you may be saying, "hmm, isn't that what [hooks](https://docs.claude.com/en/docs/claude-code/hooks) are for?" And yes, you could do this with hooks, but there's two problems with that. First, hooks are non-standard, so you have to do it differently for every agent.
+
+The second problem with hooks is that they're **fundamentally limited** to what the hook designer envisioned you might want. You only get hooks at the places in the workflow that the tool gives you, and you can only control what the tool lets you control. The next feature starts to show what I mean: as far as I know, it cannot readily be implemented with hooks the way I would want it to work.
+
+## Next feature: long-running, asynchronous tasks
+
+Let's move on to our next feature, long-running asynchronous tasks. This feature is going to have to go beyond the current capabilities of ACP into the expanded "SymmACP" feature set.
+
+Right now, when the server invokes an MCP tool, it executes in a blocking way. But sometimes the task it is performing might be long and complicated. What you would really like is a way to "start" the task and then go back to working. When the task is complete, you (and the agent) could be notified.
+
+This comes up for me a lot with "deep research". A big part of my workflow is that, when I get stuck on something I don't understand, I deploy a research agent to scour the web for information. Usually what I will do is ask the agent I'm collaborating with to prepare a research prompt summarizing the things we tried, what obstacles we hit, and other details that seem relevant. Then I'll pop over to [claude.ai](https://claude.ai/) or [Gemini Deep Research](https://gemini.google.com/) and paste in the prompt. This will run for 5-10 minutes and generate a markdown report in response. I'll download that and give it to my agent. Very often this lets us solve the problem.[^hallucinate]
+
+[^hallucinate]: Research reports are a **major** part of how I avoid hallucination. You can see an example of one such report I commissioned on the [details of the Language Server Protocol here](https://symposium-dev.github.io/symposium/research/lsp-overview/index.html); if we were about to embark on something that required detailed knowledge of LSP, I would ask the agent to read that report first.
+
+This research flow works well but it is tedious and requires me to copy-and-paste. What I would ideally want is an MCP tool that does the search for me and, when the results are done, hands them off to the agent so it can start processing immediately. But in the meantime, I'd like to be able to continue working with the agent while we wait. Unfortunately, the protocol for tools provides no mechanism for asynchronous notifications like this, from what I can tell.
+
+## SymmACP += tool invocations + unprompted sends
+
+So how would I do it with SymmACP? Well, I would want to extend the ACP protocol as it is today in two ways:
+
+1. I'd like the ACP proxy to be able to provide tools that *the proxy* will execute. Today, the agent is responsible for executing all tools; the ACP protocol only comes into play when requesting *permission*. But it'd be trivial to have MCP tools where, to execute the tool, the agent sends back a message over ACP instead.
+2. I'd like to have a way for the *agent* to initiate responses to the *editor*. Right now, the editor always initiatives each communication session with a prompt; but, in this case, the agent might want to send messages back unprompted.
+
+In that case, we could implement our Research Proxy like so:
+
+```mermaid
+sequenceDiagram
+    participant E as Editor
+    participant P as Proxy
+    participant A as Agent
+    
+    E->>P: prompt("Why is Rust so great?")
+    P->>A: prompt("Why is Rust so great?")
+    A->>P: invoke tool("begin_research")
+    activate P
+    P->>A: ok
+    A->>P: "I'm looking into it!"
+    P->>E: "I'm looking into it!"
+    A->>P: end_turn
+    P->>E: end_turn
+
+    Note over E,A: Time passes (5-10 minutes) and the user keeps working...
+    Note over P: Research completes in background
+    
+    P->>A: &lt;research-complete/&gt
+    deactivate P
+    A->>P: "Research says Rust is fast"
+    P->>E: "Research says Rust is fast"
+    A->>P: end_turn
+    P->>E: end_turn
+```
+
+What's cool about this is that the proxy encapsulates the entire flow: it knows how to do the research, and it manages notifying the various participants when the research completes. (Also, this leans on one detail I left out, which is that )
+
+## Next feature: tangent mode
+
+Let's explore our next feature, [Q CLI's `/tangent` mode](https://docs.aws.amazon.com/amazonq/latest/qdeveloper-ug/command-line-experimental-features.html). This feature is interesting because it's a simple (but useful!) example of history editing. The way `/tangent` works is that, when you first type `/tangent`, Q CLI saves your current state. You can then continue as normal but when you *next* type `/tangent`, your state is restored to where you were. This, as the name suggests, lets you explore a side conversation without polluting your main context.
+
+The basic idea for supporting tangent in SymmACP is that the proxy is going to (a) intercept the tangent prompt and remember where it began; (b) allow the conversation to continue as normal; and then (c) when it's time to end the tangent, create a new session and replay the history up until the point of the tangent[^orclear].
+
+[^orclear]: Alternatively: clear the session history and rebuild it, but I kind of prefer the functional view of the world, where a given session never changes.
+
+## SymACP += replay
+
+You can *almost* implement "tangent" in ACP as it is, but not quite. In ACP, the agent always owns the session history. The editor can create a new session or load an older one; when loading an older one, the agent "replays" "replays" the events so that the editor can reconstruct the GUI. But there is no way for the *editor* to "replay" or construct a session to the *agent*. Instead, the editor can only send prompts, which will cause the agent to reply. In this case, what we want is to be able to say "create a new chat in which I said this and you responded that" so that we can setup the initial state. This way we could easily create a new session that contains the messages from the old one.
+
+So how this would work:
+
+```mermaid
+sequenceDiagram
+    participant E as Editor
+    participant P as Proxy
+    participant A as Agent
+    
+    E->>P: prompt("Hi there!")
+    P->>A: prompt("Hi there!")
+
+    Note over E,A: Conversation proceeds
+    
+    E->>P: prompt("/tangent")
+    Note over P: Proxy notes conversation state
+    P->>E: end_turn
+    E->>P: prompt("btw, ...")
+    P->>A: prompt("btw, ...")
+
+    Note over E,A: Conversation proceeds
+    
+    E->>P: prompt("/tangent")
+    
+    P->>A: new_session
+    P->>A: prompt("Hi there!")    
+    Note over P,A: ...Proxy replays conversation...
+
+```
+
+
+## Next feature: interactive walkthroughs
+
+One of the nicer features of Symposium is the ability to do [interactive walkthroughs][wt]. These consist of an HTML sidebar as well as inline comments in the code:
+
+<img src="{{< baseurl >}}/assets/2025-symmacp/walkthrough.png" alt="Walkthrough screenshot" width="100%"/>
+
+Right now, this is implemented by a kind of hacky dance:
+
+* The agent invokes an MCP tool and sends it the walkthrough in markdown. This markdown includes commands meant to be placed on particular lines, identified not by line number (agents are bad at line numbers) but by symbol names or search strings.
+* The MCP tool parses the markdown, determines the line numbers for comments, and creates HTML. It sends that HTML over IPC to the VSCode extension.
+* The VSCode receives the IPC message, displays the HTML in the sidebar, and creates the comments in the code.
+
+It works, but it's a giant Rube Goldberg machine.
+
+## SymmACP += Enriched conversation history
+
+With SymmACP, we would structure the passthrough mechanism as a proxy. Just as today, it would provide an MCP tool to the agent to receive the walkthrough markdown. It would then convert that into the HTML to display on the side along with the various comments to embed in the code. But this is where things are different.
+
+Instead of sending that content over IPC, what I would want to do is to make it possible for proxies to deliver extra information along with the chat. This is relatively easy to do in ACP as is, since it provides for various capabilities, but I think I'd want to go one step further 
+
+I would have a proxy layer that manages walkthroughs. As we saw before, it would provide a tool. But there'd be one additional thing, which is that, beyond just a chat history, it would be able to convey additional state. I think the basic conversation structure is like:
+
+* Conversation
+    * Turn
+        * User prompt(s) -- could be zero or more
+        * Response(s) -- could be zero or more
+        * Tool use(s) -- could be zero or more
+
+but I think it'd be useful to (a) be able to attach metadata to any of those things, e.g., to add extra context *about the conversation* or *about a specific turn* (or even a specific *prompt*), but also additional kinds of events. For example, tool approvals are an *event*. And presenting a walkthrough and adding annotations are an event too.
+
+The way I imagine it, one of the core things in SymmACP would be the ability to serialize your state to JSON. You'd be able to ask a SymmACP paricipant to summarize a session. They would in turn ask any delegates to summarize and then add their own metadata along the way. You could also send the request in the *other* direction -- e.g., the agent might present its state to the editor and ask it to augment it.
+
+## Enriched history would let walkthroughs be extra metadata
+
+This would mean a walkthrough proxy could add extra metadata into the chat transcript like "the current walkthrough" and "the current comments that are in place". Then the *editor* would either *know* about that metadata or not. If it doesn't, you wouldn't see it in your chat. Oh well -- or perhaps we do something HTML like, where there's a way to "degrade gracefully" (e.g., the walkthrough could be presented as a regular "response" but with some metadata that, if you know to look, tells you to interpret it differently). But if the editor DOES know about the metadata, it interprets it specially, throwing the walkthrough up in a panel and adding the comments into the code.
+
+With enriched histories, I think we can even say that in SymmACP, the ability to load, save, and persist sessions *itself* becomes an extension, something that can be implemented by a proxy; the base protocol only needs the ability to conduct and serialize a conversation.
+
+## Final feature: Smarter tool delegation.
+
+Let me sketch out another feature that I've been noodling on that I think would be pretty cool. It's well known that there's a problem that LLMs get confused when there are too many MCP tools available. They get distracted. And that's sensible, so would I, if I were given a phonebook-size list of possible things I could do and asked to figure something out. I'd probably just ignore it. 
+
+But how do humans deal with this? Well, we don't take the whole phonebook -- we got a shorter list of *categories* of options and then we drill down. So I go to the File Menu and *then* I get a list of options, not a flat list of commands.
+
+I wanted to try building an MCP tool for IDE capabilities that was similar. There's a bajillion set of things that a modern IDE can "do". It can find references. It can find definitions. It can get type hints. It can do renames. It can extract methods. In fact, the list is even open-ended, since extensions can provide their *own* commands. I don't know what all those things *are* but I have a sense for the *kinds of things* an IDE can do -- and I suspect models do too. 
+
+What if you gave them a single tool, "IDE operation", and they could use plain English to describe what they want? e.g., `ide_operation("find definition for the ProxyHandler that referes to HTTP proxies")`. Hmm, this is sounding a lot like a delegate, or a sub-agent. Because now you need to use a second LLM to interpret that request -- you probably want to do something like, give it a list of sugested IDE capabilities and the ability to find out full details and ask it to come up with a plan (or maybe directly execute the tools) to find the answer.
+
+As it happens, MCP *has* a capability to enable tools to do this -- it's called (somewhat oddly, in my opinion) "sampling". It allows for "callbacks" from the MCP tool to the LLM. But literally *nobody* implements it, from what I can tell.[^qcli] But sampling is kind of limited anyway. With SymmACP, I think you could do much more interesting things.
+
+[^qcli]: I started an implementation for Q CLI but got distracted -- and, for reasons that should be obvious, I've started to lose interest.
+
+## SymmACP.contains(simultaneous_sessions)
+
+The key is that ACP already permits a single agent to "serve up" many simultaneous sessions. So that means that if I have a proxy, perhaps one supplying an MCP tool definition, I could use it to start *fresh* sessions -- combine that with the "history replay" capability I mentioned above, and the tool can exactly what context to bring over into that session to start from, as well, which is very cool (that's a challenge for MCP servers today, they don't get access to the conversation history).
+
+```mermaid
+sequenceDiagram
+    participant E as Editor
+    participant P as Proxy
+    participant A as Agent
+    
+    A->>P: ide_operation("...")
+    activate P
+    P->>A: new_session
+    activate P
+    activate A
+    P->>A: prompt("Using these primitive operations, suggest a way to do '...'")
+    A->>P: ...
+    A->>P: end_turn
+    deactivate P
+    deactivate A
+    Note over P: performs the plan
+    P->>A: result from tool
+    deactivate P
+```
+
+## Conclusion
+
+Ok, this post sketched a variant on [ACP] that I call SymmACP. SymmACP extends ACP with
+
+* the ability for either side to provide the initial state of a conversation, not just the server
+* the ability for an "editor" to provide an MCP tool to the "agent"
+* the ability for agents to respond without an initial prompt
+* the ability to serialize conversations and attach extra state (already kind of present)
+
+Most of these are modest extensions to ACP, in my opinion, and easily doable in a backwards fashion just by adding new capabilities. **But together they unlock the ability for anyone to craft extensions to agents and deploy them in a composable way.** I am super excited about this. This is exactly what I wanted Symposium to be all about.
+
+It's worth nothing the old adage: "with great power, comes great responsibility". These proxies and ACP layers I've been talking about are really like IDE extensions. They can effectively do *anything* you could do. There are obvious security concerns. Though I think that approaches like Microsoft's [Wassette](https://opensource.microsoft.com/blog/2025/08/06/introducing-wassette-webassembly-based-tools-for-ai-agents/) are key here -- it'd be awesome to have a "capability-based" notion of what a "proxy layer" is, where everything compiles to WASM, and where users can tune what a given proxy can actually *do*.
+
+I plan to start sketching a plan to drive this work in [Symposium][] and elsewhere. My goal is to have a completely open and interopable client, one that can be based on any agent (including local ones) and where you can pick and choose which parts you want to use. I expect to build out lots of custom functionality to support Rust development (e.g., explaining and diagnosting trait errors using the new trait solver is high on my list...and macro errors...) but also to have other features like walkthroughs, collaborative interaction style, etc that are all language independent -- and I'd love to see language-focused features for other langauges, especially Python and TypeScript (because ["the new trifecta"](https://smallcultfollowing.com/babysteps/blog/2025/07/31/rs-py-ts-trifecta/)) and Swift and Kotlin (because mobile). If that vision excites you, come join the [Symposium Zulip][] and let's chat!
+
+## Appendix: A guide to the agent protocols I'm aware of
+
+One question I've gotten when discussing this is how it compares to the other host of protocols out there. Let me give a brief overview of the related work and how I understand its pros and cons:
+
+* *[Model context protocol (MCP)](https://modelcontextprotocol.io/docs/getting-started/intro):* The queen of them all. A protocol that provides a set of tools, prompts, and resources up to the agent. Agents can invoke tools by supplying appropriate parameters, which are JSON. Prompts are shorthands that users can invoke using special commands like `/` or `@`, they are essentially macros that expand "as if the user typed it" (but they can also have parameters and be dynamically constructed). *Resources* are just data that can be requested. MCP servers can either be local or hosted remotely. Remote MCP has only recently become an option and auth in particular is limited.
+    * Comparison to SymmACP: MCP provides tools that the agent can invoke. SymmACP builds on it by allowing those tools to be provided by outer layers in the proxy chain. SymmACP is oriented at controlling the whole chat "experience".
+* *[Zed's Agent Client Protocol (ACP)][ACP]:* The basis for SymmACP. Allows editors to create and manage sessions. Focused only on local sessions, since your editor runs locally.
+    * Comparison to SymmACP: That's what this post is all about! SymmACP extends ACP with new capabilities that let intermediate layers manipulate history, provide tools, and provide extended data upstream to support richer interaction patterns than jus chat. PS I expect we may want to support more remote capabilities, but it's kinda orthogonal in my opinion (e.g., I'd like to be able to work with an agent running over in a cloud-hosted workstation, but I'd probably piggyback on ssh for that).
+* *[Google's Agent-to-Agent Protocol (A2A)](https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/) and [IBM's Agent Communication Protocol (ACP)](https://www.ibm.com/think/topics/agent-communication-protocol)[^yes]:* From what I can tell, Google's "agent-to-agent" protocol is *kinda* like a mix of MCP and OpenAPI. You can ping agents that are running remotely and get them to send you "agent cards", which describe what operations they can perform, how you authenticate, and other stuff like that. It looks to me quite similar to MCP except that it has richer support for remote execution and in particular supports things like long-running communication, where an agent may need to go off and work for a while and then ping you back on a webhook.
+    * *Comparison to MCP:* To me, A2A looks like a variant of MCP that is more geared to remote execution. MCP has a method for tool discovery where you ping the server to get a list of tools; A2A has a similar mechanism with Agent Cards. MCP can run locally, which A2A cannot afaik, but A2A has more options about auth. MCP can only be invoked synchronously, whereas A2A supports long-running operations, progress updates, and callbacks. It seems like the two could be merged to make a single whole.
+    * *Comparison to SymmACP:* I think A2A is orthogonal from SymmACP. A2A is geared to agents that provide services to one another. SymmACP is geared towards building new development tools for interacting with agents. It's possible you could build something like SymmACP *on* A2A but I don't know what you would really gain by it (and I think it'd be easy to do later).
+
+[^yes]: Yes, you read that right. There is another ACP. Just a mite confusing when you google search. =)
