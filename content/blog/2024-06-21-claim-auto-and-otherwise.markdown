@@ -231,7 +231,7 @@ I think we should write up some design axioms. But it turns out we already have 
 
 > * **Applicability**. Where are you allowed to elide implied information? Is there any heads-up that this might be happening?
 > * **Power**. What influence does the elided information have? Can it radically change program behavior or its types?
-> * **Context-dependence**. How much of do you have to know about the rest of the code to know what is being implied, i.e. how elided details will be filled in? Is there always a clear place to look?
+> * **Context-dependence**. How much do you have to know about the rest of the code to know what is being implied, i.e. how elided details will be filled in? Is there always a clear place to look?
 
 Aaron concluded that *"**implicit features should balance these three dimensions**. If a feature is large in one of the dimensions, it's best to strongly limit it in the other two."* In the case of autoclaim, the applicability is high (could happen a lot with no heads up) and the context dependence is medium-to-large (you have to know the types of things and traits they implement). We should therefore limit power, and this is why we put clear guidelines on who should implement `Claim`. And of course for the cases where that doesn't suffice, the lint can limit the applicability to zero.
 
