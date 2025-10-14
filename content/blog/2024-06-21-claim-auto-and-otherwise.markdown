@@ -53,7 +53,7 @@ In fact, `clone` can have an effect on the program's *semantics* as well. Imagin
 
 Now imagine we introduced a new trait `Claim`. This would be a subtrait of `Clone`that indicates that cloning is:
 
-* **Cheap:** Claiming should complete in O(1) time and avoid copying more than a few cache lines (64-256 bytes on current arhictectures).
+* **Cheap:** Claiming should complete in O(1) time and avoid copying more than a few cache lines (64-256 bytes on current architectures).
 * **Infallible:** Claim should not encounter failures, even panics or aborts, under any circumstances. **Memory allocation is not allowed**, as it can abort if memory is exhausted. 
 * **Transparent:** The old and new value should behave the same with respect to their public API.
 
