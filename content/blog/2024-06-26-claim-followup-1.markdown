@@ -26,7 +26,7 @@ I got a few questions about the relationship of the Copy/Clone/Claim traits to o
     * `Copy` represents values that can be cloned via memcpy and which lack destructors ("plain old data").
     * `Claim` represents values whose clones are cheap, infallible, and transparent; on the basis of these properties, claims are inserted automatically by the compiler.
 
-`Copy` and `Claim` overlap but do not have a strict hierarchical relationship. Some `Claim` types (like `Rc` and `Arc`) are not "plain old data". And while all `Copy` operations are infallible, some of them fail to meet claims other conditions:
+`Copy` and `Claim` overlap but do not have a strict hierarchical relationship. Some `Claim` types (like `Rc` and `Arc`) are not "plain old data". And while all `Copy` operations are infallible, some of them fail to meet claim's other conditions:
 
 * Copying a large type like `[u8; 1024]` is not cheap.
 * Copying a type with interior mutability like `Cell<u8>` is not transparent.
