@@ -44,7 +44,7 @@ In a [talk I gave some years back at Rust LATAM in Uruguay](https://nikomatsakis
 
 <img src="{{< baseurl >}}/assets/2025-movedestructleak/firespell.gif" alt="Person casting a firespell and burning themselves"/>
 
-Rust currently does a pretty good job with preventing parts of your program from interfering with one another, but we don't do as good a job when it comes to guaranteeing that cleaup happens[^safety]. We have destructors, of course, but they have two critical limitations:
+Rust currently does a pretty good job with preventing parts of your program from interfering with one another, but we don't do as good a job when it comes to guaranteeing that cleanup happens[^safety]. We have destructors, of course, but they have two critical limitations:
 
 [^safety]: Academics distinguish "safety" from "liveness properties", where safety means "bad things don't happen" and "liveness" means "good things eventually happen". Another way of saying this is that Rust's type system helps with a lot of safety properties but struggles with liveness properties.
 
