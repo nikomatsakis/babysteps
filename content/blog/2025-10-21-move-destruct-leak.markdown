@@ -242,7 +242,7 @@ error[E0493]: destructor of `T` cannot be evaluated at compile-time
 
 This check is not presently taking place in borrow check but it could be.
 
-### The borrow checker would require "moved" values implement `Move`
+### The borrow checker would require that "moved" values implement `Move`
 
 The final part of the check would be requiring that "moved" values implement `Move`:
 
