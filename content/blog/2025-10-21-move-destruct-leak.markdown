@@ -1,5 +1,5 @@
 ---
-title: "Move, Destruct, Leak, and Rust"
+title: "Move, Destruct, Forget, and Rust"
 date: 2025-10-21T21:45:02-04:00
 series:
 - "Must move"
