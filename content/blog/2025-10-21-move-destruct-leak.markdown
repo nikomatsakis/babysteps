@@ -344,7 +344,7 @@ This setup provides attacks a key problem that has blocked async drop in my mind
 
 ### Why is the trait `Destruct` and not `Drop`?
 
-This comes from the const generifs work. I don't love it. But there is a logic to it. Right now, when you drop a struct or other value, that actually does a whole sequence of things, only one of which is running any `Drop` impl -- it also (for example) drops all the fields in the struct recursively, etc. The idea is that "destruct" refers to this whole sequence.
+This comes from the const generics work. I don't love it. But there is a logic to it. Right now, when you drop a struct or other value, that actually does a whole sequence of things, only one of which is running any `Drop` impl -- it also (for example) drops all the fields in the struct recursively, etc. The idea is that "destruct" refers to this whole sequence.
 
 ### How hard would this to be to prototype?
 
