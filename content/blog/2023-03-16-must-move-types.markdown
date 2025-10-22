@@ -130,7 +130,7 @@ pub struct Guard {
 impl !Drop for Guard { }
 ```
 
-When you do this, the type becomes “must move” and any function which has a value of type `Guard` must either move it somewhere else. You might wonder then how you ever terminate — the answer is that one way to “move” the value is to unpack it with a pattern. For example, `Guard` might declare a `log` method:
+When you do this, the type becomes “must move” and any function which has a value of type `Guard` must move it somewhere else. You might wonder then how you ever terminate — the answer is that one way to “move” the value is to unpack it with a pattern. For example, `Guard` might declare a `log` method:
 
 ```rust
 impl Guard {
