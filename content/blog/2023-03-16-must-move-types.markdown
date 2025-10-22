@@ -2,6 +2,8 @@
 layout: post
 title: Must move types
 date: 2023-03-16T18:32:00-0400
+series:
+- "Must move"
 ---
 
 Rust has lots of mechanisms that prevent you from doing something bad. But, right now, it has NO mechanisms that force you  to do something *good*[^mu]. I’ve been thinking lately about what it would mean to add “must move” types to the language. This is an idea that I’ve long resisted, because it represents a fundamental increase to complexity. But lately I’m seeing more and more problems that it would help to address, so I wanted to try and think what it might look like, so we can better decide if it's a good idea.
