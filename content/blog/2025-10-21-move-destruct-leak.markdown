@@ -313,6 +313,31 @@ So, the system as I described *would* allow for 'unmoveable' types (i.e., a stru
 
 This seems like something that could be useful -- e.g., to model "video RAM" or something that lives in a specific location in memory and cannot live anywhere else -- but it's not a widespread need.
 
+### How would you handle destructors with arguments?
+
+I imagine something like this:
+
+```rust
+struct Transaction {
+    data: Vec<u8>
+}
+
+/// Opt out from destruct
+impl Move for Transaction { }
+
+impl Transaction {
+    // This is effectively a "destructor"
+    pub fn complete(
+        self, 
+        connection: Connection,
+    ) {
+        let Transaction { data } = self;
+    }
+}
+```
+
+With this setup, any function that owns a `Transaction` must eventually invoke `transaction.complete()`. This is because no values of this type can be dropped, so they must be moved.
+
 ### How does this relate to async drop?
 
 This setup provides attacks a key problem that has blocked async drop in my mind, which is that types that are "async drop" do not have to implement "sync drop". This gives the type system the ability to prevent them from being dropped in sync code, then, and it would mean that they can only be dropped in async drop. But there's still lots of design work to be done there.
@@ -325,3 +350,14 @@ This comes from the const generifs work. I don't love it. But there is a logic t
 
 I...don't actually think it would be very hard. I've thought somewhat about it and all of the changes seem pretty straightforward. I would be keen to support a [lang-team experiment](https://lang-team.rust-lang.org/how_to/experiment.html) on this.
 
+### Does this mean we should have had leak?
+
+The whole topic of destructors and leaks and so forth datesback to approximately Rust 1.0, when we discovered that, in fact, our abstraction for threads was unsound when combined with cyclic ref-counted boxes. Before that we hadn't fully internalized that destructors are "opt-out methods". You can read [this blog post I wrote at the time][rcleak]. At the time, the primary idea was to have some kind of `?Leak` bounds and it was tied to the idea of references (so that all `'static` data was assumed to be "leakable", and hence something you could put into an `Rc`). I... mostly think we made the right call at the time. I think it's good that most of the ecosystem is interoperable and that `Rc` doesn't require `static` bounds, and certainly I think it's good that we moved to 1.0 with minimal disruption. In any case, though, I rather prefer this design to the ones that were under discussion at the time, in part because it also addresses the need for different kinds of destructors and for destructors with many arguments and so forth, which wasn't something we thought about then.
+
+[rcleak]: {{< baseurl >}}/blog/2015/04/29/on-reference-counting-and-leaks/
+
+### Isn't it confusing to have these "magic" traits that "opt out" from default bounds?
+
+I think that specifying the *bounds you want* is inherently better than today's `?` design, both because it's easier to understand and because it allows us to backwards compatibly add traits in between in ways that are not possible with the `?` design.
+
+However, I do see that having `T: Move` mean that `T: Destruct` does not hold is subtle. I wonder if we should adopt some kind of sigil or convention on these traits, like `T: @Move` or something. I don't know! Something to consider.
