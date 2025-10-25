@@ -204,7 +204,7 @@ It's worth pointing out that this will be annoying as all get out in the face of
 
 ```rust
 fn return_err<T: Move>(a: T) -> T {
-    // ERROR: If a panic occurs, `a` would be dropped, but `T` not implement `Destruct`
+    // ERROR: If a panic occurs, `a` would be dropped, but `T` does not implement `Destruct`
     forbid_env_var();
 
     a
