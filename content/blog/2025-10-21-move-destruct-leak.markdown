@@ -291,7 +291,7 @@ I am not sure exactly how to manage it, but we'll figure it out -- and in the me
 
 #### Associated type bounds in closures
 
-The one place that I think it is *really imporatnt* that we weaken the associated type bounds is with closures-- and, fortunately, that's a place we can get away with due to the way our "closure trait bound" syntax works. I feel like I wrote a post on this before, but I can't find it now, but the short version is that, today, when you write `F: Fn()`, that means that the closure must return `()`. If you write `F: Fn() -> T`, then this type `T` must have been declared somewhere else, and so `T` will (independently from the associated type of the `Fn` trait) get a default `Forget` bound. So since the `Fn` associated type is not independently nameable in stable Rust, we can change its bounds, and code like this would continue to work unchanged:
+The one place that I think it is *really important* that we weaken the associated type bounds is with closures-- and, fortunately, that's a place we can get away with due to the way our "closure trait bound" syntax works. I feel like I wrote a post on this before, but I can't find it now, but the short version is that, today, when you write `F: Fn()`, that means that the closure must return `()`. If you write `F: Fn() -> T`, then this type `T` must have been declared somewhere else, and so `T` will (independently from the associated type of the `Fn` trait) get a default `Forget` bound. So since the `Fn` associated type is not independently nameable in stable Rust, we can change its bounds, and code like this would continue to work unchanged:
 
 ```rust
 fn foo<T, F>()
@@ -344,7 +344,7 @@ This setup provides attacks a key problem that has blocked async drop in my mind
 
 ### Why is the trait `Destruct` and not `Drop`?
 
-This comes from the const generifs work. I don't love it. But there is a logic to it. Right now, when you drop a struct or other value, that actually does a whole sequence of things, only one of which is running any `Drop` impl -- it also (for example) drops all the fields in the struct recursively, etc. The idea is that "destruct" refers to this whole sequence.
+This comes from the const generics work. I don't love it. But there is a logic to it. Right now, when you drop a struct or other value, that actually does a whole sequence of things, only one of which is running any `Drop` impl -- it also (for example) drops all the fields in the struct recursively, etc. The idea is that "destruct" refers to this whole sequence.
 
 ### How hard would this to be to prototype?
 
@@ -352,7 +352,7 @@ I...don't actually think it would be very hard. I've thought somewhat about it a
 
 ### Does this mean we should have had leak?
 
-The whole topic of destructors and leaks and so forth datesback to approximately Rust 1.0, when we discovered that, in fact, our abstraction for threads was unsound when combined with cyclic ref-counted boxes. Before that we hadn't fully internalized that destructors are "opt-out methods". You can read [this blog post I wrote at the time][rcleak]. At the time, the primary idea was to have some kind of `?Leak` bounds and it was tied to the idea of references (so that all `'static` data was assumed to be "leakable", and hence something you could put into an `Rc`). I... mostly think we made the right call at the time. I think it's good that most of the ecosystem is interoperable and that `Rc` doesn't require `static` bounds, and certainly I think it's good that we moved to 1.0 with minimal disruption. In any case, though, I rather prefer this design to the ones that were under discussion at the time, in part because it also addresses the need for different kinds of destructors and for destructors with many arguments and so forth, which wasn't something we thought about then.
+The whole topic of destructors and leaks and so forth dates back to approximately Rust 1.0, when we discovered that, in fact, our abstraction for threads was unsound when combined with cyclic ref-counted boxes. Before that we hadn't fully internalized that destructors are "opt-out methods". You can read [this blog post I wrote at the time][rcleak]. At the time, the primary idea was to have some kind of `?Leak` bounds and it was tied to the idea of references (so that all `'static` data was assumed to be "leakable", and hence something you could put into an `Rc`). I... mostly think we made the right call at the time. I think it's good that most of the ecosystem is interoperable and that `Rc` doesn't require `static` bounds, and certainly I think it's good that we moved to 1.0 with minimal disruption. In any case, though, I rather prefer this design to the ones that were under discussion at the time, in part because it also addresses the need for different kinds of destructors and for destructors with many arguments and so forth, which wasn't something we thought about then.
 
 [rcleak]: {{< baseurl >}}/blog/2015/04/29/on-reference-counting-and-leaks/
 
