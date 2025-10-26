@@ -49,7 +49,7 @@ Just recently, I was debugging [Symposium](), which is written in Swift. Somehow
 
 [RAII]: https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization
 
-Josh gave me a similar example from [the "bytes" crate](https://docs.rs/bytes/latest/bytes/). A [`Bytes`](https://docs.rs/bytes/latest/bytes/struct.Bytes.html) type is a [handle][] to a slice of some underlying memory buffer. When you clone that handle, it will keep the entire backing buffer around. Sometimes you might prefer to copy your slice out into a separate buffer so that the underlying buffer can be freed. It's not that hard for me to imagine trying to hunt down an errant handle that is keeping some large buffer alive and being very frustrated that I can't see explicitly in the where those handles are created.
+Josh gave me a similar example from [the "bytes" crate](https://docs.rs/bytes/latest/bytes/). A [`Bytes`](https://docs.rs/bytes/latest/bytes/struct.Bytes.html) type is a [handle][] to a slice of some underlying memory buffer. When you clone that handle, it will keep the entire backing buffer around. Sometimes you might prefer to copy your slice out into a separate buffer so that the underlying buffer can be freed. It's not that hard for me to imagine trying to hunt down an errant handle that is keeping some large buffer alive and being very frustrated that I can't see explicitly in the code where those handles are created.
 
 [handle]: {{< baseurl >}}/blog/2025/10/07/the-handle-trait/
 
