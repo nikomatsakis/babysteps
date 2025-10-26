@@ -174,7 +174,7 @@ The real goal should be to disconnect "can be memcopied" and "can be automatical
 
 At codegen time, I would still expect us to guarantee that `x = y` will memcpy and will not invoke `y.claim()`, since technically the `Clone` impl may not be the same behavior; it'd be nice if we could extend this guarantee to any call to `clone`, but I don't know how to do that, and it's a separate problem. Furthermore, the `automatic_claims` lint would only apply to types that don't implement `Copy`.[^copied]
 
-[^copied]: Oooh, that gives me an idea. It would be nice if in addition to writing `x.claim()` one could write `x.copy()` (similar to [`iter.copied()`](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.copied)) to explicitly indicate that you are doing a memcpy. Then the compiler rule is basicaly that it will insert either `x.claim()` or `x.copy()` as appropriate for types that implement `Claim`.
+[^copied]: Oooh, that gives me an idea. It would be nice if in addition to writing `x.claim()` one could write `x.copy()` (similar to [`iter.copied()`](https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.copied)) to explicitly indicate that you are doing a memcpy. Then the compiler rule is basically that it will insert either `x.claim()` or `x.copy()` as appropriate for types that implement `Claim`.
 
 ## Frequently asked questions
 
