@@ -7,7 +7,7 @@
     </p>
   </header>
 
-  {{ range (.Site.GetPage "blog").Pages | first 6 }}
+  {{ range (.Site.GetPage "blog").Pages.ByDate.Reverse | first 6 }}
     {{ partial "page-preview.html" . }}
   {{ end }}
 

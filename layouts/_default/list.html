@@ -3,7 +3,7 @@
     <h1>{{ .Title }}</h1>
   </header>
 
-  {{ range .Pages }}
+  {{ range .Pages.ByDate.Reverse }}
     {{ partial "page-preview.html" . }}
   {{ end }}
 {{ end }}
