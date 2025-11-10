@@ -390,7 +390,7 @@ let p = &foo;
 Clone::clone(p)
 ```
 
-to be transformed in the same way (replaced with `foo`), and the same would apply to more levels of intermediate usage. This would kind of "fall out" from the MIR-based optimization technique I imagine. It doesn't have to be this way, we could be more particular about the syntax that people wrote, but I think that would be surprising.
+to be transformed in the same way (replaced with `foo`), and the same would apply to more levels of intermediate usage. This would kind of "fall out" from the MIR-based transformation technique I imagine. It doesn't have to be this way, we could be more particular about the syntax that people wrote, but I think that would be surprising.
 
 On the other hand, you could still fool it e.g. like so
 
