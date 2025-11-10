@@ -375,6 +375,31 @@ fn borrow(message: Message) -> String {
 
 In the past, I've talked about the last-use *transformation* as an *optimization* -- but I'm changing terminology here. This is because, typically, an *optimization* is supposed to be unobservable to users except through measurements of execution time (or though UB), and that is clearly not the case here. The transformation would be a mechanical transformation performed by the compiler in a deterministic fashion.
 
+### Would the transformation "see through" references?
+
+I think yes, but in a limited way. In other words I would expect
+
+```rust
+Clone::clone(&foo)
+```
+
+and
+
+```rust
+let p = &foo;
+Clone::clone(p)
+```
+
+to be transformed in the same way (replaced with `foo`), and the same would apply to more levels of intermediate usage. This would kind of "fall out" from the MIR-based optimization technique I imagine. It doesn't have to be this way, we could be more particular about the syntax that people wrote, but I think that would be surprising.
+
+On the other hand, you could still fool it e.g. like so
+
+```rust
+fn identity<T>(x: &T) -> &T { x }
+
+identity(&foo).clone()
+```
+
 ### Would the transformation apply across function boundaries?
 
 The way I imagine it, no. The transformation would be local to a function body. This means that one could write a `force_clone` method like so that "hides" the clone in a way that it will never be transformed away (this is an important capability for edition transformations!):
