@@ -26,7 +26,7 @@ For some code, automatically calling `Claim` may be undesirable. For example, so
 
 ## Step 1: Introducing an explicit `Claim` trait
 
-Quick, reading this code, can you tell me anything about it's performance characteristics?
+Quick, reading this code, can you tell me anything about its performance characteristics?
 
 ```rust
 tokio::spawn({
