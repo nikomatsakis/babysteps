@@ -80,15 +80,15 @@ The borrow checker these days operates on [MIR][][^why]. MIR is basically a very
 ```mermaid
 flowchart TD
   Intro --> BB1
-  Intro["let mut x: i32\nlet mut y: i32\nlet mut p: &'0 i32\nlet mut q: &'1 i32"]
-  BB1["p = &x;\ny = y + 1;\nq = &y;\nif something goto BB2 else BB3"]
+  Intro["let mut x: i32<br>let mut y: i32<br>let mut p: &'0 i32<br>let mut q: &'1 i32"]
+  BB1["p = &x;<br>y = y + 1;<br>q = &y;<br>if something goto BB2 else BB3"]
   BB1 --> BB2
   BB1 --> BB3
-  BB2["p = q;\nx = x + 1;\n"]
+  BB2["p = q;<br>x = x + 1;<br>"]
   BB3["y = y + 1;"]
   BB2 --> BB4;
   BB3 --> BB4;
-  BB4["y = y + 1;\nread_value(p);\n"]
+  BB4["y = y + 1;<br>read_value(p);<br>"]
 
   classDef default text-align:left,fill-opacity:0;
 ```
