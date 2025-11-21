@@ -9,6 +9,8 @@ This post explores another proposal in the space of ergonomic ref-counting that 
 
 [ecc]: {{< baseurl >}}/blog/2025/10/22/explicit-capture-clauses.html
 
+<!-- more -->
+
 ## TL;DR
 
 The idea itself is simple, within a closure (or future), we add the option to write `move($expr)`. This is a value expression ("rvalue") that desugars into a temporary value that is moved into the closure. So
