@@ -130,6 +130,28 @@ It's a bit ironic that I like this, because it's doubling down on part of Rust's
 
 `move` expressions are, I think, moving in the opposite direction. Rather than talking about attached and detached, they bring us to a more unified notion of closures, one where you don't have "ref closures" and "move closures" -- you just have closures that sometimes capture moves, and a "move" closure is just a shorthand for using `move` expressions everywhere. This is in fact how closures work in the compiler under the hood, and I think it's quite elegant.
 
+## Why not suffix?
+
+One question is whether a `move` expression should be a *prefix* or a *postfix* operator. So e.g.
+
+```rust
+|| something(&$expr.move)
+``` 
+
+instead of `&move($expr)`.
+
+My feeling is that it's not a good fit for a postfix operator because it doesn't just take the final value of the expression and so something with it, it actually impacts when the entire expression is evaluated. Consider this example:
+
+```rust
+|| process(foo(bar()).move)
+```
+
+When does `bar()` get called? If you think about it, it has to be closure creation time, but it's not very "obvious".
+
+We reached a similar conclusion when we were considering `.unsafe` operators. I think there is a rule of thumb that things which delineate a "scope" of code ought to be prefix -- though I suspect `unsafe(expr)` might actually be nice, and not just `unsafe { expr }`.
+
+*Edit:* I added this section after-the-fact in response to questions.
+
 ## Conclusion
 
 I'm going to wrap up this post here. To be honest, what this design really has going for it, above anything else, is its *simplicity* and the way it *generalizes Rust's existing design*. I love that. To me, it joins the set of "yep, we should clearly do that" pieces in this puzzle:
