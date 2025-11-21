@@ -116,7 +116,7 @@ The reason that I love the `move` variant of this proposal is that it makes clos
 > }
 > ```
 
-### This proposal makes `move` "fit in" for me
+## This proposal makes `move` "fit in" for me
 
 It's a bit ironic that I like this, because it's doubling down on part of Rust's design that I was recently complaining about. In my earlier post on [Explicit Capture Clauses][ecc] I wrote that:
 
