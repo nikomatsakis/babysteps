@@ -9,7 +9,7 @@ This post explores another proposal in the space of ergonomic ref-counting that 
 
 [ecc]: {{< baseurl >}}/blog/2025/10/22/explicit-capture-clauses.html
 
-<!-- more -->
+<!--more-->
 
 ## TL;DR
 
