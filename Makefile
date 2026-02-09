@@ -6,7 +6,7 @@ help:
 	@echo "  make generate deploy"
 
 # Use Hugo from proto
-hugo = hugo
+hugo ?= hugo
 
 post:
 	@if [ -z "${NAME}" ]; then echo "Set NAME to something!"; else ${hugo} new content content/blog/`date '+%Y-%m-%d'`-${NAME}.markdown; fi
