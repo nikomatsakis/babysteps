@@ -1,0 +1,5 @@
+{{- /* Mark that this page has Dada code blocks */ -}}
+{{- .Page.Store.Set "hasDada" true -}}
+
+{{- /* Render the code block with a special class and data attributes for highlighting */ -}}
+<pre><code class="language-dada" data-dada-keywords="{{ delimit (.Page.Params.dada_keywords | default (slice "let")) "," }}" data-dada-types="{{ delimit (.Page.Params.dada_types | default (slice "String")) "," }}">{{- .Inner -}}</code></pre>

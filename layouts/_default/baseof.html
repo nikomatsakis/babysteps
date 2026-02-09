@@ -66,6 +66,10 @@
   </script>
   {{ end }}
 
+  {{ if .Page.Store.Get "hasDada" }}
+  <script src="{{ .Site.BaseURL }}/js/dada-highlight.js"></script>
+  {{ end }}
+
 </body>
 
 </html>
