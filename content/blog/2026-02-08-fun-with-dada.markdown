@@ -33,7 +33,7 @@ The idea was that you could start writing without any types at all and just exec
 
 I got this working and it was actually pretty cool. [I gave a talk about it at the Programming Language Mentoring Workshop in 2022](https://www.youtube.com/watch?v=tdg03gEbyS8), though skimming that video it doesn't seem like I really demo'd the permission modeling. Too bad. 
 
-At the same time, I found myself unconvinced that the gradually typed approach made sense. What I wanted was that when you executed the program without type annotations, you would stil get errors at the point where you violated a borrow. And that meant that the program had to track a lot of extra data, kind of like miri does, and it was really only practical as a teaching tool. I still would like to explore that, but it also felt like it was adding a lot of complexity to the language design for something that would only be of interest very early in a developer's journey[^LLM2].
+At the same time, I found myself unconvinced that the gradually typed approach made sense. What I wanted was that when you executed the program without type annotations, you would get errors at the point where you violated a borrow. And that meant that the program had to track a lot of extra data, kind of like miri does, and it was really only practical as a teaching tool. I still would like to explore that, but it also felt like it was adding a lot of complexity to the language design for something that would only be of interest very early in a developer's journey[^LLM2].
 
 [^LLM2]: And, with LLMs, that period of learning is shorter than ever.
 
