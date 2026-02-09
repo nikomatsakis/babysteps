@@ -13,7 +13,7 @@ Before you get any ideas, Dada isn't fit for use. In fact the compiler doesn't e
 
 [^relax]: Yes, I relax by designing new programming languages. Doesn't everyone?
 
-That said, Dada has been a very fertile source of ideas that I think could very well be applicable to Rust. And not just for language design: playing with the compiler is also what led to the [new `salsa` design](https://smallcultfollowing.com/babysteps/blog/2022/08/18/come-contribute-to-salsa-2022/)[^yakshave], which is now used by both rust-analyzer and [Astral's ty](https://github.com/astral-sh/ty). So I really want to get those ideas out there!
+That said, Dada has been a very fertile source of ideas that I think could be applicable to Rust. And not just for language design: playing with the compiler is also what led to the [new `salsa` design](https://smallcultfollowing.com/babysteps/blog/2022/08/18/come-contribute-to-salsa-2022/)[^yakshave], which is now used by both rust-analyzer and [Astral's ty](https://github.com/astral-sh/ty). So I really want to get those ideas out there!
 
 [^yakshave]: Designing a new version of [`salsa`](https://salsa-rs.github.io/salsa/) so that I could write the Dada compiler in the way I wanted really was an epic yak shave, now that I think about it.
 
