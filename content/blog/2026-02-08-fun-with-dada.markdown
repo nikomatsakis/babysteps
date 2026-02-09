@@ -41,7 +41,9 @@ Therefore, I decided to start over, this time, to just focus on the static type 
 
 ## Dada is like a streamlined Rust
 
-Dada today is like Rust but *streamlined*. The goal is that Dada has the same basic "ownership-oriented" *feel* of Rust, but with a lot fewer choices and nitty-gritty details you have to deal with.
+Dada today is like Rust but *streamlined*. The goal is that Dada has the same basic "ownership-oriented" *feel* of Rust, but with a lot fewer choices and nitty-gritty details you have to deal with.[^rfl]
+
+[^rfl]: Of course this also makes Dada less flexible. I doubt a project like Rust for Linux would work with Dada.
 
 Rust often has types that are semantically equivalent, but different in representation. Consider `&Option<String>` vs `Option<&String>`: both of them are equivalent in terms of what you can do with them, but of course Rust makes you carefully distinguish between them. In Dada, they are the same type. Dada also makes `&Vec<String>`, `&Vec<&String>`, `&[String]`, `&[&str]`, and many other variations all the same type too. And before you ask, it does it without heap allocating everything or using a garbage collector.
 
