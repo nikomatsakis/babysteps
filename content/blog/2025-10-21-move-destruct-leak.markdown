@@ -291,7 +291,7 @@ I am not sure exactly how to manage it, but we'll figure it out -- and in the me
 
 #### Associated type bounds in closures
 
-The one place that I think it is *really imporatnt* that we weaken the associated type bounds is with closures-- and, fortunately, that's a place we can get away with due to the way our "closure trait bound" syntax works. I feel like I wrote a post on this before, but I can't find it now, but the short version is that, today, when you write `F: Fn()`, that means that the closure must return `()`. If you write `F: Fn() -> T`, then this type `T` must have been declared somewhere else, and so `T` will (independently from the associated type of the `Fn` trait) get a default `Forget` bound. So since the `Fn` associated type is not independently nameable in stable Rust, we can change its bounds, and code like this would continue to work unchanged:
+The one place that I think it is *really important* that we weaken the associated type bounds is with closures-- and, fortunately, that's a place we can get away with due to the way our "closure trait bound" syntax works. I feel like I wrote a post on this before, but I can't find it now, but the short version is that, today, when you write `F: Fn()`, that means that the closure must return `()`. If you write `F: Fn() -> T`, then this type `T` must have been declared somewhere else, and so `T` will (independently from the associated type of the `Fn` trait) get a default `Forget` bound. So since the `Fn` associated type is not independently nameable in stable Rust, we can change its bounds, and code like this would continue to work unchanged:
 
 ```rust
 fn foo<T, F>()
