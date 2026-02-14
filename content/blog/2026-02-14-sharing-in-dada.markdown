@@ -20,6 +20,8 @@ dada_types:
 
 OK, let's talk about *sharing*. This is the first of Dada blog posts where things start to diverge from Rust in a deep way and I think the first where we start to see some real advantages to the Dada way of doing things (and some of the tradeoffs I made to achieve those advantages).
 
+<!--more-->
+
 ## We are shooting for a GC-like experience without GC
 
 Let's start with the goal: earlier, I said that Dada was like "Rust where you never have to type `as_ref`". But what I really meant is that I want a *GC-like* experience--without the GC.
@@ -378,7 +380,7 @@ I like to think of Dada as "opinionated Rust" in some sense. Unlike Rust, it imp
 
 These conventions come at some modest runtime cost. My rule is that basic operations are allowed to do "shallow" operations, e.g., toggling the `_flag` or adjusting the ref-counts on every field. But they cannot do "deep" operations that require traversing heap structures.
 
-In exchange for adopting conventions nad paying that cost, you get "composability", by which I mean that permissions in Dada (like `shared`) flow much more naturally, and types that are semantically equivalent (i.e., you can do the same things with them) generally have the same layout in memory.
+In exchange for adopting conventions and paying that cost, you get "composability", by which I mean that permissions in Dada (like `shared`) flow much more naturally, and types that are semantically equivalent (i.e., you can do the same things with them) generally have the same layout in memory.
 
 
 
