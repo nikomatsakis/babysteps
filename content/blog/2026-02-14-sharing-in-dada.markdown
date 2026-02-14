@@ -191,8 +191,6 @@ let name: shared String = ch1.name
         # ------
 ```
 
-This would be as if, in Rust, when I accessed the field of an `Arc<Character>` I got back an `Arc<Name>`. Obviously this is not the case, and it wouldn't work, but that's the idea.
-
 ## Propagation using a `Vec`
 
 To drill home how cool and convenient this is, imagine that I have a `Vec[String]` that I share with `.share`:
