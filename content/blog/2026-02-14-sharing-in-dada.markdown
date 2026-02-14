@@ -9,6 +9,8 @@ dada_keywords:
   - "class"
   - "given"
   - "give"
+  - "shared"
+  - "share"
 dada_types:
   - "String"
   - "Point"
