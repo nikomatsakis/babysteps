@@ -16,7 +16,7 @@ Nothing this good comes for free. The big catch of the proposal is that it intro
 The TL;DR of the proposal is that we should:
 
 * Introduce a new "default trait bound" `Forget` and an associated trait hierarchy:
-    * `trait Forget: Drop`, representing values that can be forgotten
+    * `trait Forget: Destruct`, representing values that can be forgotten
     * `trait Destruct: Move`, representing values with a destructor
     * `trait Move: Pointee`, representing values that can be moved
     * `trait Pointee`, the base trait that represents *any value*
