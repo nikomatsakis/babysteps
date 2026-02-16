@@ -340,7 +340,7 @@ With this setup, any function that owns a `Transaction` must eventually invoke `
 
 ### How does this relate to async drop?
 
-This setup provides attacks a key problem that has blocked async drop in my mind, which is that types that are "async drop" do not have to implement "sync drop". This gives the type system the ability to prevent them from being dropped in sync code, then, and it would mean that they can only be dropped in async drop. But there's still lots of design work to be done there.
+This setup attacks a key problem that has blocked async drop in my mind, which is that types that are "async drop" do not have to implement "sync drop". This gives the type system the ability to prevent them from being dropped in sync code, then, and it would mean that they can only be dropped in async drop. But there's still lots of design work to be done there.
 
 ### Why is the trait `Destruct` and not `Drop`?
 
