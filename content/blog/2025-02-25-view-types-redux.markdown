@@ -1,6 +1,8 @@
 ---
 title: "View types redux and abstract fields"
 date: 2025-02-25T16:04:46Z
+series:
+  - "view-types"
 ---
 
 A few years back I proposed [view types]({{< baseurl >}}/blog/2021/11/05/view-types/) as an extension to Rust’s type system to let us address the problem of (false) inter-procedural borrow conflicts. The basic idea is to introduce a “view type” `{f1, f2} Type`[^syntax], meaning “an instance of `Type` where you can only access the fields `f1` or `f2`”. The main purpose is to let you write function signatures like `& {f1, f2} self` or `&mut {f1, f2} self` that define what fields a given type might access. I was thinking about this idea again and I wanted to try and explore it a bit more deeply, to see how it could actually work, and to address the common question of how to have places in types without exposing the names of private fields.

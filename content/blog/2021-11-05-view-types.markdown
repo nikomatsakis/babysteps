@@ -2,6 +2,8 @@
 layout: post
 title: "View types for Rust"
 date: 2021-11-05T11:37:00-0400
+series:
+  - "view-types"
 ---
 
 I wanted to write about an idea that's been kicking around in the back of my mind for some time. I call it *view types*. The basic idea is to give a way for an `&mut` or `&` reference to identify which fields it is actually going to access. The main use case for this is having "disjoint" methods that don't interfere with one another.
@@ -365,4 +367,3 @@ This concludes our tour of "view types", a proto-proposal. I hope you enjoyed yo
 I'd also be interested to read about related work. The idea here seems likely to have been invented and re-invented numerous times. What other languages, either in academic or industry, have similar mechanisms? How do they work? Educate me!
 
 ### Footnotes
-
