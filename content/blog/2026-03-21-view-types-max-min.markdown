@@ -331,7 +331,7 @@ In the syntax I described, you have to write `&mut place {field1, field2}` expli
 
 ### Man, I have to write the fields that my method uses in the signature? That sucks! It should be automatic!
 
-I get that for many applications, particularly with *private* methods, writing out the list fields that will be accessed seems a bit silly: the compiler ought to be able to figure it out.
+I get that for many applications, particularly with *private* methods, writing out the list of fields that will be accessed seems a bit silly: the compiler ought to be able to figure it out.
 
 On the flip side, this is the kind of inter-procedural inference we try to avoid in Rust, for a number of reasons:
 
