@@ -98,7 +98,7 @@ scope(|s| ...)
 // This value has type `&Scope`... 
 ```
 
-Because the API nevers gives up ownership of the scope, it can ensure that it is never "forgotten" and thus that its destructor runs.
+Because the API never gives up ownership of the scope, it can ensure that it is never "forgotten" and thus that its destructor runs.
 
 The scoped thread approach works for sync code, but it doesn't work for async code. The problem is that async functions return a future, which is a value. Users can therefore decide to "forget" this value, just like any other value, and thus the destructor may never run.
 
