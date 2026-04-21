@@ -3,7 +3,7 @@ title: "Symposium: community-oriented agentic development"
 date: 2026-04-21T12:24:17-04:00
 ---
 
-I'm very excited to announce the [first release of the *Symposium* project][main-blog] as well as its [inclusion in the Rust Foundation](https://rustfoundation.org/media/welcoming-symposium-to-the-rust-innovation-lab/). Symposium’s goal is to let everyone in the Rust community participate in making agentic development better. The core idea is that crate authors should be able to vend skills, MCP servers, and other extensions, in addition to code. The Symposium tool then installs those extensions automatically based on your dependencies. After all, who knows how to use a crate better than the people who maintain it?
+I'm very excited to announce the [first release of the *Symposium* project][main-blog] as well as its [inclusion in the Rust Foundation's Innovation Lab](https://rustfoundation.org/media/welcoming-symposium-to-the-rust-innovation-lab/). Symposium’s goal is to let everyone in the Rust community participate in making agentic development better. The core idea is that crate authors should be able to vend skills, MCP servers, and other extensions, in addition to code. The Symposium tool then installs those extensions automatically based on your dependencies. After all, who knows how to use a crate better than the people who maintain it?
 
 If you want to read more details about how Symposium works, I refer you to the [announcement post from Jack Huey on the main Symposium blog][main-blog]. *This* post is my companion post, and it is focused on something more personal -- the reasons that *I* am working on Symposium.
 
