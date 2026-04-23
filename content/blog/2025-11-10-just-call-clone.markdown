@@ -217,7 +217,7 @@ tokio::task::spawn(async move {
 });
 ```
 
-### I'm worried that the execution order of calls to alias will be too subtle. How is thie "explicit enough for low-level code"?
+### I'm worried that the execution order of calls to alias will be too subtle. How is this "explicit enough for low-level code"?
 
 There is no question that Just Call Clone makes closure/future desugaring more subtle. Looking at task 1:
 
