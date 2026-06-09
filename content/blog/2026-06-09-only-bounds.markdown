@@ -5,7 +5,7 @@ series:
 - "Revisiting Sizedness"
 ---
 
-`only` bounds are going to be the most impactful change to Rust that you've never heard of. They are currently being designed and developed by the Arm team (David Wood, Rémy Rakic, et al.) as part of the [Sized Hierarchy and Scalable Vector Extensions][PG] project goal.  This post explores the feature and aims to answer a particular question about the design (the scope of bounds, I'll explain). But before I dive in, I want to give a bit of context.
+`only` bounds are going to be the most impactful change to Rust that you've never heard of. They are currently being designed and developed by the Arm team (David Wood, Rémy Rakic, et al.) as part of the [Sized Hierarchy and Scalable Vector Extension][PG] project goal.  This post explores the feature and aims to answer a particular question about the design (the scope of bounds, I'll explain). But before I dive in, I want to give a bit of context.
 
 [PG]: https://rust-lang.github.io/rust-project-goals/2026/scalable-vectors.html
 
@@ -47,7 +47,7 @@ As a fun bit of historical trivia, this system was introduced way back in 2014 t
 
 ## But `Sized` vs `?Sized` isn't enough for everything we need
 
-The `Sized` vs `?Sized` design has served us reasonably well but it is also showing its limits. It turns out that "value has a statically computable size" vs "each value has a distinct size computable at runtime" doesn't cover all the things you might want. For example, `extern` types are types whose values have no known size, even at runtime. And then Arm's Scalable Vector Extensions want to describe SIMD types where every value of the type has the same size (unlike `str` and `[T]`, where each value can have a different length) but where that size is not known until runtime.
+The `Sized` vs `?Sized` design has served us reasonably well but it is also showing its limits. It turns out that "value has a statically computable size" vs "each value has a distinct size computable at runtime" doesn't cover all the things you might want. For example, `extern` types are types whose values have no known size, even at runtime. And then Arm's Scalable Vector Extension want to describe SIMD types where every value of the type has the same size (unlike `str` and `[T]`, where each value can have a different length) but where that size is not known until runtime.
 
 ## A richer `Sized` hierarchy
 
@@ -69,7 +69,7 @@ where
 
 Two caveats:
 
-1. I'm excluding the way that Arm's scalable vector extensions fit into this, because it's orthogonal.
+1. I'm excluding the way that Arm's Scalable Vector Extension fit into this, because it's orthogonal.
 2. The trait names aren't settled. I'm using the names I understand the libs-api team to prefer; they're not my favorites, but that's ultimately the team who owns stdlib bikesheds, so I defer to them.[^actions]
 
 [^actions]: I prefer names that refer to the *operations* that can be performed on the values, so e.g. instead of `MetadataSized` I would prefer `SizeOfVal`, since it means that you can invoke the `std::mem::size_of_val` function on it.
@@ -361,7 +361,7 @@ The [Project Goal][PG] has a lot of details. The latest updates are available on
 
 ## Conclusion
 
-I want to close with a meta-observation and a big shout-out to the Arm team. I think they are showing how awesome open-source can be. The Arm team's primary motivation is adding support for Scalable Vector Extensions. This helps Rust make full use of Arm processors. This is, in and of itself, a laudable goal, and valuable to Rust: One of Rust's assets, in my view, is that it gives you access to all the power your processor has to provide, and that should include unique extensions.
+I want to close with a meta-observation and a big shout-out to the Arm team. I think they are showing how awesome open-source can be. The Arm team's primary motivation is adding support for Scalable Vector Extension. This helps Rust make full use of Arm processors. This is, in and of itself, a laudable goal, and valuable to Rust: One of Rust's assets, in my view, is that it gives you access to all the power your processor has to provide, and that should include unique extensions.
 
 But rather than add the feature as a kind of special-case extension to Rust, the Arm team is going further and driving a general purpose improvement, one that will unlock a bunch of other features (extern types and, to some extent, guaranteed destructors; guaranteed destructores themselves unlock scoped async threads and better Wasm integration). I love that.
 
