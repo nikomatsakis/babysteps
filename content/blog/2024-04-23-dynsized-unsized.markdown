@@ -1,6 +1,8 @@
 ---
 title: "Sized, DynSized, and Unsized"
 date: 2024-04-23T16:51:54-04:00
+series:
+- "Revisiting Sizedness"
 ---
 
 [Extern types][et] have been blocked for an unreasonably long time on a fairly narrow, specialized question: Rust today divides all types into two categories — *sized*, whose size can be statically computed, and *unsized*, whose size can only be computed at runtime. But for external types what we really want is a *third category*, types whose size can never be known, even at runtime (in C, you can model this by defining structs with an unknown set of fields). The problem is that Rust’s `?Sized` notation does not naturally scale to this third case. I think it’s time we fixed this. At some point I read a proposal — I no longer remember where — that seems like the obvious way forward and which I think is a win on several levels. So I thought I would take a bit of time to float the idea again, explain the tradeoffs I see with it, and explain why I think the idea is a good change.

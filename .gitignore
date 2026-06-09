@@ -4,3 +4,5 @@ _site
 /resources/_gen
 hugo
 proto-ruby-install.log
+logs
+*.swp
