@@ -132,7 +132,7 @@ Like any other bound, `only` bounds are combined with other bounds to form the o
 
 The final strength of `only` bounds is that they allow us to introduce whole new *families* of default bounds. One example is the idea of [introducing a `Move` bound](https://smallcultfollowing.com/babysteps/blog/2025/10/21/move-destruct-leak/). Note that this is a distinct feature and is not covered under the [current RFC][RFC].
 
-All types in Rust today are "movable" and "forgettable", meaning that you can memcpy the value from place to place so long as you stop using the previous location *and* you can recycle the memory where it is stored without running the value's destructor. There is one notable exception -- when you pin a value, you it can no longer be moved, and you must run its destructor before its memory is reused -- but otherwise this is a hard-and-fast rule. And that's annoying!
+All types in Rust today are "movable" and "forgettable", meaning that you can memcpy the value from place to place so long as you stop using the previous location *and* you can recycle the memory where it is stored without running the value's destructor. There is one notable exception -- when you pin a value, it can no longer be moved, and you must run its destructor before its memory is reused -- but otherwise this is a hard-and-fast rule. And that's annoying!
 
 The problem is that not being able to guarantee that a destructor runs blocks a lot of unsafe code patterns. For example, [scoped tasks a la `rayon` depend on a destructor for safety](https://smallcultfollowing.com/babysteps/blog/2016/10/02/observational-equivalence-and-unsafe-code/). In sync code, this works because we've decided it's UB to unwind a stack frame without running the destructors of values stored there, and so if you put a local variable on the stack, you can be sure its destructor will run. But that doesn't work in `async` code! And there are times when unwinding *without* running destructors would be nice.
 
@@ -140,7 +140,7 @@ The solution is to introduce a second family of default traits. Unlike the `Size
 
 ```mermaid
 flowchart TD
-  subgraph A["Accessability traits"]
+  subgraph A["Accessibility traits"]
       Forget[["Forget (default)"]] -- extends --> Leak
       Leak -- extends --> Destruct
       Destruct -- extends --> Access
@@ -161,7 +161,7 @@ The meaning of the traits are as follows:
 This introduces new checks into the compiler:
 
 * When you move a value (i.e., `a = b` where `b` is not used later), we will check that the type implements `Move` (whereas today, it is always allowed).
-* When you exit a scope, we will check that the values in each local variables have either been moved or have a type that implements `Destruct`.
+* When you exit a scope, we will check that the values in local variables have either been moved or have a type that implements `Destruct`.
 
 Some implications:
 
@@ -173,7 +173,7 @@ Some implications:
 
 The spur for writing this blog post was a question in a lang team meeting on how `only` bounds ought to work given the existence of multiple "families" of default traits, as I described above. Although the [current RFC][RFC] is looking only at the `Sized` traits, we expect to look at the "access family" in a future RFC, so we want to be sure we are not making any decisions that won't scale to cover both.
 
-The way I imagine it working is like this. Each default traits is associated with one or more "families". When you have an only bound, it "opts out" from all default traits in each family that the trait is associated with:
+The way I imagine it working is like this. Each default trait is associated with one or more "families". When you have an only bound, it "opts out" from all default traits in each family that the trait is associated with:
 
 * `T: only Move` opts out from `Forget`, `Leak`, `Destruct` -- but not `Sized`.
 * `T: only Destruct` opts out from `Forget`, `Leak`, and `Move` -- but not `Sized`.
@@ -236,7 +236,7 @@ struct Rc<T: only MaybeSized + only Leak> {}
 I believe the proper minimum bounds for `Rc` are:
 
 * `only MaybeSized` because while it can store `MetadataSized` or `Sized` things, it doesn't have to, it can also store things of an non-computable size (although it does raise the question of how they would be freed, but that's an allocator concern).
-* `only Leak` because `Rc` values can form cycles and thus we can't ever guarantee the destructor will be run. Interestingly, `Rc<T>` can implement `Forget` even its contents don't.
+* `only Leak` because `Rc` values can form cycles and thus we can't ever guarantee the destructor will be run. Interestingly, `Rc<T>` can implement `Forget` even if its contents don't.
 
 ## Frequently asked questions
 
@@ -260,7 +260,7 @@ fn foo<T: MetadataSized + ?default>
 
 which would "opt out" from *all* defaulted bounds. Obviously we'd have to bikeshed the syntax, but ignore that for now. The question is whether opting out of *all* defaults is better than opting out of a single family. I prefer the per-family option for two reasons:
 
-* First, things like `T: only Move` demonstrate that you might very reasonably which to opt out from a single family but retain the default `Sized` bound. I think it's likely that there will be many functions that want to opt out of `Sized` *or* `Forget` *but not both*.
+* First, things like `T: only Move` demonstrate that you might very reasonably wish to opt out from a single family but retain the default `Sized` bound. I think it's likely that there will be many functions that want to opt out of `Sized` *or* `Forget` *but not both*.
     * You might think that we could make `Move: Sized` to get the same effect, but I think that would be a mistake. The fact that a value's size must be computed dynamically doesn't inherently mean it can't be moved.
 * Second, it makes it harder to introduce new families later, if we decide there are other orthogonal properties of values that we'd like to relax.
 
@@ -363,5 +363,5 @@ The [Project Goal][PG] has a lot of details. The latest updates are available on
 
 I want to close with a meta-observation and a big shout-out to the Arm team. I think they are showing how awesome open-source can be. The Arm team's primary motivation is adding support for Scalable Vector Extension. This helps Rust make full use of Arm processors. This is, in and of itself, a laudable goal, and valuable to Rust: One of Rust's assets, in my view, is that it gives you access to all the power your processor has to provide, and that should include unique extensions.
 
-But rather than add the feature as a kind of special-case extension to Rust, the Arm team is going further and driving a general purpose improvement, one that will unlock a bunch of other features (extern types and, to some extent, guaranteed destructors; guaranteed destructores themselves unlock scoped async threads and better Wasm integration). I love that.
+But rather than add the feature as a kind of special-case extension to Rust, the Arm team is going further and driving a general purpose improvement, one that will unlock a bunch of other features (extern types and, to some extent, guaranteed destructors; guaranteed destructors themselves unlock scoped async threads and better Wasm integration). I love that.
 
