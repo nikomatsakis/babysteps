@@ -22,6 +22,19 @@ h4 {
   margin-top: 2rem;
 }
 
+img.float-right {
+  float: right;
+  width: 10rem;
+  margin: 0.25rem 0 1rem 1.25rem;
+
+  @media (max-width: 500px) {
+    float: none;
+    display: block;
+    width: 60%;
+    margin: 1rem auto;
+  }
+}
+
 em {
   font-style: italic;
 }
