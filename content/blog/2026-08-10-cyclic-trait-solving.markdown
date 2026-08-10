@@ -231,6 +231,8 @@ My motivation for getting into this work is a bit complicated. I want perfect de
 
 In the next few posts I'll go a bit deeper into the exploration I and others have been doing. I'll talk about some of the "false starts" we took along the way and why they don't work, and then about some of the solutions that are under consideration. Working through this stuff has really helped me to broaden my understanding of various areas of logic. By the time we're done, we'll cover[^shallow] coinduction and productivity, modal logic and the later modality, and we'll see how our techniques might even help us with resolving specialization[^plottwist].
 
+I cited it earlier, but if you want to read other tasks on the same subject, I definitely recommend [Nadri's post on dictionary-passing style][dps].
+
 [^shallow]: In a shallow way, I'm no expert!
 
 [^plottwist]: Plot twist, bet you didn't see that coming! I sure didn't.
