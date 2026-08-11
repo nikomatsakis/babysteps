@@ -24,7 +24,7 @@ Now imagine that we have an impl of this for `i32`:
 impl Dump for i32 {
     fn dump(&self) {
         println!("{self}");
-	}
+    }
 }
 ```
 
@@ -36,9 +36,9 @@ impl<T> Dump for Rc<T>
 where
     T: Dump,
 {
-	fn dump(&self) {
-		T::dump(self)
-	}
+    fn dump(&self) {
+        T::dump(self)
+    }
 }
 
 // Impl Opt
@@ -46,11 +46,11 @@ impl<T> Dump for Option<T>
 where
     T: Dump,
 {
-	fn dump(&self) {
-		if let Some(v) = self {
-			T::dump(v)
-		}
-	}
+    fn dump(&self) {
+        if let Some(v) = self {
+            T::dump(v)
+        }
+    }
 }
 ```
 
@@ -68,24 +68,24 @@ where
     T: Dump,
 {
     fn dump(&self) {
-		Dump::dump(&self.value);
+        Dump::dump(&self.value);
        if let Some(n) = &self.next {
-			Dump::dump(n);
-		}
+            Dump::dump(n);
+        }
     }
 }
 ```
 
-If I try to show that `List<i32>: Debug`, I do that by
+If I try to show that `List<i32>: Dump`, I do that by
 
-* Applying "impl L" to show that `List<i32>: Debug` if `i32: Debug`
-	* Then applying "impl I" to show that `i32: Debug`
+* Applying "impl L" to show that `List<i32>: Dump` if `i32: Dump`
+    * Then applying "impl I" to show that `i32: Dump`
 
 There's no *cycle* here -- that is, I didn't have to use impl L to show that impl L is valid.
 
 ## Cyclic logic sounds bad, but it can be exactly what you want
 
-Now, when I said that "the impl L didn't have to use the impl L to show that it is valid" that might not have sounded suspicious to you. In fact, it's a pretty natural idea. After all, generally when you try to establish a logical argument, you aren't allowed to use cyclic reasoning. That is, you can't say: I know that Niko likes Rust because Niko lists Rust. So, in the same sense, it seems natural that I should not be able to say "I know that `List<i32>` implements `Dump` because `List<i32>` implements `Dump`".
+Now, when I said that "the impl L didn't have to use the impl L to show that it is valid" that might not have sounded suspicious to you. In fact, it's a pretty natural idea. After all, generally when you try to establish a logical argument, you aren't allowed to use cyclic reasoning. That is, you can't say: I know that Niko likes Rust because Niko likes Rust. So, in the same sense, it seems natural that I should not be able to say "I know that `List<i32>` implements `Dump` because `List<i32>` implements `Dump`".
 
 But actually, it would sometimes be really useful to say *exactly* that. One example is so-called "perfect derive". In our `Dump` impl above, we had one where-clause, `T: Dump`. And if you were to create a custom derive for `Dump` and write `#[derive(Dump)]`, the impl I showed is typically exactly what you would get. But it's not necessarily what you *want*. Consider what you get with `#[derive(Clone)]`:
 
@@ -96,11 +96,11 @@ where
     T: Clone, // <-- generated but not really required!
 {
     fn dump(&self) {
-		List {
-			value: Clone::clone(&self.value),
-			next: Clone::clone(&self.next),
-		}
-	}
+        List {
+            value: Clone::clone(&self.value),
+            next: Clone::clone(&self.next),
+        }
+    }
 }
 ```
 
@@ -108,7 +108,7 @@ Here, the derive is going to create an impl that requires `T: Clone`. But if you
 
 You might think that the compiler could do some super smarty-pants analysis on the fields to figure it out. And, in a way, it can: that is what cyclic trait solving is all about. The thing is, while the *compiler* can do that, the *derive* cannot -- the derive doesn't have access to the definitions of other types and so forth, and clearly we would need to know things about `Option` and `Rc` to figure out whether `T: Clone` is required here.
 
-But what we *could* do is to generate a different impl. Instead of adding `T: Clone` for each type parameter, we could add a where-caluse for each field type. This makes sense: after all, we are just going to be calling `Clone` on every field, so it's quite logical to say that the impl is valid if every field is cloneable:
+But what we *could* do is to generate a different impl. Instead of adding `T: Clone` for each type parameter, we could add a where-clause for each field type. This makes sense: after all, we are just going to be calling `Clone` on every field, so it's quite logical to say that the impl is valid if every field is cloneable:
 
 ```rust
 // Impl LC2
@@ -128,9 +128,9 @@ Under *this* formulation, we can see that all we have to be able to do is to clo
 We call this idea [perfect derive][] and it's been a goal for a while. The thing is, cyclic reasoning *is* tricky to get right. The `Clone` example is actually an easy one: that one doesn't really require cyclic reasoning:
 
 * To show that `List<i32>: Clone` we have to show that...
-	* `Rc<i32>: Clone`, which is easy because `impl<T> Clone for Rc<T>` doesn't have any where-clauses[^Sized]
-	* `Option<Rc<List<i32>>>: Clone` uses the `impl<T> Clone for Option<T> where T: Clone` impl which requires...
-		* `Rc<List<i32>>: Clone`, which is again easy 
+    * `Rc<i32>: Clone`, which is easy because `impl<T> Clone for Rc<T>` doesn't have any where-clauses[^Sized]
+    * `Option<Rc<List<i32>>>: Clone` uses the `impl<T> Clone for Option<T> where T: Clone` impl which requires...
+        * `Rc<List<i32>>: Clone`, which is again easy 
 
 [^Sized]: Apart from the default `Sized` bound, I'm ignoring that here
 
@@ -152,10 +152,10 @@ where
 Now imagine we try to show `List<i32>: Dump`. We begin by applying impl L1, which requires us to show that its where clauses hold:
 
 * To show `List<i32>: Dump` we use impl L1, which has two where-clauses:
-	* `Rc<i32>: Dump`, this one is easy because the `Rc` impl requires that `i32: Dump` which is true.
-	* But `Option<Rc<List<i32>>>: Dump` is tricky. The `Option` impl requires that...
-		* We need to prove `Rc<List<i32>>: Dump`, and then the `Rc` impl requires that...
-			* We need to prove `List<i32>: Dump`, but that is what we started with! That's cyclic logic!
+    * `Rc<i32>: Dump`, this one is easy because the `Rc` impl requires that `i32: Dump` which is true.
+    * But `Option<Rc<List<i32>>>: Dump` is tricky. The `Option` impl requires that...
+        * We need to prove `Rc<List<i32>>: Dump`, and then the `Rc` impl requires that...
+            * We need to prove `List<i32>: Dump`, but that is what we started with! That's cyclic logic!
 
 Ugh. Something's tricky here!
 
@@ -176,8 +176,8 @@ where
 If you are naive, this weird trait-impl pair can be used to prove that *any* type is `Copy`, regardless of whether it has a `Copy` impl. For example:
 
 * Say we want to prove that `String: Copy`. We observe that if a type implements `Magic`, it must implement `Copy`, so...
-	* We begin by proving `String: Magic`. We use the impl M, which requires
-		* that we show `String: Magic`, which is a cycle, so we accept it.
+    * We begin by proving `String: Magic`. We use the impl M, which requires
+        * that we show `String: Magic`, which is a cycle, so we accept it.
 
 Uh oh, now we did something wrong. We proved that `String: Copy` even though there is no `Copy` impl. Something is fishy.
 
@@ -205,15 +205,15 @@ trait Magic: Copy {}
 impl<T: Magic> Magic for T {}
 
 fn is_copy<T: Copy>() {
-	// this function believes `T: Copy`
+    // this function believes `T: Copy`
 }
 
 fn main() {
-	// this can be called because we believe that
-	// * `String: Magic` because
-	//     * `String: Magic`, and we accept cycles.
-	// And then `String: Magic` implies `String: Copy`.
-	is_copy::<String>();
+    // this can be called because we believe that
+    // * `String: Magic` because
+    //     * `String: Magic`, and we accept cycles.
+    // And then `String: Magic` implies `String: Copy`.
+    is_copy::<String>();
 }
 ```
 
