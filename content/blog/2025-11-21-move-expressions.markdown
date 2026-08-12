@@ -7,7 +7,7 @@ series:
 
 This post explores another proposal in the space of ergonomic ref-counting that I am calling **move expressions**. To my mind, these are an alternative to [explicit capture clauses][ecc], one that addresses many (but not *all*) of the goals from that design with improved ergonomics and readability.
 
-[ecc]: {{< baseurl >}}/blog/2025/10/22/explicit-capture-clauses.html
+[ecc]: {{< baseurl >}}/blog/2025/10/22/explicit-capture-clauses/
 
 <!--more-->
 
