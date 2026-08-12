@@ -53,7 +53,7 @@ Josh gave me a similar example from [the "bytes" crate](https://docs.rs/bytes/la
 
 [handle]: {{< baseurl >}}/blog/2025/10/07/the-handle-trait/
 
-A similar case occurs with APIs like like `Arc::get_mut`[^make_mut]. `get_mut` takes an `&mut Arc<T>` and, if the ref-count is 1, returns an `&mut T`. This lets you take a *shareable* handle that *you* know is not actually *being* shared and recover uniqueness. This kind of API is not frequently used -- but when you need it, it's so nice it's there.
+A similar case occurs with APIs like `Arc::get_mut`[^make_mut]. `get_mut` takes an `&mut Arc<T>` and, if the ref-count is 1, returns an `&mut T`. This lets you take a *shareable* handle that *you* know is not actually *being* shared and recover uniqueness. This kind of API is not frequently used -- but when you need it, it's so nice it's there.
 
 [^make_mut]: Or `Arc::make_mut`, which is one of my favorite APIs. It takes an `Arc<_>` and gives you back mutable (i.e., unique) access to the internals, always! How is that possible, given that the ref count may not be 1? Answer: if the ref-count is not 1, then it clones it. This is perfect for copy-on-write-style code. So beautiful. 😍
 
