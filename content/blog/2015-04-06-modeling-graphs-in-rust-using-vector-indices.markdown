@@ -82,7 +82,7 @@ indicated by a number like `N3` and edge indices by a number like
 
 ```
 Graph:
-    N0 ---E0---> N1 ---E1---> 2
+    N0 ---E0---> N1 ---E1--> N2
     |                         ^
     E2                        |
     |                         |
@@ -93,7 +93,7 @@ Nodes (NodeData):
   N0 { Some(E0) }     
   N1 { Some(E1) }
   N2 { None     } 
-  N3 { Some(E2) } 
+  N3 { Some(E3) } 
   
 Edges:
   E0 { N1, Some(E2) }
