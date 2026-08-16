@@ -56,7 +56,7 @@ Now, maybe we use this for a while, and we find that people really don't like th
 ```rust
 const_preview::const_item! {
     const fn compute_value<T: const Default>() {
-        // as `~const` is what is implemented today, I'll use it in this example
+        // ...
     }
 }
 ```
