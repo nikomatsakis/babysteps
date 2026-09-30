@@ -6,11 +6,11 @@ comments: true
 categories: [Rust]
 ---
 
-So Ben Blum has doing [some investigation][bblum] into the full
+So bblum has been doing [some investigation][bblum] into the full
 implications of the `Sized` bound that I proposed as part of the
 [dynamically sized types][dst] post. It's clear that, if we change
 nothing else, the impact of `Sized` will be somewhat greater than I
-thought. He estimates somewhere around 40% of the files in libstd need
+thought. They estimate somewhere around 40% of the files in libstd need
 at least one `Sized` bound; the actual number may wind up being
 somewhat higher.
 

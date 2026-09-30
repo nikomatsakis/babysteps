@@ -69,7 +69,7 @@ complications that we had never satisfactorily resolved.
 
 ## An alternate approach
 
-Anyway, after some discussion with Ben Blum, I've been thinking about
+Anyway, after some discussion with bblum, I've been thinking about
 another approach.  It's pretty close to what Graydon originally
 proposed (maybe even identical?) though with an added component from
 Patrick.  Interestingly, they are both ideas that I didn't like on
