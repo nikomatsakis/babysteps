@@ -5,7 +5,7 @@ series:
 - "Cyclic trait impls"
 ---
 
-For this post, I wanted to talk about two different approaches to handling supertraits. I'm calling them *modular* proofs vs *external* proofs. I know those terms won't make sense yet and that's fine. The key thing is that initially we felt that modular proofs were better but unworkable; it seemed like external proofs were necessary to get the expressiveness we wanted. But I have since realized that, in fact, external proofs were incompatible with Rust as designed, and hence modular proofs are really the only option[^ralfj]. This post dives into that reasoning, and also gives a bit of explanation of what I mean by proofs in the first place.
+For this post, I wanted to talk about two different approaches to handling supertraits. I'm calling them *modular* proofs vs *external* proofs. The key idea of this post is that, if we want to have cyclic trait impls, we really need to use a *modular* proof strategy, where the impl establishes all supertraits hold. Previously we had considered an *external* strategy, where the piece of code *using* the impl has the obligation to prove the supertraits hold. Modular proofs always seemed better but I did not think they were workable in the past. But I have become convinced that external proofs are incompatible with Rust as designed, and hence modular proofs are really the only option[^ralfj]. This post dives into that reasoning, and also gives a bit of explanation of what I mean by proofs in the first place.
 
 [^ralfj]: I think this was obvious to Ralf Jung from the start. But it took me a bit.
 
