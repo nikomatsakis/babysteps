@@ -35,6 +35,47 @@ img.float-right {
   }
 }
 
+figure.float-figure {
+  width: 250px;
+  max-width: 45%;
+
+  &.float-right {
+    float: right;
+    margin: 0.25rem 0 1rem 1.25rem;
+  }
+
+  &.float-left {
+    float: left;
+    margin: 0.25rem 1.25rem 1rem 0;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    font-style: italic;
+    text-align: center;
+  }
+
+  ~ h2 {
+    clear: both;
+  }
+
+  @media (max-width: 600px) {
+    &.float-left,
+    &.float-right {
+      float: none;
+      max-width: 100%;
+      margin: 1rem auto;
+    }
+  }
+}
+
 em {
   font-style: italic;
 }
