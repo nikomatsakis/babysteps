@@ -175,7 +175,7 @@ I don't know how much of a role for Rust there is in this space. I think there a
 
 [^h]: The revenge of `.h` files?
 
-I also think there's space for dedicated "modeling languages", something that let you iterate quickly with agents on the high-level designs and invariants without having to get into the weeds and read the code. I have more thoughts on this but it merits many blog posts all of its own. For the moment, I'll settle for pointing you all at this post by Kari Wilhelm, ["Principles of Anchor Engineering"](https://nappingtoheavymetal.com/post/2026-09-15-principles-of-anchor-engineering/), which I think does a nice job of describing what it means to pull out the key elements of a design and drive the coding from there.
+I also think there's space for dedicated "modeling languages", something that let you iterate quickly with agents on the high-level designs and invariants without having to get into the weeds and read the code. I have more thoughts on this but it merits many blog posts all of its own. For the moment, I'll start by pointing you all at this post by Kari Wilhelm, ["Principles of Anchor Engineering"](https://nappingtoheavymetal.com/post/2026-09-15-principles-of-anchor-engineering/), which I think does a nice job of describing what it means to pull out the key elements of a design and drive the coding from there.
 
 ## Conclusion
 
