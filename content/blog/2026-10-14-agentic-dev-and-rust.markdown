@@ -184,7 +184,7 @@ We covered a lot of ground here, so let me put this all together. What makes Rus
 * It offers good default perf (why pay more?) and, in conjunction with a profiler, can be tuned as much as you want.
 * The type system gives stronger guardrails, and if you setup your agents right, you can strengthen those guardrails through techniques like new types.
 
-And what could make it better, from a language design perspective? Overall, I think our job is easier. We double down on our existing maxims, but some of the really difficult get a bit easier:
+And what could make it better, from a language design perspective? Overall, I think it's very similar to what we were doing, except that the way we weight the tradeoffs is tweaked to account for agents doing the code authoring, and humans focused more on code comprehension:
 
 * *If it compiles, it works* -- our type system is our big advantage, we need to make it more expressive and more functional so that agents don't get stuck trying to work around it!
     * And as an adjunct, establish a North Star: Enable *Unsafe code without unsafety* by supporting proof, and see the most widely used Rust libraries proven sound.
