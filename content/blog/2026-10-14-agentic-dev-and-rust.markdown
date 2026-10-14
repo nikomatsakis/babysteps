@@ -1,11 +1,11 @@
 ---
-title: "What agentic dev means for Rust (and vice versa)"
+title: "What agents mean for Rust (and vice versa)"
 date: 2026-10-14T06:19:44+02:00
 ---
 
 <figure class="float-figure float-right">
   <img src="{{< baseurl >}}assets/2026-10-14-agentic-dev-and-rust/sheldon.gif" alt="Sheldon breathing into a paper bag.">
-  <figcaption>Me, calmly assessing the implications for programming language design.</figcaption>
+  <figcaption>Me, calmly assessing the implications of LLMs for programming language design(ers).</figcaption>
 </figure>
 
 As someone who has made a career of programming language design, I definitely have moments of existential dread about the rise of LLMs. I started coding in 5th grade on an x86[^secret] that ran at 5MHz, had something like a 5MB hard-disk and 512K of RAM[^dad]. Computers were really, really different back then. But honestly, programming wasn't. For all the advances in IDEs and programming languages and so forth, the basic act of entering code into a file has remained surprisingly constant[^vim] -- right up until a few years ago, when everything kinda turned on its head. That's been exciting and empowering at times[^electron] but also scary and disorienting. *Will my skills in programming matter? What about my skills in programming language **design** (such as they are)?* This blog post is my attempt to answer those questions.
@@ -28,16 +28,19 @@ So as not to keep you in suspense, let me just give you the conclusion. In short
 
 ## Rust is popular in the agentic era
 
+<figure class="float-figure float-right">
+  <img src="{{< baseurl >}}assets/2026-10-14-agentic-dev-and-rust/be-honest.png" alt="Meme dialogue: “I wrote this in Rust!” “Be honest.” “I am being honest!” “An agent wrote it.” “Thank you.”">
+  <figcaption>From the most important Slack channel at Amazon, #aws-memes.</figcaption>
+</figure>
+
 Rust is popular right now. [Very popular:](https://x-thread.org/t/2087229652293337160)
 
-> Stratospheric among the breakout languages is TypeScript, cropped from the chart and sitting currently at +1200% growth from the prior year. \[..\] The second most rapid recent growth is in Rust. **Meta engineers have written twice as much first-party Rust code so far this year than in the previous 9 years combined.**
+> Stratospheric among the breakout languages is TypeScript, cropped from the chart and sitting currently at +1200% growth from the prior year. \[..\]
 >
-> -- David Tolnay (emphasis mine)
+> The second most rapid recent growth is in Rust. **Meta engineers have written twice as much first-party Rust code so far this year than in the previous 9 years combined.**
+>
+> &mdash;  David Tolnay (emphasis mine)
 
-
-<figure class="float-figure float-left">
-  <img src="{{< baseurl >}}assets/2026-10-14-agentic-dev-and-rust/be-honest.png" alt="Meme dialogue: “I wrote this in Rust!” “Be honest.” “I am being honest!” “An agent wrote it.” “Thank you.”">
-</figure>
 
 Some of that is because agents make it very easy to try out new things. And some of that is because Rust has a reputation for being performant and, if it's just as easy to pick any language, why not pick one that will yield faster execution times?
 
@@ -84,14 +87,12 @@ As usual though, while a reputation for good performance is what brings people t
 <script async src="https://platform.x.com/widgets.js" charset="utf-8"></script>
 </center>
 
-I think there's truth in that: languages like Rust, Ocaml, or Haskell all share this "if it compiles, it works" feeling, and I think that agents will benefit from that.[^go] 
-
-[^go]: It's worth noting that "if it compiles, it works" is not the *only* formula for agentic success. I've heard that Go works quite well with agentic development, for example, I expect because it provides clear conventions and a solid standard library (along with a linter to help detect common bugs). On the other hand, I predict that as those systems are maintained long-term, subtle bugs like data races or failure to check for errors will occur. Time will tell!
+I think there's truth in that: languages like Rust, Ocaml, or Haskell all share this "if it compiles, it works" feeling, and I think that agents will benefit from that.
 
 ## Testing is not enough, type systems help
 
 > *Testing can show the presence of bugs, but not their absence.*
-> 
+>
 > &mdash; Edsger W. Dijkstra, 1970
 
 <figure class="float-figure float-right">
@@ -108,8 +109,8 @@ This is where a type systems really shines -- particularly an advanced one like 
 ## Type systems are not enough either
 
 > *Type systems can show the absence of bugs, but not the presence of correctness.*
-> 
-> &mdash; Niko Matsakis, failing to coin a phrase of equal eloquence[^soclose], 2026
+>
+> &mdash; Me, failing to coin a phrase of equal eloquence[^soclose], 2026
 
 [^soclose]: So close though, right? I just .. couldn't land the plane.
 

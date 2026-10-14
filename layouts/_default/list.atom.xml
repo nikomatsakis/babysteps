@@ -1,5 +1,5 @@
 {{ printf `<?xml version="1.0" encoding="utf-8"?>` | safeHTML }} {{/* ref: https://validator.w3.org/feed/docs/atom.html */}}
-<feed xmlns="http://www.w3.org/2005/Atom"{{ with site.LanguageCode }} xml:lang="{{ . }}"{{ end }}>
+<feed xmlns="http://www.w3.org/2005/Atom"{{ with site.Language.Locale }} xml:lang="{{ . }}"{{ end }}>
     <generator uri="https://gohugo.io/" version="{{ hugo.Version }}">Hugo</generator>
     {{- $title := site.Title -}}
     {{- with .Title -}}

@@ -1,5 +1,5 @@
 baseURL = "https://smallcultfollowing.com/babysteps/"
-languageCode = "en-us"
+locale = "en-us"
 title = "baby steps"
 enableEmoji = true
 

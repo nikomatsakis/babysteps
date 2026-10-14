@@ -2,6 +2,11 @@
   margin-top: 1rem;
 }
 
+// Line breaks must not inherit the spacing between block elements.
+br {
+  margin-top: 0;
+}
+
 h2 {
   font-size: 1.4rem;
   font-weight: 650;
@@ -59,7 +64,7 @@ figure.float-figure {
     margin-top: 0.5rem;
     font-size: 0.8rem;
     font-style: italic;
-    text-align: center;
+    text-align: left;
   }
 
   ~ h2 {
