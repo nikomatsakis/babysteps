@@ -3,6 +3,7 @@ title: "Only Bounds"
 date: 2026-06-09T05:04:17-04:00
 series:
 - "Revisiting Sizedness"
+- "Must move"
 ---
 
 `only` bounds are going to be the most impactful change to Rust that you've never heard of. They are currently being designed and developed by the Arm team (David Wood, Rémy Rakic, et al.) as part of the [Sized Hierarchy and Scalable Vector Extension][PG] project goal.  This post explores the feature and aims to answer a particular question about the design (the scope of bounds, I'll explain). But before I dive in, I want to give a bit of context.
