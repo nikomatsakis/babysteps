@@ -163,7 +163,6 @@ I'd like to propose a north star for Rust: **no more unsafe code**. By that, I d
 [^cpp]: All too often, C++ libraries consider it adequate to tell users ["you're holding it wrong"](https://www.wired.com/2010/06/iphone-4-holding-it-wrong/) -- i.e., that they are responsible for causing undefined behavior by misusing the API. Rust takes a clear position that a safe API has to protect its users, no matter how much they abuse it.
 
 [^stream]: To be fair, if Rust is encountering a stream of CVEs, other languages like C++ and Java are encountering a veritable flood, since they lack the protection of Rust's type system.
-st takes a clear position that a safe API has to protect its users, no matter how much they abuse it.
 
 ## Design is an open problem
 
