@@ -1,5 +1,5 @@
 ---
-title: "Cylic trait implementations: motivation"
+title: "Cyclic trait implementations: motivation"
 date: 2026-08-10T09:35:40-04:00
 series:
 - "Cyclic trait impls"
